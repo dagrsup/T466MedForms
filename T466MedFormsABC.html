@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+
+  <title>T466 Med Forms ABC</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+  <style type="text/css">
+
+    // https://stackoverflow.com/questions/17756649/disable-the-horizontal-scroll
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x:hidden;
+      visibility:visible;
+    }
+
+    .imgcls {
+      position:relative;
+      display:block;
+      width: 100%;
+    }
+
+    li {
+      margin-right: 20pt;
+      margin-bottom: 5pt;
+    }
+
+    li:not(:last-child) input {
+      margin-bottom: 10pt;
+    }
+    
+    input fieldset {
+      border-bottom:1pt;
+      margin-bottom:5pt;
+      visibility:visible;
+      padding:3pt;
+    }
+    
+    .mysectiondiv {
+      width: 92%;
+      font-size: 20pt;
+      padding-left:10pt;
+      padding-right:10pt;
+      padding-bottom:10pt;
+      margin:2pt;
+      margin-bottom:10pt;
+      border: 2pt solid #002200;
+    }
+
+    .mysection {
+       color: #990000;
+       padding-right:4pt;
+       padding-bottom:4pt;
+       padding-top: -4pt;
+       padding-left:8pt;
+    
+       border-bottom: 2pt solid #002200;
+    }
+    
+    .mycomment {
+      font-size: 14pt;
+      margin-right:15pt;
+      margin-top:12pt;
+      margin-bottom:8pt;
+    }
+    
+    .myformfieldset {
+      font-size: 16pt;
+      margin-top:3pt;
+      padding:6pt;
+      display:block;
+    }
+
+    .myradiofieldset {
+      font-size: 12pt;
+      margin-bottom:6pt;
+      display:block;
+    }
+
+    .myradiodiv {
+      display:inline;
+      margin-bottom: 12pt;
+    }
+    
+    .myradiolabel {
+      width: auto;
+      display:inline;
+      margin-left: 4pt;
+      margin-right: 4pt;
+      verticle-align:middle;
+      text-align: left;
+      font-size:12pt;
+    }
+    
+    .myradio {
+      display:inline;
+      width: auto;
+      margin-right:4pt;
+      verticle-align:middle;
+    }
+        
+    .myradio.selected{
+      background: url("check.png") no-repeat;
+    }
+    
+    .myradiofieldsetshowhide {
+        padding:6pt;
+    }
+
+    .mycheckdiv {
+        display:block;
+        margin-top:6pt;
+        width:100%;
+    }
+        
+    .mychecklabel {
+      padding-right: 4pt;
+      font-size:10pt;
+      width:auto;
+      text-align: left;
+      display:inline-block;
+      font-size:12pt;
+    }
+    
+    .mycheck {
+        margin-right:10pt;
+        font-size:10pt;
+        width:auto;
+        display:inline-block;
+    }
+        
+    .mycheckfieldsetshowhide {
+        display:block;
+        margin-top: 6pt;
+        margin-bottom: 4pt;
+        padding: 6pt;
+    }
+
+    .mytextdiv {
+       display:block;
+    }
+    
+    .mypriorstop {
+       display:block;
+       width:100%;
+    }
+    
+    .mypriorsdiv {
+       display:block;
+       font-size: 18pt;
+       width:100%;
+    }
+    
+    .myprioritemsdiv {
+       display:block;
+       width:100%;
+    }
+    
+    .myaprioritemdiv {
+       display:block:
+       width:100%;
+       border-bottom:2pt dashed magenta;
+        margin-top:6pt;
+    }
+    
+    .myapriornamediv {
+       display:inline:
+       width:33%;
+    }
+    
+    .mypriorspan {
+       display:inline:
+       width:100%;
+    }
+    
+    .mypriorsbutton {
+       display:inline:
+       width:100pt;
+       margin: 6pt;
+    }
+
+    .mynewformdiv {
+       display:block;
+       width:100%;
+       margin-top:6pt;
+       border-bottom:2pt dashed black;
+    }
+    
+    .myloadformdiv {
+       display:block;
+       width:100%;
+       border-bottom:2pt dashed black;
+    }
+    
+    .mypriorfile {
+       display:block;
+       width:100%;
+       margin:10pt;
+    }      
+    
+    .mytextlabel {
+      display:block;
+      margin-top:4pt;
+      width: auto;
+      text-align: left;
+      font-size:12pt;
+      margin-bottom:5pt;
+    }
+    
+    .mytext {
+      margin-left:15pt;
+      margin-bottom:8pt;
+      font-size: 10pt;
+    }
+    
+    .mytextarea{
+    }
+    
+    .myfile {
+       display:block;
+       width: 50%;
+    }
+    
+    .myfileimg {
+      display:block;
+      width: 100%;
+      margin-top:20pt;
+      height: auto;
+      margin-bottom:20pt;
+    }
+    
+    .myfilefieldset {
+        display:block;
+        margin-top:14pt;
+        margin-left: 6pt;
+        margin-right: 6pt;
+        margin-bottom:14pt;
+    }
+    
+    .saveditem {
+    }
+    
+    .savedcheckeditem {
+    }
+    
+    input:invalid {
+      box-shadow: 0 0 5pt 1pt red;
+    }
+
+    input:focus:invalid {
+      box-shadow: none;
+    }
+
+    /* https://stackoverflow.com/questions/39804924/html-verify-that-each-div-will-be-on-separated-print-page    */
+    @media print {
+        /* insert your style declarations here */
+        .onnewpage {
+            page-break-after: always; /* ensures the next will we appear on new page */
+        }
+    }
+    
+    .formwithbackgroundimage {
+        position: relative;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display:block;
+        font-size:1.5vw;
+    }
+
+    .formdata {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.0);
+        color:  rgba(0, 0, 0, 1.0);
+      }
+
+    
+    /*
+.split, .gutter.gutter-horizontal {
+	float: left;
+	}
+	.gutter.gutter-horizontal {
+	cursor: ew-resize;
+	} */
+    
+    .fullscreen {
+        width: 100vw;
+        height: 100%;
+        padding: 0vh;
+     }
+
+.a {
+  background: url('path/to/image.jpg') center/cover;
+}
+    </style>  
+</head>
+
+ <body>
+     <div>
+       <h1> Boy Scout Medical Forms A, B, C </h1>
+        <ul>
+          <li style="text-align: justify;">This static online form is to help make Boy Scouts Medical Forms ABCs easier.</li>
+          <li style="text-align: justify;">All information is stored locally on your browser client, with "no" information submitted to server.</li>
+          <li style="text-align: justify;">Activities exceeding 72 hrs, require Form C along with A & B. Form C requires a Dr's signature and you may need to schedule an annual exam with Dr.</li>
+          <li style="text-align: justify;">There are absolutely no express or implied promises or warranty of safety, security or privacy of this web form, and by using this form, you will be using it at own risk.</li>
+          <li style="text-align: justify;">The digital printable output created by this web page will contain sensitive medical information and you will assume all risks to make sure it does not get misused or fall into wrong hands.</li>
+        </ul>
+
+       <p>If you dont agree with statements above, or do not understand the possible privacy risks of digitized medical data, please don't use this online form. You can print blank forms and fill and submit them 
+       manually (in writing) by following instructions at: https://www.scouting.org/health-and-safety/ahmr/ </p>
+
+<script>
+       function proceed() {
+          var agree = document.getElementById("id_iagreetothisform");
+          if (agree.checked) {
+            document.getElementById("proceedDIV").style.display = "block";
+            document.getElementById("mydyndivID").style.display="block";
+            agree.disabled = false; // cant disagree anymore :-)
+          } else {
+            alert("Please read and agree to the statements above, before proceeding. If you are in doubt, specially about your ability to manage the digitized data generated by this page, please elect not to use this web form by not proceeding. -Thanks");
+          }
+       }
+  
+       function iagree() {
+          var e = document.getElementById("proceedButtonId");
+          e.disabled = !document.getElementById("id_iagreetothisform").checked;
+       }
+</script>
+       <p><br></p>
+       <p><input type="checkbox" id="id_iagreetothisform" oninput="iagree()">By checking here I agree to statements above.</input></p>
+       <p><button id="proceedButtonId", onclick="proceed()" disabled>PROCEED</button>
+         
+         </div>
+         <div id="proceedDIV" style="display:none;">
+             <p><br></p>
+             <a id="localizerId"></a>
+
+            <div id="mydyndivID" style="display:none">
+              <div>
+              </div>
+            </div>
+            <div class="mysectiondiv" id="epilogueId">
+              <div class="mysectiondiv" id="formIssuesID" style="display:none"></div>
+              <div class="mysectiondiv onnewpage" id="formCompleteID" style="display:none">
+                <h4 class="mysection"> Congratulations!! You have successfully completed filling out this form instance, look below to doublecheck your entries and then export to a file to print or e-mail to pertinent persons.</h4>
+                <h2> Do not forget to sign all the yellow marked areas </h2>
+               </div>
+        </div>
+<h1>Currently following is what your forms would look like</h1>
+<div id="finalformdataID" class="onnewpage">
+<div class="formwithbackgroundimage onnewpage" id="formA"><img src="assets/680-001_ABC-page-001.jpg" class="imgcls"/></div>
+<div class="formwithbackgroundimage onnewpage" id="formB"><img src="assets/680-001_ABC-page-002.jpg" class="imgcls"/></div>
+<div class="formwithbackgroundimage onnewpage" id="formBB"><img src="assets/680-001_ABC-page-003.jpg" class="imgcls"/></div>
+<div id="addedImagesID"></div>
+<div id="additionalinstructionsID"></div>
+<div class="onnewpage" id="summaryID"></div>
+<p><button onclick="get_form_instance();">Obtain Form Instance</button></p>
+<p><button id="id_normalizebutton" onclick="normalize_this_app();" style="display:block;">Normalize App to ship it</button></p>
+</div>
+
+<script>
+  
+ //Split(['#topPart', '#bottomPart']);
+  
+var specials = new Map ([
+      ["Identifier",     ["text", 64,   "[a-zA-Z]([-_@\\[\\]\\(\\)\\{\\}\\.a-zA-Z0-9\\s]+)*",                  "Must be an identifier starting with a letter and consist of letters, digits, dots, hyphens, underscores, @, parentheses and spaces"]],
+      ["Name",           ["text", 24,   "[a-zA-Z]+([-'][a-zA-Z]+)*",                                           "Must be a name"]],
+      ["Names",          ["text", 48,  "[a-zA-Z]+([-\\s'][a-zA-Z]+)*",                                         "Must be names"]],
+      ["WordListShort",  ["text", 64,  ".*",                                                 "Must be a list of words or a sentence."]],
+      ["Phone",          ["text", 24,   "([+]?\\d{1,3}(-|\\s)?)?(\\(\\d{3,5}\\)|\\d{3,5})[-|\\s]?\\d{2,5}[-|\\s]?\\d{4,5}",  "Must be a phone number"]],
+      ["Street",         ["text", 64,  "[a-zA-Z0-9|'|&|\\.|\\*|@|#]+(\\s[a-zA-Z0-9|'|&|\\.|\\*|@|#|-]+)*",                  "Invalid street address"]],
+      ["City",           ["text", 32,   "[a-zA-Z|'|&|\\.|\\*|@|#]+(\\s[a-zA-Z|'|&|\\.|\\*|@|#|-]+)*",                     "Invalid city name"]],
+      ["Zip",            ["text", 12,   "[0-9]{5}(-[0-9]{4,6})?",                                              "Invalid zip code"]],   
+      ["State",          ["text", 2, "[A-Z][A-Z]",                                                              "Invalid state code"]],
+      ["Description",    ["text", 32, ".*",                                                      "Invalid description"]],
+      ["ShortDesc",      ["text", 20, ".*",                                                      "Invalid description"]],
+      ["vShortDesc",     ["text", 10, ".*",                                                      "Invalid description"]],
+      ["Page",           ["textarea", 8192, "[^\s]+[\s[^s]+]*",                                                "Invalid page content"]],
+      ["Date",           ["date"]],
+      ["Photo",          ["file"]],
+      ["Email",          ["email"]],
+      ["Number",         ["number"], 12, "\d+", "Invalid number"]
+   ]);
+
+var specials_width_height_map = [1, 12, "width: 20%;", 13, 24, "width: 25%;", 25, 32, "width: 33%;", 33, 64, "width: 50%;", 65, 96, "width: 66%;", 97, 10241024, "width: 80%; height: 150pt;"];
+
+const allPriorFormsKey = "$$_All^^priorABCforms^^$$";
+
+var datin =  [
+      ["Secti", "Participant Details:", [
+        [ "Names", "Full Name:",   "mns", 1, [["formA", 400, 275, 1300, 375], ["formB", 500, 275, 1400, 375], ["formBB", 400, 275, 1300, 375]]],
+        [ "Date", "Date Of Birth:", "dob", 1, [["formA", 400, 400, 1300, 460], ["formB", 500, 400, 1400, 460], ["formBB", 400, 400, 1300, 460]]],
+      ]],
+      ["Secti", "Any participation restriction(s):", [
+        ["Comment", "Due to the nature of programs and  activities, the Boy Scouts of America and local  councils cannot continually monitor compliance  of program participants or any limitations  imposed upon them by parents or medical  providers. However, so that leaders can be as  familiar as possible with any limitations, list any  restrictions imposed on a child participant in  connection with programs or activities below:"],
+        [ "Formy", "Check None if no restrictions", [
+          ["Cheky", "None Restrictions", "pr", 0, 
+            [0, [ "WordListShort", "Restrict participation as listed here:", "pre", 1, [["formA", 1250, 1575, 2300, 1635]], "If no restrictions specified here, check the None checkbox box above."]
+            ], [["formA", 1895, 1515, 1935, 1545]]]
+        ]]
+      ]],
+
+      ["Secti", "Adult(s) authorized to take to and from Events", [
+  
+        ["Comment", "You must designate at least one adult. Please include a telephone number"],
+
+        ["Formy", "Authorized Adult 1:", [
+
+          [ "Names",  "Full name of Adult 1:", "a1fn",         1, [["formA", 325, 2545, 1000, 2605]]],
+          [ "Phone",  "Phone Number of Adult 1:",  "a1ph",     1, [["formA", 325, 2600, 1000, 2660]]] 
+        ]],
+
+        ["Formy", "Authorized Adult 2:", [
+
+          [ "Names",  "Full name of Adult 2:", "a2fn",       0, [["formA", 1425, 2545,	2100, 2605]]],
+          [ "Phone",  "Phone Number of Adult 2:",  "a2ph",   0, [["formA", 1425, 2600, 2100, 2660]]]
+        ]]
+      ]],
+
+      ["Secti", "Adults NOT Authorized to Take Youth To and From Events:", [
+
+        ["Formy", "Unauthorized Adult 1 (**NOT** authorized):", [
+
+          [ "Names",  "Full name of NOT authorized Adult 1:", "una1fn",    0, [["formA", 325,  2775,	1000, 2835]]],
+          [ "Phone",  "Phone Number of NOT authorized Adult 1:",  "una1ph",  0, [["formA", 325,  2845,	1000, 2905]]]
+        ]],
+
+        ["Formy", "Unauthorized Adult 2 (**NOT** authorized):", [
+
+          [ "Names",  "Full name of NOT authorized Adult 2:", "una2fn",  0, [["formA", 1425, 2775, 2100, 2835]]],
+          [ "Phone",  "Phone Number of NOT authorized Adult 2:",  "una2ph",  0, [["formA", 1425, 2845, 2100, 2905]]]
+        ]]
+      ]],
+
+      ["Secti", "General Information Of Participant:", [
+
+        [ "Number", "Age (yrs):", "age", 1, [9, 99], [["formB", 325,500, 550, 540]]],
+        [ "Radii", "Gender", "gndr", [["Male", []], ["Female", []], ["Prefer Not to Say", []], 0], [], [["formB", 825, 500, 1100, 540]]],
+        [ "Number", "Height (inches):", "ht", 1, [24, 90], [["formB", 1375, 500, 1650, 540]]],
+        [ "Number", "Weight (lbs):", "wt", 1, [24,350], [["formB", 1925, 500, 2150, 540]]],
+        [ "Street", "Address (number, street, apt/ste):", "street", 1, [["formB", 375, 560, 2325, 600]]],
+        [ "City", "City:", "cty", 1, [["formB", 300, 635, 875, 675]]],
+        [ "State", "State:", "st", 1, [["formB", 1000, 635, 1275, 675]]],
+        [ "Zip", "ZipCode:", "zip", 1, [["formB",  1525, 635, 1725, 675]]],
+        [ "Phone", "Phone:", "pph", 1, [["formB", 1900, 635,  2325, 675]]],
+      ]],
+
+      ["Secti", "Unit details:", [
+
+        ["Names",  "Unit Leader:", "ul", 1, [["formB", 375, 700,  1500, 740]]],
+        ["Phone", "Unit Leader's Mobile Phone:", "ulph",   1, [["formB", 1750, 700, 2325, 740]]],
+        ["Street", "Council Name/No", "council:", 1, [["formB", 500, 770, 1900, 810]], "Must be a valid council name"],
+        ["Identifier", "Unit Number:", "unitname", 1, [["formB", 2040, 770, 2325, 710]], "Must be a valid unit name"]
+      ]],  
+
+      ["Secti", "Health/Accident insurance details", [
+
+        ["Names", "Health/Insurance Company Name:", "insc", 1, [["formB", 700, 825, 1425, 915]]],
+        ["Names", "Policy Number:", "policynum", 1, [["formB", 1575, 825, 2325, 915]]],
+        ["Names", "Group Number:", "groupnum", 1, []],
+        ["Names", "Policy holder name:", "phln", 1, []],
+        ["Names", "Plan Name:", "plnn", 0, []],
+        ["Names", "Plan type:", "plnt", 0, []],
+        ["Names", "Employer name (if applicable):", "empn", 0, []],
+        ["Phone", "Insurance company contact phone number:", "insph", 1, []],
+        ["Phone", "Preauthorization phone number (if needed):", "inspaph", 0, []],
+        ["Photo", "Add Front image/photo of insurance card, please keep the image size below 1MB", "insfront", 1, []],
+        ["Photo", "Add Backside image/photo of insurance card, please keep the image size below 1MB", "insback", 1, []]
+      ]],
+
+      ["Secti", "Emergency Contacts:", [
+
+          ["Formy", "Primary Emergency Contact:", [
+            [ "Names",  "Name:", "ecn", 1, [["formB", 325, 1100, 1400, 1140]]],
+            [ "Name",   "Relationship to participant:", "ecrl", 1, [["formB", 1585, 1100, 2325, 1140]]],
+            [ "Street", "Address (number, street, apt/ste):", "ecstreet", 1, [["formB", 350, 1170, 1230, 1210]]],
+            [ "City",   "City:", "eccty", 1, []],
+            [ "Zip",    "ZipCode:", "eczip", 1, []],
+            [ "State",  "State:", "ecst", 1, []],
+            [ "Phone",  "Home Phone (for Primary Emergency Contact):", "echph", 1, [["formB", 1425, 1170, 1775, 1210]]],
+            [ "Phone",  "Work Phone (for Primary Emergency Contact):", "ecwph", 0, [["formB", 1950, 1170, 2325, 1210]]],
+          ]],
+
+          ["Formy", "Alternate Emergency Contact:", [  
+            [ "Names",  "Alternate Name:", "aecn", 1, [["formB", 550, 1235, 1400, 1275]]],
+            [ "Phone",  "Primary Phone (for alternate emergency contact):", "aecph", 1, [["formB", 1650, 1235, 2325, 1275]]]
+          ]]
+      ]],
+
+      ["Secti", "Health History:", [
+
+            ["Comment", "Do you currently have or have you ever been treated for any of the following? Select all that apply:"],
+  
+            [ "Radii", "Diabetese", "diab", [["Yes", [["formB", 250, 1480, 300, 1530]]], ["No", [["formB", 340, 1480, 390, 1530]]], 1], 
+                [0, ["WordListShort", "Explain, including last HbA1c percentage and date, must specify Last HbA1c:", "exDiab", 1, [["formB", 1650, 1480, 2425, 1520]], "Must explain diabetese including last HbA1c"]]],
+            [ "Radii", "Hypertension (high blood pressure)", "hyper", [["Yes", [["formB", 250, 1540, 300, 1590]]], ["No", [["formB", 340, 1540, 390, 1590]]], 1],
+                [0, ["WordListShort", "Explain", "exHyper", 1, [["formB", 1175, 1540, 2425, 1590]], "Must explain"]]],
+            [ "Radii", "Adult or congenital heart disease/heart attack/chest pain (angina)/heart murmur/coronary artery disease. Any heart surgery or procedure:", "heart", [["Yes", [["formB", 250, 1630, 300, 1680]]], ["No", [["formB", 340, 1630, 390, 1680]]], 1],
+                [0, ["WordListShort", " Explain all “yes” answers, including heart surgeries and/or procedures:", "exHeart", 1, [["formB", 1175, 1600, 2425, 1690]], "Must explain heart issues"]]],
+            [ "Radii", "Family history of heart disease or any sudden heart-related death of a family member before age 50", "before50", [["Yes", [["formB", 250, 1730, 300, 1780]]], ["No", [["formB", 340, 1730, 390, 1780]]], 1],
+                [0, ["WordListShort", "Explain:", "exFamilyHeart", 1, [["formB", 1175, 1705, 2425, 1795]], "Must explain family heart disease before 50"]]],
+            [ "Radii", "Stroke/TIA", "stroke", [["Yes", [["formB", 250, 1800, 300, 1850]]], ["No", [["formB", 340, 1800, 390, 1850]]], 1], 
+                [0, ["WordListShort", "Explain:", "exStroke", 1, [["formB", 1175, 1800, 2425, 1840]], "Must explain strokes"]]],
+            [ "Radii", "Asthma", "asthma", [["Yes", [["formB", 250, 1860, 300, 1910]]], ["No", [["formB", 340, 1860, 390, 1910]]], 1],
+                [0, ["WordListShort", "Explain, including last attack date:", "exAsthma", 1, [["formB", 1425, 1855, 2425, 1895]], "must explain asthma"]]],
+            [ "Radii", "Lung/respiratory disease", "lungs", [["Yes", [["formB", 250, 1925, 300, 1975]]], ["No", [["formB", 340, 1925, 390, 1975]]], 1],
+                [0, ["WordListShort", "Explain:", "exLung", 1, [["formB", 1175, 1925, 2425, 1975]], "must explain lungs"]]],
+            [ "Radii", "COPD", "copd", [["Yes", [["formB", 250, 1985, 300, 2035]]], ["No", [["formB", 340, 1985, 390, 2035]]], 1],
+                [0, ["WordListShort", "Explain:", "exCOPD", 1, [["formB", 1175, 1985, 2425, 2035]], "Must explain COPD"]]],
+            [ "Radii", "Ear/eyes/nose/sinus problems", "eens", [["Yes", [["formB", 250, 2050, 300, 2100]]], ["No", [["formB", 340, 2050, 390, 2100]]], 1],
+                [0, ["WordListShort", "Explain:", "exEENS", 1, [["formB", 1175, 2050, 2425, 2100]], "Must explain ear/eyes/nose/sinus problems"]]],
+            [ "Radii", "Muscular/skeletal condition/muscle or bone issues", "msm", [["Yes", [["formB", 250, 2110, 300, 2160]]], ["No", [["formB", 340, 2110, 390, 2160]]], 1],
+                [0, ["WordListShort", "Explain:", "exMSM", 1, [["formB", 1175, 2110, 2425, 2100]], "Must explain issues"]]],
+            [ "Radii", "Head injury/concussion", "head", [["Yes", [["formB", 250, 2170, 300, 2220]]], ["No", [["formB", 340, 2170, 390, 2220]]], 1],
+                [0, ["WordListShort", "Explain:", "exHead", 1, [["formB", 1175, 2170, 2425, 2220]], "Must explain issues"]]],
+            [ "Radii", "Altitude Sickness", "as", [["Yes", [["formB", 250, 2225, 300, 2275]]], ["No", [["formB", 340, 2225, 390, 2275]]], 1],
+                [0, ["WordListShort", "Explain:", "exAS", 1, [["formB", 1175, 2225, 2425, 2275]], "Must explain altitude sickness"]]],
+            [ "Radii", "Psychiatric/psychological or emotional difficulties", "psych", [["Yes", [["formB", 250, 2285, 300, 2235]]], ["No", [["formB", 340, 2285, 390, 2235]]], 1],
+                [0, ["WordListShort", "Explain:", "exPsych", 1, [["formB", 1175, 2285, 2425, 2235]], "Must explain difficulties"]]],
+            [ "Radii", "Behavioral/neurological disorders", "behav", [["Yes", [["formB", 250, 2345, 300, 2395]]], ["No", [["formB", 340, 2345, 390, 2395]]], 1],
+                [0, ["WordListShort", "Explain:", "exBehav", 1, [["formB", 1175, 2345, 2425, 2295]], "must explain disorders"]]],
+            [ "Radii", "Blood disorders/sickle cell disease", "blood", [["Yes", [["formB", 250, 2400, 300, 2450]]], ["No", [["formB", 340, 2400, 390, 2450]]], 1],
+                [0, ["WordListShort", "Explain:", "exBlood", 1, [["formB", 1175, 2400, 2425, 2450]], "Must explain blood disorders"]]],
+            [ "Radii", "Fainting spells and dizziness", "faint", [["Yes", [["formB", 250, 2460, 300, 2510]]], ["No", [["formB", 340, 2460, 390, 2510]]], 1],
+                [0, ["WordListShort", "Explain:", "exFaint", 1, [["formB", 1175, 2460, 2425, 2510]], "Must explain fainting and dizziness"]]],
+            [ "Radii", "Kidney Disease", "kidney", [["Yes", [["formB", 250, 2520, 300, 2570]]], ["No", [["formB", 340, 2520, 390, 2570]]], 1],
+                [0, ["WordListShort", "Explain:", "exKidney", 1, [["formB", 1175, 2520, 2425, 2570]], "Must explain kidney disease"]]],
+            [ "Radii", "Seizures", "seizure", [["Yes", [["formB", 250, 2585, 300, 2635]]], ["No", [["formB", 340, 2585, 390, 2635]]], 1],
+                [0, ["WordListShort", "Explain including last seizure date", "exSeizure", 1, [["formB", 1435, 2585, 2425, 2635]], "Must explain"]]],
+            [ "Radii", "Abdominal/stomach/digestive problems", "abdom", [["Yes", [["formB", 250, 2645, 300, 2695]]], ["No", [["formB", 340, 2645, 390, 2695]]], 1],
+                [0, ["WordListShort","Explain:", "exAb", 1, [["formB", 1175, 2645, 2425, 2695]], "Must explain problems"]]],
+            [ "Radii", "Thyroid disease", "thyroid", [["Yes", [["formB", 250, 2705, 300, 2755]]], ["No", [["formB", 340, 2705, 390, 2755]]], 1],
+                [0, ["WordListShort", "Explain:", "other", "exThyroid", 1, [["formB", 1175, 2705, 2425, 2755]], "Must explain thyroid"]]],
+            [ "Radii", "Excessive Fatigue", "fatigue", [["Yes", [["formB", 250, 2765, 300, 2815]]], ["No", [["formB", 340, 2765, 390, 2815]]], 1],
+                [0, ["WordListShort", "Explain:", "exFatigue", 1, [["formB", 1175, 2765, 2425, 2815]], "Must explain fatigue"]]],
+            [ "Radii", "Obstructive sleep apnea/sleep disorders", "apnea", [["Yes", [["formB", 250, 2825, 300, 2875]]], ["No", [["formB", 340, 2825, 390, 2875]]], 1],
+                [0, ["WordListShort", "Explain including CPAP (y/n):", "exApnea", 1, [["formB", 1480, 2825, 2425, 2875]], "Must explain"]]],
+            [ "Radii", "List all Surgeries and hospitalizations", "surgeries", [["Yes", [["formB", 250, 2885, 300, 2935]]], ["No", [["formB", 340, 2885, 390, 2935]]], 1],
+                [0, ["WordListShort", "Explain including last surgery date:", "exSurgeries", 1, [["formB", 1440, 2885, 2425, 2935]], "Must explain surgeries and hiospitalizations"]]],
+            [ "Radii", "List Any Other medical conditions not covered above.", "other", [["Yes", [["formB", 250, 2940, 300, 2990]]], ["No", [["formB", 340, 2940, 390, 2990]]], 1],
+                [0, ["WordListShort", "Explain:", "exOthers", 1, [["formB", "1175, 2940, 2425, 2990"]], "Must explain other conditions"]]]
+      ]],
+
+      ["Secti", "Allergies: Are you allergic to or do you have any adverse reaction to any of the following?", [
+
+          [ "Radii", "Allergic to medication(s)", "algmeds", [["Yes", [["formBB", 175, 720, 215, 760]]], ["No", [["formBB", 270, 720, 310, 760]]], 1],
+              [0, ["WordListShort", "Explain/list all medications you are allergic to:", "medAllergies", 1, [["formBB", 700, 720, 1220, 760]], "Must explain medications allergies"]]],
+          [ "Radii", "Allergic to plants(s)", "algplants", [["Yes", [["formBB", 1275, 720, 1315, 760,]]], ["No", [["formBB", 1365, 720, 1405, 760]]], 1],
+              [0, ["WordListShort", "Explain/list all plants you are allergic to:", "plantAllergies", 1, [["formBB", 1795, 720, 2320, 760]], "Must explain plant allergies"]]],
+          [ "Radii", "Allergic to foods(s)", "algfoods", [["Yes", [["formBB", 175, 775, 215, 815]]], ["No", [["formBB", 270, 775, 310, 815]]], 1],
+              [0, ["WordListShort", "Explain/list all foods you are allergic to:", "foodAllergies", 1, [["formBB", 700, 775, 1220, 815]], "Must explain food allergies"]]],
+          [ "Radii", "Allergic to insects(s) stings", "alginsects", [["Yes", [["formBB", 1275, 775, 1315, 815]]], ["No", [["formBB", 1365, 775, 1405, 815]]], 1],
+              [0, ["WordListShort", "Explain/list all insects stings you are allergic to:", "insectAllergies", 1, [["formBB", 1795, 775, 2320, 815]], "Must explain all insect/stings allergies"]]]
+      ]],
+
+      ["Secti", "Medications: List all medications currently used, including any over-the-counter medications.", [
+
+        ["Cheky", "Check here if no medicatiomns are taken routinely.", "noroutinemeds", 0,
+            [0, ["Formy", "Medications", [
+                  ["Cheky", "Medication-1:", "med1", 0,
+                      [1, [
+                        ["Description", "Name:", "med1name", 1, [["formBB", 150, 1105, 680, 1145]]],
+                        ["vShortDesc", "Dose:", "med1dose", 1, [["formBB", 700, 1105, 855, 1145]]],
+                        ["ShortDesc", "Freq:", "med1freq", 1, [["formBB", 875, 1105, 855, 1145]]],
+                        ["Description", "Reason:", "med1reason", 1, [["formBB", 1260, 1105, 2320, 1145]]]]], []],
+                  ["Cheky", "Medication-2:", "med2", 0,
+                      [1, [
+                        ["Description", "Name:", "med2name", 1, [["formBB", 150, 1165, 680, 1205]]],
+                        ["ShortDesc", "Dose:", "med2dose", 1, [["formBB", 700, 1165, 855, 1205]]],
+                        ["ShortDesc", "Freq:", "med2freq", 1, [["formBB", 875, 1165, 855, 1205]]],
+                        ["Description", "Reason:", "med2reason", 1, [["formBB", 1260, 1165, 2320, 1205]]]]], []],
+                  ["Cheky", "Medication-3:", "med3", 0,
+                      [1, [
+                        ["Description", "Name:", "med3name", 1, [["formBB", 150, 1235, 680, 1275]]],
+                        ["ShortDesc", "Dose:", "med3dose", 1, [["formBB", 700, 1235, 855, 1275]]],
+                        ["ShortDesc", "Freq:", "med3freq", 1, [["formBB", 875, 1235, 855, 1275]]],
+                        ["Description", "Reason:", "med3reason", 1, [["formBB", 1260, 1235, 2320, 1275]]]]], []],
+                  ["Cheky", "Medication-4:", "med4", 0,
+                      [1, [
+                        ["Description", "Name:", "med4name", 1, [["formBB", 150, 1295, 680, 1335]]],
+                        ["ShortDesc", "Dose:", "med4dose", 1, [["formBB", 700, 1295, 855, 1335]]],
+                        ["ShortDesc", "Freq:", "m3, ed4freq", 1, [["formBB", 875, 1295, 855, 1335]]],
+                        ["Description", "Reason:", "med4reason", 1, [["formBB", 1260, 1295, 2320, 1335]]]]], []],
+                  ["Cheky", "Medication-5:", "med5", 0,
+                      [1, [
+                        ["Description", "Name:", ", med5name", 1, [["formBB", 150, 1355, 680, 1395]]],
+                        ["ShortDesc", "Dose:", "med5dose", 1, [["formBB", 700, 1355, 855, 1395]]],
+                        ["ShortDesc", "Freq:", "med5freq", 1, [["formBB", 875, 1355, 855, 1395]]],
+                        ["Description", "Reason:", "med5reason", 1, [["formBB", 1260, 1355, 2320, 1395]]]]], []],
+                  ["Cheky", "Medication-6:", "med6", 0,
+                      [1, [
+                        ["Description", "Name:", "med6name", 1, [["formBB", 150, 1415, 680, 1455]]],
+                        ["ShortDesc", "Dose:", "med6dose", 1, [["formBB", 700, 1415, 855, 1455]]],
+                        ["ShortDesc", "Freq:", "med6freq", 1, [["formBB", 875, 1415, 855, 1455]]],
+                        ["Description", "Reason:", "med6reason", 1, [["formBB", 1260, 1415, 2320, 1455]]]]], []],
+                  ["Comment", "If you still have more details or medications to list, check below for additional page/space to describe them."],
+
+                  ["Cheky", "Check here for additional space.", "additionaldesc", 0, 
+                     [1, [ "Page", "Explain/list here any additional details that need to go on that additional sheet", "explainAdditionalSpace"]], [["formBB", 1350, 925, 1390, 965]]]
+              ]]
+        ], [["formBB", 150, 925, 190, 965]]],
+
+        ["Radii", "Non-prescription medication:", "mednonpresauth", [["Allowed under nurse supervision", [["formBB", 150, 1480, 190, 1520]]], ["Not Allowed", [["formBB", 300, 1480, 340, 1520]]], 0],
+            [0, ["Names", "Non-prescription medication administration is authorized with these exceptions (that can not be administered):", "medNonPres", 0, [["formBB", 1575, 1475, 2320, 1565]]]]],
+
+        ["Comment", "Approval for medications listed in prior sections","Bring enough medications in sufficient quantities and in the original containers. Make sure that they  are NOT expired, including inhalers and EpiPens. You SHOULD NOT STOP taking any maintenance medication unless instructed to do so by your doctor\n."],
+
+        ["Names", "Administration of the above medications is approved for youth by Parent/Guardians, Print Your Name here (as binding signature)", "parentmedapprove", 1],
+        ["Names", "Administration of the above medications is approved for youth by MD/DO, NP, or PA signature (if your state requires signature), Print your name here to confirm your physician has signed off", "pysicianapprove", 1],
+
+      ]],
+
+      ["Secti", "Immunization: Tetanus immunization is required and must have been received within the last 10 years", [
+
+        ["Formy", "Tetanus Immunization", [
+          ["Radii", "If you had or been immunized for tetanus within ten years:", "tetanus", [["Yes", [["formBB", 175, 2165, 215, 2205]]], ["No", [["formBB", 265, 2165, 305, 2205]]], ["Had Disease", [["formBB", 410, 2165, 450, 2205]]], 1], 
+              [0, ["Date", "Date of last tetanus immunization:", "tetanusDate", 1, [["formBB", 1155, 2165, 2320, 2205]]]]]
+        ]],
+
+        ["Formy", "Other immunizations:", [
+          ["Comment", "You can choose to enter remaining immunization dates manually or add immunization proof (as image files)."],
+  
+          ["Radii", "Immunization Details:", "immunedetailmode", [["Enter dates manually", []], ["Add Immunization File", []], 1], 
+              [0, ["Formy", "List immunization dates manually", [
+                  ["Radii", "Pertussis:", "pertussis", [["Yes", [["formBB", 175, 2235, 215, 2275]]],	["No", [["formBB", 265, 2235, 305, 2275]]],  ["Had Disease", [["formBB", 410, 2235, 450, 2275]]], 1], 
+                      [0, ["Date", "Petrussis Vaccine or Disease Date:", "pertussisDate", 1, [["formBB", 1155, 2235, 2320, 2275]]]]],
+                  ["Radii", "Diphtheria:", "deptheria", [["Yes", [["formBB", 175, 2300, 215, 2340]]],	["No", [["formBB", 265, 2300, 305, 2340]]],  ["Had Disease", [["formBB", 410, 2300, 450, 2340]]], 1], 
+                      [0, ["Date", "Diptheria Vaccine or Disease Date:", "deptheriaDate", 1, [["formBB", 1155, 2300, 2320, 2340]]]]],
+                  ["Radii", "Measles/mumps/rubella:", "mmr", [["Yes", [["formBB", 175, 2375, 215, 2415]]],	["No", [["formBB", 265, 2375, 305, 2415]]],  ["Had Disease", [["formBB", 410, 2375, 450, 2415]]], 1], 
+                      [0, ["Date", "MMR Vaccine or Disease Date:", "mmrDate", 1, [["formBB", 1155, 2375, 2320, 2415]]]]],
+                  ["Radii", "Polio:", "polio", [["Yes", [["formBB", 175, 2435, 215, 2475]]],	["No", [["formBB", 265, 2435, 305, 2475]]],  ["Had Disease", [["formBB", 410, 2435, 450, 2475]]], 1], 
+                      [0, ["Date", "Polio Vaccine or Disease Date:", "polioDate", 1, [["formBB", 1155, 2435, 2320, 2475]]]]],
+                  ["Radii", "Chicken Pox:", "pox", [["Yes", [["formBB", 175, 2500, 215, 2540]]],	["No", [["formBB", 265, 2500, 305, 2540]]],  ["Had Disease", [["formBB", 410, 2500, 450, 2540]]], 1], 
+                      [0, ["Date", "Chicken Pox Vaccine or Disease Date:", "poxDate", 1, [["formBB", 1155, 2500, 2320, 2540]]]]],
+                  ["Radii", "Hepatitis A:", "hepa", [["Yes", [["formBB", 175, 2575, 215, 2515]]],	["No", [["formBB", 265, 2575, 305, 2515]]],  ["Had Disease", [["formBB", 410, 2575, 450, 2515]]], 1], 
+                      [0, ["Date", "Hepatitis A Vaccine or Disease Date:", "hepaDate", 1, [["formBB", 1155, 2575, 2320, 2515]]]]],
+                  ["Radii", "Hepatitis B:", "hepb", [["Yes", [["formBB", 175, 2635, 215, 2675]]],	["No", [["formBB", 265, 2635, 305, 2675]]],  ["Had Disease", [["formBB", 410, 2635, 450, 2675]]], 1], 
+                      [0, ["Date", "Hepatitis B Vaccine or Disease Date:", "hepbDate", 1, [["formBB", 1155, 2635, 2320, 2675]]]]],
+                  ["Radii", "Meningitis:", "meningitis", [["Yes", [["formBB", 175, 2705, 215, 2745]]],	["No", [["formBB", 265, 2705, 305, 2745]]],  ["Had Disease", [["formBB", 410, 2705, 450, 2745]]], 1], 
+                      [0, ["Date", "Meningitis Vaccine or Disease Date:", "menDate", 1, [["formBB", 1155, 2705, 2320, 2745]]]]],
+                  ["Radii", "Influenza:", "flu", [["Yes", [["formBB", 3, 175, 2775, 215, 2815]]],	["No", [["formBB", 265, 2775, 305, 2815]]],  ["Had Disease", [["formBB", 410, 2775, 450, 2815]]], 1], 
+                      [0, ["Date", "Influenza Vaccine or Disease Date", "inflDate", 1, [["formBB", 1155, 2775, 2320, 2815]]]]],
+                  ["Radii", "Other e.g. HIB:", "other-hib", [["Yes", [["formBB", 175, 2840, 215, 2885]]],	["No", [["formBB", 265, 2840, 305, 2885]]],  ["Had Disease", [["formBB", 410, 2840, 450, 2885]]], 1], 
+                      [0, ["Date", "Other/HIB Vaccine or Disease Date:", "otherDate", 1, [["formBB", 1155, 2775, 2320, 2815]]]]]
+                ]],
+              1, ["Formy", "Add immunization form photos (keep image sizes below 1MB):", [
+                 ["Photo", "Immunization Form Page-1 Photo", "immunization1", 1], 
+                 ["Photo", "Immunization Form Page-2 Photo", "immunization2", 0], 
+                 ["Photo", "Immunization Form Page-3 Photo", "immunization3", 0], 
+                 ["Photo", "Immunization Form Page-4 Photo", "immunization4", 0], 
+                 ["Photo", "Immunization Form Page-5 Photo", "immunization5", 0]]],
+            ]],
+          ]],
+        ]],
+
+      ["Secti", "FORM C- Do you want to add Form C?", [
+        ["Comment", "Form C is required for Boy Scouts activities that exceed 72 hours. For example (but not limited to) Camp Chawanakee and Camp Philmonte require mandatory submission or Form C signed by a Dr/Physician..."],
+        ["Cheky", "Check here to add form C: ", "upldfrmc", 0, [1,
+            [
+              ["Photo", "Form C", "formc", 0],
+              ["Formy", "Particulars from Form C", [
+                ["Date", "Dr's Date on Form C:", "drdtonc", 1], 
+                ["Name", "Dr's Name on Form C:", "drnameonc", 1],
+                ["Name", "Dr's medical group on Form C (optional):", "drgrouponc", 0],
+                ["Street", "Dr's Address (number, street, apt/ste):", "drstreetonc", 1],
+                ["City",   "Dr's City:", "drctyonc", 1],
+                ["Zip",    "Dr's ZipCode:", "drziponc", 1],
+                ["State",  "Dr's State:", "drstonc", 1],
+                ["Phone",  "Dr's Contact Phone:", "drphonc", 1],
+              ]]
+            ]], []
+          ]
+      ]]
+            ];
+  
+    var dynform = null;
+    var formissues = null;
+    var formcomplete = null;
+    var summary = null;
+    var addedimages = null;
+    var namemap = null;
+    var finalformdata = null;
+    var additionalinstructions = null;
+  
+    //window.open("assets/check.jpg");
+  
+    /*Access Local filesystem using HTML5
+    window.webkitRequestFileSystem(window.PERSISTENT , 1024*1024*1024, SaveDatFileBro);
+ 
+    function SaveDatFileBro(localstorage) {
+      localstorage.root.getFile("info.txt", {create: true});
+    }
+  
+    function WriteToFile() {
+      set fso = CreateObject("Scripting.FileSystemObject"); 
+     set s   = fso.CreateTextFile("<your Path>/filename.txt", True);
+
+      var firstName = document.getElementById('FirstName');
+      var lastName  = document.getElementById('lastName');
+
+      s.writeline("First Name :" + FirstName);
+      s.writeline("Last Name :" + lastName);
+
+      s.writeline("-----------------------------");
+      s.Close();
+    }
+ 
+    set fso = CreateObject("Scripting.FileSystemObject"); 
+    set s   = fso.CreateTextFile("<your Path>/filename.txt", True);
+ 
+    var firstName = document.getElementById('FirstName');
+    var lastName  = document.getElementById('lastName');
+ 
+    s.writeline("First Name :" + FirstName);
+    s.writeline("Last Name :" + lastName);
+ 
+    s.writeline("-----------------------------");
+    s.Close();
+ } */
+  
+  // Check for the various File API support.
+  if (window.File && window.FileReader && window.FileList && window.Blob) {
+    trace('Great success! All the File APIs are supported.');
+  } else {
+    alert('The File APIs are not fully supported in this browser. Please use Google Chrome, or Firefox, that we have tested.');
+    exit();
+  }
+    function alnumonly(str) {
+      return str.replace(/[^A-Za-z0-9]/g, '');
+    }
+
+    function trace(t) {
+      // document.getElementById("myDiv").textContent += "<br>" + t;
+    }
+
+    // Returns if a value is a string
+    function isString (value) {
+      return ((typeof value) === 'string') || (value instanceof String);
+    }
+
+    function proc_rest(newE,arr) {
+       if (isString(arr[0])) {
+            proc_single(newE, arr);
+        } else {
+          for (var i=0; i < arr.length; i++) {
+             proc_single(newE, arr[i]);
+          }
+       }
+       return newE;
+    }
+
+    function checknameuniqueness(lid, arr) {
+       if (namemap.has(lid)) {
+          assert(false, "namemap already has the name: " + lid);
+       } else {
+          namemap.set(lid, arr);
+       }
+    }
+                                       
+    function proc_single(newE, arr) {
+        switch(arr[0]) {
+          case "Comment":
+            newE.append($($.parseHTML('<h5 class="mycomment">'+arr[1]+'</h5>')).show().get(0));
+            break;
+          case "Formy":
+            proc_form(newE, arr);
+            break;
+          case "Radii":
+            proc_radio(newE, arr);
+            break;
+          case "Cheky":
+            proc_check(newE, arr);
+            break;
+          case "Secti":
+            proc_sect(newE, arr);
+            break;
+          default:
+            proc_specs(newE, arr);
+        }
+        return newE;
+    }
+
+    function proc_sect(newE, sect) {
+
+        var h = $($.parseHTML('<div class="mysectiondiv"><h4 class="mysection">'+sect[1]+'</h4></div>')).show().get(0);
+
+        if (newE !== null) {
+            newE.appendChild(h);
+        }
+        proc_rest(h, sect[2]);
+        return h;
+    }
+
+    function proc_form(newE, arr) {
+        var fieldset = $($.parseHTML('<fieldset class="myformfieldset"><legend>' + arr[1] +'</legend></fieldset>')).show().get(0);
+        var form = document.createElement("form");
+
+        form.appendChild(fieldset);
+        newE.appendChild(form);
+
+        proc_rest(fieldset, arr[2]);
+        return form;
+    }
+                                       
+    function uidj(arr, j) {
+        console.assert((typeof arr[3]) === 'object', "illeagle object arr");
+        return "uid_"+arr[2]+alnumonly((arr[3][j])[0]);
+    }
+
+    function uid(arr) {
+        return "uid_"+arr[2]+alnumonly(arr[1]);
+    }
+
+    function forminstid(id, form, i, superradio) {
+        var retval = id + "_" + form + "_fdsinst_" + i + (superradio ? "_superradio" : "_nonsr" );
+        return retval;
+    }
+                                       
+    function makeformdatainsts(rid, fds, superradio) {
+      for (var i=0; i < fds.length; i++) {
+        var form = fds[i][0];
+        var f = document.getElementById(form);
+        if (f === null) {
+            alert("Form specified: " + form + " not found.");
+            power = debuasd;
+            continue;
+        }
+  
+        var img = f.getElementsByTagName("img")[0];
+        var aw = img.naturalWidth * 1.0;
+        var ah = img.naturalHeight * 1.0;
+        var w = img.offsetWidth * 1.0;
+        var h = img.offsetHeight * 1.0;
+  
+        var id = forminstid(rid, form, i, superradio);
+        var eid = document.getElementById(id);
+        if (eid) {
+            eid.parent.removeChild(eid);
+        }
+        var e = document.getElementById(f);
+        if (e == null) {
+            var str = '<label class="formdata" style="left:' + (100.0*fds[i][1]/aw) + '%; top:' + (100.0*fds[i][2]/ah) + '%; width:' + (100.0*(fds[i][3]-fds[i][1])/aw) + '%; height:' + (100.0*(fds[i][4]-fds[i][2])/ah) + '%; ';
+                str+= ' font-size:100%' + '" id="' + id + '"></label>';
+            e = $($.parseHTML(str)).show().get(0);
+            f.appendChild(e);
+        }
+      }
+    }
+  
+    function mmmddyyyy(val) {
+      var d = new Date(val);
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      if ((new Date(val) !== "Invalid Date") && !isNaN(new Date(val)))
+      {
+        return months[d.getMonth()] + " " + d.getDay() + ", " + d.getFullYear();
+      } else {
+        return val;
+      }
+    }
+
+    function updateformdatainsts(e, reset) {
+      var arr = namemap.get(e.id);
+      if (arr[0] === "Radii") {
+          // we have a radio button
+          var fds = arr[2][3][arr[1]][1];
+          for (var i=0; i < fds.length; i++) {
+            var eid = forminstid(e.id, fds[i][0], i, true);
+            eid = document.getElementById(eid);
+            if (reset) {
+              eid.innerHTML = (arr[2][3][arr[2][3].length-1] == arr[1]) ? "X" : "";
+            } else {
+               eid.innerHTML = e.checked? "X" : "";
+            }
+          }
+          // now process the nonsuper instances
+          if (arr[2].length > 5) {
+            fds = arr[2][5];
+            for (var i=0; i < fds.length; i++) {
+              var eid = forminstid(uid(arr[2]), fds[i][0], i, false);
+              eid = document.getElementById(eid);
+              if (reset) {
+                eid.innerHTML = arr[2][3][arr[1]];
+              } else {
+                var radios = e.closest("fieldset").getElementsByTagName("input");
+                for (var j = 0; j < radios.length; j++) {
+                  if (radios[j].checked) {
+                    eid.innerHTML = arr[2][3][i][0];
+                  }
+                }
+              }
+            }
+          }
+        } else if (arr[0] === "Cheky") {
+            fds = arr[2][5];
+            for (var i=0; i < fds.length; i++) {
+              var eid = forminstid(e.id, fds[i][0], i, false);
+              eid = document.getElementById(eid);
+              if (reset) {
+                eid.innerHTML = (arr[2][3] ? "X" : "");
+              } else {                             
+                eid.innerHTML = (e.checked? "X" : "");
+              }
+            }
+        } else if (arr[0] === "Number") {
+            if (arr[2].length > 5) {
+               fds = arr[2][5];
+               for (var i=0; i < fds.length; i++) {
+                 var eid = forminstid(e.id, fds[i][0], i, false);
+                 eid = document.getElementById(eid);
+                 eid.innerHTML = reset? "" : e.value;
+               }
+            }
+        } else if (arr[2].length > 4) {
+            fds = arr[2][4];
+            for (var i=0; i < fds.length; i++) {
+              var eid = forminstid(e.id, fds[i][0], i, false);
+              eid = document.getElementById(eid);
+              if (arr[2][0] === "Date") {
+                 eid.innerHTML = reset? "" : mmmddyyyy(e.value);
+              } else {
+                eid.innerHTML = reset ? "" : e.value;
+              }
+            }
+        }
+    }
+                                       
+    function proc_radio(newE, arr) {
+        var radioset = $($.parseHTML('<fieldset class="myradiofieldset" name="' + arr[2] + '"/></fieldset>')).show().get(0);
+        var legend = document.createElement("legend");
+                                       
+        legend.appendChild(document.createTextNode(arr[1]));
+        radioset.appendChild(legend);
+                                       
+        var presetidx = arr[3][arr[3].length-1];
+                                       
+        for (var j=0; j < arr[3].length-1; j++) {
+            var rid = uidj(arr, j);
+            checknameuniqueness(rid, ["Radii", j, arr]);
+            var str = '<div class="myradiodiv"><label class="myradiolabel" for="' + rid + '">';
+                str += '<input class="myradio savedcheckeditem" type="radio" name="' + arr[2] + '" value="' + arr[3][j] + '" id="' + rid + '" data-defval=' + (arr[3][arr[3].length-1] === 1 ? '"1"' : '"0"') + '></input>';
+                str += arr[3][j][0] + '</label></div>';
+            var radio = $($.parseHTML(str)).show().get(0);
+        
+            var v = window.localStorage.getItem(lsk(rid));
+            if (v === "1") {
+                presetidx = j;
+            }
+
+            radioset.appendChild(radio);
+            var fds = arr[3][j][1];
+            makeformdatainsts(rid, fds, true);
+        }
+
+        if (arr.length > 5) {
+            makeformdatainsts(uid(arr), arr[5], false);
+        }
+        newE.appendChild(radioset);
+
+        //https://stackoverflow.com/questions/22552443/hide-display-of-3-textboxes-on-selection-of-radio-button
+        if (arr[4]) {
+          radioset.appendChild(document.createElement("br"));
+
+          var strScript = "$(function() {$('input[name=\"" + arr[2] +"\"]').on('click', function() {";
+          for (var k=0; k < arr[4].length/2; k++ ) {
+              strScript += "$('#" + arr[2] + "_showhidectlset_" + arr[4][k*2] + "').hide();";
+          }
+
+          for (var k=0; k < arr[4].length/2; k++ ) {
+              var str = '<fieldset class="myradiofieldsetshowhide" id="' + arr[2] + '_showhidectlset_' + arr[4][k*2] + '" style="display:block"></fieldset>';
+              var newDiv = $($.parseHTML(str)).show().get(0);
+
+              strScript += "if ($(this).val() == '" + arr[3][arr[4][k*2]] + "') { $('#" + arr[2] + "_showhidectlset_" + arr[4][k*2] + "').show(); }";
+              radioset.appendChild(newDiv);
+
+              proc_rest(newDiv, arr[4][k*2+1]); 
+              newDiv.style.display = (arr[4][k*2] === presetidx) ? "block" : "none";
+          }
+
+          strScript +=  " }); });"; // closing parentheses.
+          var newScript = document.createElement("script");
+          var inlineScript = document.createTextNode(strScript);
+          newScript.appendChild(inlineScript); 
+          radioset.appendChild(newScript);
+       }
+
+       //finally the desired radiobutton that gets checked..
+       var radios = radioset.getElementsByTagName("input");
+       var preset = radios[presetidx];
+       preset.checked = true;
+
+       return radioset;
+    }
+
+    function proc_check(newE, arr) {
+        var newDiv = document.createElement("div");
+        var cid = uid(arr);
+        checknameuniqueness(cid, ["Cheky", 0, arr]);
+
+        var presetidx = arr[3];
+        var v = window.localStorage.getItem(lsk(cid));
+        if (v !== null) {
+          presetidx = ((v === "1") ? 1 : 0);
+        }
+
+        var str = '<div class="mycheckdiv">';
+            str += '<input class="mycheck savedcheckeditem" type="checkbox" name="' + arr[2] + '" value="' + arr[1] + '" id="' +cid + '" data-defval=' + (arr[3] === 1 ? '"1"' : '"0"');
+            str += ((presetidx === 1) ? " checked " : "") + '></input><label class="mychecklabel" for="' + cid + '">' + arr[1] + '</label></div>';
+        var check = $($.parseHTML(str)).show().get(0);
+
+        newDiv.appendChild(check);
+        makeformdatainsts(cid, arr[5], false);
+        newE.append(newDiv);
+
+        //https://stackoverflow.com/questions/22552443/hide-display-of-3-textboxes-on-selection-of-radio-button
+        if (arr[4]) {
+          var strScript = "$(function() {$('input[name=\"" + arr[2] +"\"]').on('click', function() {";
+          for (var k=0; k < arr[4].length/2; k++ ) {
+              strScript += "$('#" + arr[2] + "_showhidectlset_" + arr[4][k*2] + "').hide();";
+          }
+
+          for (var k=0; k < arr[4].length/2; k++ ) {
+              var str = '<fieldset class="mycheckfieldsetshowhide"id="' + arr[2] + '_showhidectlset_' + arr[4][k*2] + '" style="display:block"></fieldset>';
+              var div2 = $($.parseHTML(str)).show().get(0);
+              newE.appendChild(div2);
+
+              proc_rest(div2, arr[4][k*2+1]); 
+              div2.style.display = "none";
+              if (presetidx === arr[4][2*k]) {
+                div2.style.display = "block";
+              }
+          }
+
+          strScript += "if ($(this).val() == '" + arr[1] + "') {var n = $(this).get(0); if (n.checked) { var node = $('#" + arr[2] + "_showhidectlset_1'); if (node) {node.show();} } else { var node = $('#" + arr[2] + "_showhidectlset_0'); if (node) {node.show();}}}";
+          strScript +=  " }); });"; // closing parentheses.
+
+          proc_script(newDiv, strScript);
+       }
+  
+       return newDiv;
+    }
+
+    function proc_script(newE, scr) {
+        var newScript = document.createElement("script");
+        var inlineScript = document.createTextNode(scr);
+        newScript.appendChild(inlineScript);
+        
+        newE.appendChild(newScript);
+        return newScript;
+     }
+
+    function proc_specs(newE, arr) {
+      var info = specials.get(arr[0]);
+  
+      var strValidation = ((arr[3] ===1) ? ' required ' : '');
+      if (info[0] === 'text' || info[0] === 'number' || info[0] === 'textarea' ) { 
+          strValidation += 'pattern="' + info[2] + '" maxlength="' + info[1] +'" size="' + info[1] + '" ';
+  
+          if (info[0] === 'number') { 
+            strValidation += 'min="' + arr[4][0] + '" max="' + arr[4][1] +'" ' 
+          };
+  
+          if (info[0] === 'textarea') { 
+            strValidation += ' rows="20" wrap="soft" ';
+          };
+
+          for (var k = 0; k < specials_width_height_map.length/3; k++) {
+                                                             
+              if (info[1] <= specials_width_height_map[3*k+1] ) {
+                strValidation += 'style="' + specials_width_height_map[3*k+2] + '" ';
+                break;
+              }
+          }
+      }
+  
+      var lid = uid(arr);
+      checknameuniqueness(lid, [arr[0], 0, arr]);
+      var str;
+  
+      switch(info[0]) {
+          case 'textarea':
+            str = '<div class="mytextdiv"><label class="mytextlabel" for="' + lid + '">' + arr[1] + '</label>'; 
+            str += '<textarea class="mytextarea saveditem" value="" name="' + arr[2]+ '" id="' + lid + '" '+ strValidation +'></textarea></div>';
+            break;
+          case 'file':
+            str = '<div class="mytextdiv"><fieldset class="myfilefieldset"><label class="mytextlabel" for="' + lid + '">' + arr[1] + '</label>';
+            str +='<input class="myfile saveditem" type="file" value="" name="' +arr[2]+ '" id="' + lid + '"></input></fieldset></div>';
+            break;
+          default:
+            str = '<div class="mytextdiv"><label class="mytextlabel" for="' + lid + '">' + arr[1] + '</label>'; 
+            str += '<input class="mytext saveditem" type="' + info[0] +'" value="" name="' + arr[2] + '" id="' + lid + '" '+ strValidation +'></input></div>';
+            break;
+      }
+              
+      var ctl = $($.parseHTML(str)).show().get(0);
+  
+      if (info[0] !== 'file') { // it does not make sense to save file.value due to sandbox issues.
+        var v = window.localStorage.getItem(lsk(lid));
+        if (v !== null) {
+          var e = ctl.getElementsByClassName('saveditem');
+          e[0].value = v;
+        }
+      } 
+  
+      ctl.style.display = "block";
+      if (arr[0] === "Number") {
+        if (arr.length > 5) {
+          makeformdatainsts(lid, arr[5], false);
+        }
+      } else if (arr.length > 4) {
+          makeformdatainsts(lid, arr[4], false);
+      }
+  
+      newE.appendChild(ctl);
+  
+      /*if (info[0] === 'text') {
+          / / install validation logic and hooks...
+          var newScript = document.createElement("script");
+          var inlineScript = document.createTextNode(strScript);
+          newScript.appendChild(inlineScript); 
+          newDiv.appendChild(newScript);
+        }
+      }*/
+  
+      return ctl;
+    }
+  
+    function do_new_instance() { 
+      var ide = document.getElementById("id_createinst_name");
+      if (validate_instance_name(ide.value)) {
+         new_instance(ide.value); 
+      } else { 
+         ide.focus(); 
+      };
+      return true;
+    }
+
+    function create_priors_div() {
+      var div = null;
+      priors = get_prior_instances();
+      console.assert(priors.length > 0, "priors can never be empty");
+  
+      div = $($.parseHTML('<div class="mypriorstop" id="id_priorsdiv"><h2>Following are prior instances of ABC Forms known to this Browser. Red indicates the instance that is currently loaded.<h2></div>')).show().get(0);
+      div.appendChild(document.createElement("br"));
+  
+      div = $($.parseHTML('<div class="mypriorsdiv" id="id_priorsdiv">Only form data is saved in browser for each instance, Image files/photos added for form C and Immunization records are not saved.</div>')).show().get(0);
+      div.appendChild(document.createElement("br"));      
+      div = $($.parseHTML('<div class="mypriorsdiv" id="id_priorsdiv">However everything is saved as a printable html file when a form is exported to an external file. This exported file can then be printed and signed and mailed to t466medforms@gmail.com</div>')).show().get(0);
+      div.appendChild(document.createElement("br"));      
+  
+      div = $($.parseHTML('<div class="myprioritemsdiv" id="id_priorsdiv"><h2>Following are prior instances of ABC Forms saved in this Browser. Red indicates current instance<h2></div>')).show().get(0);
+
+      for (var i = 0; i < priors.length; i++) {
+          var str = '<div class="myaprioritemdiv"><div class="myapriornamediv"><span class="mypriorspan" style="color:' + ((priors[i] === currentLocalStorageFormInstanceId) ? '#CC0000' : 'black') + '">' + priors[i] + '<span></div>' ;
+              str+= '  <button class="mypriorsbutton" onclick="load_prior(' + "'" + priors[i] + "'" + ')">Load</button>';
+              str+= '  <button class="mypriorsbutton" onclick="rename_prior(' + "'" + priors[i] + "'" + ')">Rename</button>';
+              str+= '  <button class="mypriorsbutton" onclick="remove_prior(' + "'" + priors[i] + "'" + ')">Discard</button></label></div>';
+
+          div.appendChild($($.parseHTML(str)).show().get(0));
+      }
+      
+      var info = specials.get("Identifier");
+                                    
+      var str = '<div class="mynewformdiv">Create a new ABC form instance with name:<br> <input class="mytext" type="text" pattern="' + info[2] + '" id="id_createinst_name" ';
+          str+= ' size="32" maxLength="' + info[1] + '"></input><button class="mypriorsbutton", onclick="do_new_instance()">Create Instance</button></div>';
+
+      div.appendChild($($.parseHTML(str)).show().get(0));
+      div.appendChild(document.createElement("br"));      
+      
+      str = '<div class="myloadformdiv"><label for="id_importpriorfile">Load form instance from an exported file:</label><input type="file" class="mypriorfile" onclick="load_file_instance(this.value) id="id_importpriorfile""></file><file></div>';
+
+      div.appendChild($($.parseHTML(str)).show().get(0));
+      
+      str = "<div><h2>Currently selected form instance: <span style='color:#CC0000'>" + currentLocalStorageFormInstanceId + "</span><h2></div>";
+      div.appendChild($($.parseHTML(str)).show().get(0));
+  
+      return div;
+    }
+
+    function filterout(arr, id) {
+      arr = arr.filter(function(value, index, arr) {
+            return value !== id;
+      });
+      return arr;
+    }
+                                    
+    function load_prior(priorid) {
+      var priors = get_prior_instances();
+      priors = filterout(priors, priorid);
+      priors.unshift(priorid);
+      set_prior_instances(priors);
+      load(priorid);
+    }
+  
+    function remove_prior(priorid) {  
+      var priors = get_prior_instances();
+      priors = filterout(priors, priorid);
+      set_prior_instances(priors);
+
+      // Remove all the unused keys stored in the local storage...
+      var removeKeys = [];
+      var oldkeys = "$" + priorid + "$";
+      for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (key.startsWith(oldkeys)) {
+              removeKeys.push(key);
+          }
+      }
+      for (var i = 0; i < removeKeys.length; i++) {
+        localStorage.removeItem(removeKeys[i]);
+      }
+
+      load(priors[0]);
+    }
+  
+    function get_prior_instances() {
+      var priorforms = window.localStorage.getItem(allPriorFormsKey);
+      if (priorforms !== null) {
+        priors = priorforms.split("$");
+      } else {
+        priors = ["FormABC.Untitled"];
+        set_prior_instances(priors);
+      }
+      return priors;
+    }
+    
+    function exact_match_re(re, str) {
+      var match = str.match(re);
+      return match && str === match[0];
+    }
+                                        
+    function validate_instance_name(name) {
+        var priors = get_prior_instances();
+        var info = specials.get("Identifier");
+         
+        if (name === null || name.length > info[1] || (!exact_match_re(info[2], name))) { alert("Please enter a valid name. "+info[3]); return false; }
+        if (name in priors) { alert("A prior form instance with the new name (" + response + ") already exists"); return false;}
+  
+        return true;
+    }
+  
+    function rename_prior(old) {
+      var response = "FormABC.SomeNewTitle";
+                                    
+      while(true) {
+        var response = prompt("Please provide a new name, to rename this old instance (" + old + ") to:", response);
+        if (response === null) { return;} // user cancelled.
+        if (response === old) {alert("Please enter a name different from the old (" + old + ")"); continue; }
+        if (validate_instance_name(response)) {break;} // we have it
+     }
+  
+        //We have a valid new response.
+        // First we copy over the key values in localStorage from old form to new form instance.
+        var removeKeys = [];
+        var oldkeys = "$" + old + "$";
+        for (var i = 0; i < localStorage.length; i++){
+            var key = localStorage.key(i);
+            if (key.startsWith(oldkeys)) {
+                removeKeys.push(key);
+                localStorage.setItem("$" + response + "$" + key.substring(oldkeys.length), localStorage.getItem(key));
+            }
+        }
+
+        var priors = get_prior_instances();
+        
+        // Now we remove all the key values for the old form instance.
+        for (var i = 0; i < removeKeys.length; i++) {
+          localStorage.removeItem(removeKeys[i]);
+        }
+
+        var priors = get_prior_instances();
+        priors = filterout(priors, id);
+        priors.unshift(response);
+        set_prior_instances(priors);
+        load(response);
+     }
+
+    function set_prior_instances(priors) {
+      window.localStorage.setItem(allPriorFormsKey, priors.join('$'));
+    }
+  
+    function new_instance(newid) {
+      var priors = get_prior_instances();
+      priors.unshift(newid);
+      set_prior_instances(priors);
+      load(newid);
+    }
+
+    function load_file_instance(fromfile) {
+          i = j*k; // Still to implement.
+    }
+
+    function lsk(id) {
+        return "$"+currentLocalStorageFormInstanceId+"$"+id;
+    }
+  
+    function lse(e) {
+      switch(e.localName) {
+        case "input":
+           switch(e.type) {
+              case "checkbox":
+              case "radio":
+                window.localStorage.setItem(lsk(e.id), e.checked ? "1" : "0");
+                break;
+              case "text":
+              case "date":
+              case "number":
+                window.localStorage.setItem(lsk(e.id), ((e.value === null) ? "" : e.value) );
+                break;
+              case "file":
+                // It does not make sense to save file, as it can not be restored back...
+                break;
+              default:
+                console.assert(false, "savin input type:" + e.type + " not supported");
+                break;
+            }
+            break;
+        case "textarea":
+            window.localStorage.setItem(lsk(e.id), ((e.value === null) ? "" : e.value) );
+            break;
+        default:
+          console.assert(false, "saving elements with localname:" + e.localName + " not supported");
+          break;
+      }
+    }
+  
+    function saveAllItems() {
+        var saves = document.getElementsByClassName("saveditem");
+        var savechecks = document.getElementsByClassName("savedcheckeditem");
+  
+        for (var i=0; i < saves.length; i++) {
+          lse(saves[i]);
+        }
+        for (var i=0; i < savechecks.length; i++) {
+           lse(savechecks[i]);
+        }
+
+        // Something to ponder upon,... https://thiscouldbebetter.wordpress.com/2012/12/18/loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
+        // window.open, window.opener..... https://stackoverflow.com/questions/87359/can-i-pass-a-javascript-variable-to-another-browser-window
+    }
+
+    function oninputtext() {
+        lse(this);
+        checkValidity();
+        return true;
+    }
+
+    function oninputcheck() {
+        lse(this);
+        checkValidity();
+        return true;
+    }
+  
+    function oninputfile() {
+        if (this.files === null || this.files.length != 1) {
+          alert("Please select exactly one file");
+          return;
+        }
+  
+        if (typeof window.FileReader !== 'function') {
+            alert('The File APIs are not fully supported in this browser. Please use Google Chrome, or Firefox, that we have tested.');
+            return;
+        }
+
+        var id = uid(namemap.get(this.id)[2]) + "_img";
+        var e = document.getElementById(id);
+        if (e && e.src != '') {
+          e.src = '';
+        }
+        checkValidity();
+        return true;
+    }
+
+    function oninputradio() {
+      radios = this.closest("fieldset").getElementsByTagName("input");
+      for (var i = 0; i < radios.length; i++) {
+        lse(radios[i]);
+      }
+      checkValidity();
+      return true;
+    }
+
+    function set_oninputforclasses(clss, fn) {
+      for (var i = 0; i < clss.length; i++) {
+        var es = document.getElementsByClassName(clss[i]);
+
+        for (var j = 0; j < es.length; j++) {
+            es[j].addEventListener('input', fn);
+        }
+      }
+    }
+                                           
+    // change the src url to corresponding data url.
+    function datafy(e) {
+      if (e.attributes !== null && e.hasAttribute("src")) {
+        var src = e.attributes.src.value.trim();
+        if ((src.trim() !== '') && (!src.startsWith("data:"))) {
+              if (!src.startsWith("http:")) {
+                src = new URL(src, window.location.href).href;
+              }
+              fetch(src).then(function(response) 
+                {
+                  return response.blob();
+                })
+                  .then(function(blb) {
+                    var fr = new FileReader(); 
+                    fr.onload = function(evt) {
+                      if (evt.target.result !=null) {
+                        e.attributes.src.value = evt.target.result;
+                      } 
+                    }; 
+                    fr.readAsDataURL(blb); 
+                  }).catch();
+            }
+         }
+      }
+
+  
+    function textyfy(e) {
+      if (e.attributes !== null && e.hasAttribute("src")) {
+        var src = e.attributes.src.value.trim();
+        if ((src.trim() !== '') && (!src.startsWith("data:"))) {
+            fetch(src).then(function(response) 
+              {
+                 e.attributes.src.value="data:text/plain," + response.text();
+              }).catch();
+        }
+      }
+    }
+  
+    // change the src url for all script and img descendents to data url.
+    function localize(e) {
+        var scripts = e.getElementsByTagName("script");
+        for (var i=0; i < scripts.length; i++) {
+            datafy(scripts[i]);
+        }
+        var imgs = e.getElementsByTagName("img");
+        for (var i=0; i < imgs.length; i++) {
+            datafy(imgs[i]);
+        }
+    }
+
+    function updatedocanchor(wholeapp) {
+       var anchor = document.getElementById('localizerId');
+       anchor.visibility="hidden";
+       anchor.setAttribute('download', 'T466MedForm-' + currentLocalStorageFormInstanceId + '.html');
+       anchor.setAttribute('href', "data:text/plain,");
+                                  
+        var str;                       
+        if (wholeapp) {
+            if (navigator.userAgent.search("Firefox") < 0) {
+              alert("This works only in firefox, (definitely not in Chrome)");
+              return;
+            }
+           localize(document);
+           localize(document.documentElement);
+           str = document.documentElement.outerHTML;
+        } else {
+            var nd = document.implementation.createHTMLDocument("T466MedForm-" + currentLocalStorageFormInstanceId);
+            var ids = ["formA", "formB", "formBB", "addedImagesID", "additionalinstructionsID", "summaryID"];
+            for (var i = 0; i < ids.length; i++) {
+              var e = document.getElementById(ids[i]);
+              var cln = e.cloneNode(true);
+              cln.style.display="block";
+              nd.body.appendChild(cln);
+            }
+            var meta=document.createElement('meta');
+            meta.name='viewport';
+            meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            nd.getElementsByTagName('head')[0].appendChild(meta);
+            str = nd.documentElement.outerHTML;
+        }
+                                  
+        // https://stackoverflow.com/questions/9238890/convert-html-to-datatext-html-link-using-javascript
+        var dataURI = 'data:text/html,' + encodeURIComponent(str);
+        anchor.setAttribute('href', dataURI);
+        anchor.click();
+    }
+
+    function normalize_this_app() {
+        updatedocanchor(true);
+    }
+
+    function get_form_instance() {
+        updatedocanchor(false);
+    }
+
+    function scrollto(id) {
+        var e = document.getElementById(id);
+        e.scrollIntoView(true);
+        e.focus();
+    }
+  
+    function validate_single(arr, reset) {
+        switch(arr[0]) {
+          case "Comment":
+             break;
+          case "Formy":
+            validate_sect(arr[2], reset);
+            break;
+          case "Radii":
+            if (arr[4]) {
+              var idx = arr[3][arr[3].length-1];
+              for (var j=0; j < arr[3].length-1; j++) {
+                var id = uidj(arr, j);
+                var e = document.getElementById(id);
+                updateformdatainsts(e, reset);
+                if ((!reset) && e.checked) {
+                  idx = j;
+                  var str = "<p> " + arr[1] + " " + arr[3][j][0] + " </p>";
+                  summary.appendChild($($.parseHTML(str)).show().get(0));
+                }
+              }
+              for (var k=0; k < arr[4].length/2; k++){
+                  validate_sect(arr[4][k*2+1], idx === arr[4][k*2] ? reset : true); 
+               }
+            } 
+            break;
+          case "Cheky":
+            if (arr[4]) {
+              var id = uid(arr);
+              var e = document.getElementById(id);
+              updateformdatainsts(e, reset);
+              var idx = reset? arr[3] : (e.checked ? 1 : 0);
+              if ((!reset)) {
+                  var str = "<p> " + arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected") + " </p>";
+                  summary.appendChild($($.parseHTML(str)).show().get(0));
+              }
+              for (var k=0; k < arr[4].length/2; k++ ) {
+                  validate_sect(arr[4][k*2+1], idx === arr[4][2*k] ? reset : true);
+              }
+            }
+            break;
+          case "Secti":
+            validate_sect(arr, reset);
+            break;
+          default:
+            var id = uid(arr);
+            var e = document.getElementById(id);
+            if (arr[0] === "Photo") {
+                var imgid = id+"_img";
+                var img = document.getElementById(imgid);
+                if (reset) {
+                  if (img != null) {
+                      img.style.display="none";
+                  }
+                } else {
+                   if ((arr[3] === 1) && (e.files === null || e.files.length != 1)) {
+                      // Missing mandatory photo.
+                      var str = '<p><button onclick="scrollto(' +"'" + id + '"' + ')">Go Here</button> Missing Photo: ' + arr[1] + ' (must be added to complete this form) </p>';
+                      formissues.appendChild($($.parseHTML(str)).show().get(0));
+                      if (img) {
+                          img.style.display="none";
+                      }
+                    } else {
+                        if ((e.files) && e.files.length === 1) {
+                           if (img === null) {
+                              var str = '<img class="myfileimg onnewpage" src="" name="' + arr[2] + '" id="' + imgid + '" style="display:block"></img>';
+                              img = $($.parseHTML(str)).show().get(0);
+                              addedimages.appendChild(img);
+                           }
+                           if (img && img.hasAttribute("src") && img.attributes.src.value === '') {
+                              //set new data url for this img...
+                              var file = e.files[0];
+                              var fr = new FileReader();
+                              fr.onload = function(evt) {
+                                  img.attributes.src.value = fr.result;
+                              };
+                              fr.readAsDataURL(file);
+                           }
+                        }
+                     }
+                 }
+            } else {
+              updateformdatainsts(e, reset);
+              if (!reset) {
+                  if (!e.validity.valid) {
+                    var str = '<p><button onclick="scrollto(' +"'" + id + "'" + ')">Go Here</button> ' + arr[1] + " is invalid </p>";
+                    formissues.appendChild($($.parseHTML(str)).show().get(0));
+                  } else {
+                    var str = "<p> " + arr[1] + " " + e.value + " </p>";
+                    summary.appendChild($($.parseHTML(str)).show().get(0));
+                  }
+                }
+               if (arr[0] === "Page") {
+                 while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
+                 additionalinstructions.appendChild(document.createTextNode(e.value));
+                 additionalinstructions.style.display= reset? "none" : "block";
+               }
+
+              }
+            break;
+        }
+    }
+  
+    function validate_sect(arr, reset) {
+       if (isString(arr[0])) {
+            validate_single(arr, reset);
+       } else {
+          for (var i=0; i < arr.length; i++) {
+             validate_single(arr[i], reset);
+          }
+       }
+    }
+
+    function checkValidity() {
+      formissues.style.display="none";
+       while(formissues.lastChild) {
+        formissues.removeChild(formissues.lastChild);
+      }
+      summary.style.display="none";
+      while (summary.lastChild) {
+        summary.removeChild(summary.lastChild);
+      }
+      for (var iy=0; iy < datin.length; iy++){
+            validate_sect(datin[iy][2], false);
+      }
+      summary.style.display="block"
+      if (formissues.childNodes.length === 0) {
+          //No issues detected, time to wrapup
+          formcomplete.style.display="block";
+          formissues.style.display="none";
+      } else  {
+          //No issues detected, time to wrapup
+          formcomplete.style.display="none";
+          formissues.style.display="block";
+      }
+    }
+
+    function load(id) {
+                                       
+      dynform = document.getElementById("mydyndivID");
+      formissues = document.getElementById("formIssuesID");
+      formcomplete = document.getElementById("formCompleteID");
+      summary = document.getElementById("summaryID");
+      addedimages = document.getElementById("addedImagesID");
+      namemap = new Map();
+      finalformdata = document.getElementById("finalformdataID");
+      additionalinstructions = document.getElementById("additionalinstructionsID");
+
+      var div = document.createElement("div");
+                                 
+      while (dynform.lastChild) {
+        dynform.removeChild(dynform.lastChild);
+      }
+      while (summary.lastChild) {
+        summary.removeChild(summary.lastChild);
+      }
+      while (formissues.lastChild) {
+        formissues.removeChild(formissues.lastChild);
+      }
+      while (addedimages.lastChild) {
+        addedimages.removeChild(addedimages.lastChild);
+      }
+                                      
+      currentLocalStorageFormInstanceId = id;
+                                      
+      div.appendChild(create_priors_div());
+      namesmap = new Map();
+      for (var iy=0; iy < datin.length; iy++){
+            trace("~Section:" + datin[iy][1] + "~");
+            var e = proc_sect(div, datin[iy]);
+            div.appendChild(e);
+      }
+  
+      dynform.appendChild(div);
+
+      set_oninputforclasses(['mycheck'], oninputcheck);
+      set_oninputforclasses(['myradio'], oninputradio);
+      set_oninputforclasses(['mytext', 'mytextarea'], oninputtext);                                       
+      set_oninputforclasses(['myfile', 'myfile'], oninputfile);
+                                       
+      //Check current state of validity
+      checkValidity();
+    }
+  
+    load(get_prior_instances()[0]);
+
+</script>
+</body>
+</html>
