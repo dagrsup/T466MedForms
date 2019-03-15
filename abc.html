@@ -1345,8 +1345,8 @@ var datin =  [
           alert("Still to implement");
     }
 
-    function lsk(e) {
-        return "$"+currentLocalStorageFormInstanceId+"$"+e.id;
+    function lsk(id) {
+        return "$"+currentLocalStorageFormInstanceId+"$"+id;
     }
   
     function keyvaluemap(k, v) {
@@ -1356,7 +1356,7 @@ var datin =  [
     }
   
     function lse(e) {
-      var k = lsk(e);
+      var k = lsk(e.id);
   
       switch(e.localName) {
         case "input":
