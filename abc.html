@@ -313,7 +313,6 @@
        <p>If you dont agree with statements above, or do not understand the possible privacy risks of digitized medical data, please don't use this online form. You can print blank forms and fill and submit them 
        manually (in writing) by following instructions at: https://www.scouting.org/health-and-safety/ahmr/ </p>
 
-       <p><br></p>
        <p><input type="checkbox" id="id_iagreetothisform">By checking here I agree to statements above.</input></p>
        <p><input type="button" id="proceedButtonId", onclick="proceed(); return true;" value="PROCEED"></input></p>
     <script>
@@ -356,8 +355,9 @@
       <div id="addedImagesID"></div>
       <div id="additionalinstructionsID"></div>
       <div class="onnewpage" id="summaryID"></div>
+        <h2> You can obtain a file with the current state of forms below: </h2>
+        <p> This file includes the added images (if any added)." </p>
       <p><button onclick="get_form_instance();">Obtain Form Instance</button></p>
-      <p><button id="id_normalizebutton" onclick="normalize_this_app();" style="display:block;">Normalize App to ship it</button></p>
   </div>
 </div>
      
@@ -385,7 +385,7 @@ var specials = new Map ([
       ["Number",         ["number"], 12, "\d+(\\s)*", "Invalid number"]
    ]);
 
-var specials_width_height_map = [1, 12, "width: 20%;", 13, 24, "width: 25%;", 25, 32, "width: 33%;", 33, 64, "width: 50%;", 65, 96, "width: 66%;", 97, 10241024, "width: 80%; height: 150pt;"];
+var specials_width_height_map = [1, 12, "width: 30%;", 13, 24, "width: 40%;", 25, 32, "width: 50%;", 33, 64, "width: 60%;", 65, 96, "width: 70%;", 97, 10241024, "width: 80%; height: 150pt;"];
 
 const allPriorFormsKey = "$$_All^^priorABCforms^^$$";
 
@@ -395,7 +395,7 @@ var datin =  [
         [ "Date", "Date Of Birth:", "dob", 1, [["formA", 400, 400, 1300, 460], ["formB", 500, 400, 1400, 460], ["formBB", 400, 400, 1300, 460]]],
       ]],
       ["Secti", "Any participation restriction(s):", [
-        ["Comment", "Due to the nature of programs and  activities, the Boy Scouts of America and local  councils cannot continually monitor compliance  of program participants or any limitations  imposed upon them by parents or medical  providers. However, so that leaders can be as  familiar as possible with any limitations, list any  restrictions imposed on a child participant in  connection with programs or activities below:"],
+        ["Comment", "Due to the nature of programs and  activities, the Boy Scouts of America and local  councils cannot continually monitor compliance  of program participants or any limitations  imposed upon them by parents or medical  providers. However, so that leaders can be as familiar as possible with any limitations, list any restrictions imposed on a child participant in connection with programs or activities below:"],
         [ "Formy", "Check None if no restrictions", [
           ["Cheky", "None Restrictions", "pr", 0, 
             [0, [ "WordListShort", "Restrict participation as listed here:", "pre", 1, [["formA", 1250, 1575, 2300, 1635]], "If no restrictions specified here, check the None checkbox box above."]
@@ -456,21 +456,6 @@ var datin =  [
         ["Identifier", "Unit Number:", "unitname", 1, [["formB", 2040, 770, 2325, 710]], "Must be a valid unit name"]
       ]],  
 
-      ["Secti", "Health/Accident insurance details", [
-
-        ["Names", "Health/Insurance Company Name:", "insc", 1, [["formB", 700, 825, 1425, 915]]],
-        ["Names", "Policy Number:", "policynum", 1, [["formB", 1575, 825, 2325, 915]]],
-        ["Names", "Group Number:", "groupnum", 1, []],
-        ["Names", "Policy holder name:", "phln", 1, []],
-        ["Names", "Plan Name:", "plnn", 0, []],
-        ["Names", "Plan type:", "plnt", 0, []],
-        ["Names", "Employer name (if applicable):", "empn", 0, []],
-        ["Phone", "Insurance company contact phone number:", "insph", 1, []],
-        ["Phone", "Preauthorization phone number (if needed):", "inspaph", 0, []],
-        ["Photo", "Add Front image/photo of insurance card, please keep the image size below 1MB", "insfront", 1, []],
-        ["Photo", "Add Backside image/photo of insurance card, please keep the image size below 1MB", "insback", 1, []]
-      ]],
-
       ["Secti", "Emergency Contacts:", [
 
           ["Formy", "Primary Emergency Contact:", [
@@ -488,6 +473,21 @@ var datin =  [
             [ "Names",  "Alternate Name:", "aecn", 1, [["formB", 550, 1235, 1400, 1275]]],
             [ "Phone",  "Primary Phone (for alternate emergency contact):", "aecph", 1, [["formB", 1650, 1235, 2325, 1275]]]
           ]]
+      ]],
+
+      ["Secti", "Health/Accident insurance details", [
+
+        ["Names", "Health/Insurance Company Name:", "insc", 1, [["formB", 700, 825, 1425, 915]]],
+        ["Names", "Policy Number:", "policynum", 1, [["formB", 1575, 825, 2325, 915]]],
+        ["Names", "Group Number:", "groupnum", 1, []],
+        ["Names", "Policy holder name:", "phln", 1, []],
+        ["Names", "Plan Name:", "plnn", 0, []],
+        ["Names", "Plan type:", "plnt", 0, []],
+        ["Names", "Employer name (if applicable):", "empn", 0, []],
+        ["Phone", "Insurance company contact phone number:", "insph", 1, []],
+        ["Phone", "Preauthorization phone number (if needed):", "inspaph", 0, []],
+        ["Photo", "Add Front image/photo of insurance card, please keep the image size below 1MB", "insfront", 1, []],
+        ["Photo", "Add Backside image/photo of insurance card, please keep the image size below 1MB", "insback", 1, []]
       ]],
 
       ["Secti", "Health History:", [
@@ -538,7 +538,7 @@ var datin =  [
                 [0, ["WordListShort", "Explain:", "exFatigue", 1, [["formB", 1175, 2765, 2425, 2815]], "Must explain fatigue"]]],
             [ "Radii", "Obstructive sleep apnea/sleep disorders:", "apnea", [["Yes", [["formB", 250, 2825, 300, 2875]]], ["No", [["formB", 340, 2825, 390, 2875]]], 1],
                 [0, ["Formy", "Explain including CPAP (y/n)", [
-                     ["Radii", "CPAP:", "cpap", [["Yes", []], ["No", []], 0], []],
+                     ["Radii", "CPAP:", "cpap", [["Yes", [["formB", 1325, 2825, 1375, 2875]]], ["No", [["formB", 1430, 2825, 1480, 2875]]], 0], [], []],
                      ["WordListShort", "Explain:", "exApnea", 1, [["formB", 1480, 2825, 2425, 2875]], "Must explain"]]]]],
             [ "Radii", "List all Surgeries and hospitalizations:", "surgeries", [["Yes", [["formB", 250, 2885, 300, 2935]]], ["No", [["formB", 340, 2885, 390, 2935]]], 1],
                 [0, ["WordListShort", "Explain including last surgery date:", "exSurgeries", 1, [["formB", 1440, 2885, 2425, 2935]], "Must explain surgeries and hiospitalizations"]]],
@@ -677,6 +677,10 @@ var datin =  [
           ]
       ]]
             ];
+  
+  var additionalComputedFds = [
+                                ["AdditionalFds", "Todays", "today", 1, [["formA", 1840, 1900, 2100, 1950], ["formA", 1840, 2040, 2100, 2090], ["formA", 1840, 2210, 2100, 2260]], "today()", [], []]
+                              ];
   
     var dynform = null;
     var formissues = null;
@@ -822,6 +826,7 @@ var datin =  [
     }
                                        
     function makeformdatainsts(rid, fds, superradio) {
+      var retval = [];
       for (var i=0; i < fds.length; i++) {
         var form = fds[i][0];
         var f = document.getElementById(form);
@@ -854,13 +859,36 @@ var datin =  [
             e = $($.parseHTML(str)).show().get(0);
             f.appendChild(e);
         }
+        retval.push([e, []]); 
+      }
+      return retval;
+    }
+
+    function makeadditionalcomputedfds() {
+      for (var i=0; i < additionalComputedFds.length; i++) {
+        var arr = additionalComputedFds[[i]];
+        var fid = uid(arr);
+        var insts = makeformdatainsts(fid, arr[4], false);
+        
+        var val = eval(arr[5]);
+        for (var j = 0; j < insts.length; j++) {
+          insts[j][0].innerHTML = val;
+          if (arr[3] === 0) {
+              //hidden
+                insts[j][0].style.display = "none";
+              }
+          }
       }
     }
   
+    function today() {
+       return mmmddyyyy(new Date().toString());
+    }
+
     function mmmddyyyy(val) {
       var d = new Date(val);
       var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      if ((new Date(val) !== "Invalid Date") && !isNaN(new Date(val)))
+      if ((d !== "Invalid Date") && !isNaN(d))
       {
         return months[d.getMonth()] + " " + d.getDay() + ", " + d.getFullYear();
       } else {
@@ -1136,8 +1164,9 @@ var datin =  [
   
     function do_new_instance() { 
       var ide = document.getElementById("id_createinst_name");
-      if (validate_instance_name(ide.value)) {
-         new_instance(ide.value); 
+      var newName = ide.value.trim();
+      if (validate_instance_name(newName)) {
+         new_instance(newName); 
       } else { 
          ide.focus(); 
       };
@@ -1251,7 +1280,7 @@ var datin =  [
         var info = specials.get("Identifier");
          
         if (name === null || name.length > info[1] || (!exact_match_re(info[2], name))) { alert("Please enter a valid name. "+info[3]); return false; }
-        if (name in priors) { alert("A prior form instance with the new name (" + response + ") already exists"); return false;}
+        if (priors.includes(name)) { alert("A prior form instance with the name: " + name + ", already exists"); return false;}
   
         return true;
     }
@@ -1262,6 +1291,7 @@ var datin =  [
       while(true) {
         var response = prompt("Please provide a new name, to rename this old instance (" + old + ") to:", response);
         if (response === null) { return;} // user cancelled.
+        response = response.trim();
         if (response === old) {alert("Please enter a name different from the old (" + old + ")"); continue; }
         if (validate_instance_name(response)) {break;} // we have it
       }
@@ -1474,6 +1504,38 @@ var datin =  [
            str = document.documentElement.outerHTML;
         } else {
             var nd = document.implementation.createHTMLDocument("T466MedForm-" + currentLocalStorageFormInstanceId);
+
+            var meta=document.createElement('meta');
+            meta.setAttribute('charset', 'utf-8');
+            nd.getElementsByTagName('head')[0].appendChild(meta);
+            document.createElement('meta');
+            meta.name='viewport';
+            meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            nd.getElementsByTagName('head')[0].appendChild(meta);
+  
+            //copy over the sytles
+            var parentStyleSheets = document.styleSheets;
+            var cssString = "";
+            for (var i = 0, count = parentStyleSheets.length; i < count; ++i) {
+              if (parentStyleSheets[i].cssRules) {
+                  var cssRules = parentStyleSheets[i].cssRules;
+                  for (var j = 0, countJ = cssRules.length; j < countJ; ++j) {
+                    cssString += cssRules[j].cssText;
+                  }
+              } else {
+                  cssString += parentStyleSheets[i].cssText;  // IE8 and earlier
+              }
+            }
+            var style = document.createElement("style");
+            style.type = "text/css";
+            try {
+                style.innerHTML = cssString;
+            }
+            catch (ex) {
+                style.styleSheet.cssText = cssString;  // IE8 and earlier
+            }
+            nd.getElementsByTagName("head")[0].appendChild(style);
+
             var ids = ["formA", "formB", "formBB", "addedImagesID", "additionalinstructionsID", "summaryID"];
             for (var i = 0; i < ids.length; i++) {
               var e = document.getElementById(ids[i]);
@@ -1481,16 +1543,42 @@ var datin =  [
               cln.style.display="block";
               nd.body.appendChild(cln);
             }
-            var meta=document.createElement('meta');
-            meta.name='viewport';
-            meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-            nd.getElementsByTagName('head')[0].appendChild(meta);
-            str = nd.documentElement.outerHTML;
+                                           
+            var imgs = nd.getElementById("addedImagesID").getElementsByTagName("img");
+            for (var i = 0; i < imgs.length; i++) {
+               imgs[i].attributes.src.value = ""; // src attributes dont make sense anynmore.
+                  // but we will indeed provide a script to create the object urls afresh when the new document is loaded..
+            }
+            var scriptstr = '\n'
+             + '     function base64ToArrayBuffer(base64) {               \n'
+             + '         var binary_string =  window.atob(base64);        \n'
+             + '         var len = binary_string.length;                  \n'
+             + '         var bytes = new Uint8Array( len );               \n'
+             + '         for (var i = 0; i < len; i++)        {           \n'
+             + '             bytes[i] = binary_string.charCodeAt(i);      \n'
+             + '         }                                                \n'
+             + '         return bytes.buffer;                             \n'
+             + '     }                                                    \n'
+             + '     function updateimgurls() {                           \n'
+             + '         var imgs = document.getElementsByTagName("img"); \n'
+             + '         for (var i = 0; i < imgs.length; i++) {          \n'
+             + '             if (imgs[i].attributes.src.value == "") {    \n'
+             + '                 var blob = new Blob([base64ToArrayBuffer(imgs[i].getAttribute("data-imgdata"))], {type : "image/jpeg"}); \n'
+             + '                 imgs[i].attributes.src.value = URL.createObjectURL(blob);    \n'
+             + '                 imgs[i].setAttribute("data-imgdata", "");                    \n'
+             + '             }                                                                \n'
+             + '         }                                                                    \n'
+             + '     }                                                                        \n'
+             + '     updateimgurls();                                                         \n' ;
+
+            proc_script(nd.getElementsByTagName('body')[0], scriptstr);
+            //str = nd.documentElement.outerHTML;
+            var s = new XMLSerializer();
+            str = s.serializeToString(nd);
+            str = str.replace(/&lt;/g, "<"); // Kludgy hack... but works for our purposes...
         }
-                                  
-        // https://stackoverflow.com/questions/9238890/convert-html-to-datatext-html-link-using-javascript
-        var dataURI = 'data:text/html,' + encodeURIComponent(str);
-        anchor.setAttribute('href', dataURI);
+        var htmlBlob = new Blob([str], {type : 'text/html'}); 
+        anchor.setAttribute('href', URL.createObjectURL(htmlBlob));
         anchor.click();
     }
 
@@ -1504,10 +1592,35 @@ var datin =  [
 
     function scrollto(id) {
         var e = document.getElementById(id);
+        //e.scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});
         e.scrollIntoView(true);
+        myElement.scrollIntoView(true);
+        var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        window.scrollBy(0, (myElement.getBoundingClientRect().height-viewportH)/2);
         e.focus();
     }
-  
+ 
+    //https://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
+    function arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
+    }
+
+    function base64ToArrayBuffer(base64) {
+        var binary_string =  window.atob(base64);
+        var len = binary_string.length;
+        var bytes = new Uint8Array( len );
+        for (var i = 0; i < len; i++)        {
+            bytes[i] = binary_string.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
+                                
     function validate_single(arr, reset) {
         switch(arr[0]) {
           case "Comment":
@@ -1570,20 +1683,26 @@ var datin =  [
                           img.style.display="none";
                       }
                     } else {
+                        var imgidlabel = imgid + "_filelabelwithin";
                         if ((e.files) && e.files.length === 1) {
                            if (img === null) {
-                              var str = '<img class="myfileimg onnewpage" src="" name="' + arr[2] + '" id="' + imgid + '" style="display:block"></img>';
+                              var str = '<img class="myfileimg onnewpage" src="" name="' + arr[2] + '" id="' + imgid + '" style="display:block" data-file="" data-imgdata=""></img>';
                               img = $($.parseHTML(str)).show().get(0);
                               addedimages.appendChild(img);
                            }
-                           if (img && img.hasAttribute("src") && img.attributes.src.value === '') {
-                              //set new data url for this img...
-                              var file = e.files[0];
+                           var file = e.files[0];
+                           var oldfile = img.getAttributeNode('data-file');
+                           var filetag = (file.name + "#" + file.lastModifiedDate);
+                           if (oldfile.value !== filetag) {
                               var fr = new FileReader();
                               fr.onload = function(evt) {
-                                  img.attributes.src.value = fr.result;
+                                  //set new data url for this img...
+                                  oldfile.value = filetag;
+                                  img.getAttributeNode('data-imgdata').value = arrayBufferToBase64(fr.result);
+                                  img.attributes.src.value = URL.createObjectURL(file);
+                                  img.style.display="block";
                               };
-                              fr.readAsDataURL(file);
+                              fr.readAsArrayBuffer(file);
                            }
                         }
                      }
@@ -1601,6 +1720,7 @@ var datin =  [
                 }
                if (arr[0] === "Page") {
                  while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
+                 additionalinstructions.innerHTML = "<h2> Additional Instructions Specified: </h2>";
                  additionalinstructions.appendChild(document.createTextNode(e.value));
                  additionalinstructions.style.display= reset? "none" : "block";
                }
@@ -1625,6 +1745,9 @@ var datin =  [
        while(formissues.lastChild) {
         formissues.removeChild(formissues.lastChild);
       }
+      
+      formissues.innerHTML = "<h2> Unresolved set of issues to complete this form instance: </h2>";
+      
       summary.style.display="none";
       while (summary.lastChild) {
         summary.removeChild(summary.lastChild);
@@ -1633,6 +1756,9 @@ var datin =  [
       for (var iy=0; iy < datin.length; iy++){
             validate_sect(datin[iy][2], false);
       }
+      
+      makeadditionalcomputedfds();
+      
       summary.style.display="block"
       if (formissues.childNodes.length === 0) {
           //No issues detected, time to wrapup
