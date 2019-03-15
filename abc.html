@@ -21,7 +21,7 @@
     .imgcls {
       position:relative;
       display:block;
-      width: 100%;
+      width: 99.98%;
     }
 
     li {
@@ -38,6 +38,10 @@
       margin-bottom:5pt;
       visibility:visible;
       padding:3pt;
+    }
+    
+    input[type=text] {
+      border:1pt solid black;
     }
     
     .mysectiondiv {
@@ -278,6 +282,9 @@
         color:  rgba(0, 0, 0, 1.0);
       }
 
+    .summarypara {
+       margin:2pt;
+     }
     
     /*
 .split, .gutter.gutter-horizontal {
@@ -690,6 +697,7 @@ var datin =  [
     var namemap = null;
     var finalformdata = null;
     var additionalinstructions = null;
+    var keyvaluesforJSONtoafile = {};
   
     //window.open("assets/check.jpg");
   
@@ -1337,25 +1345,33 @@ var datin =  [
           alert("Still to implement");
     }
 
-    function lsk(id) {
-        return "$"+currentLocalStorageFormInstanceId+"$"+id;
+    function lsk(e) {
+        return "$"+currentLocalStorageFormInstanceId+"$"+e.id;
+    }
+  
+    function keyvaluemap(k, v) {
+        var vt = v.trim();
+        window.localStorage.setItem(k, vt);
+        keyvaluesforJSONtoafile[k] = vt;
     }
   
     function lse(e) {
+      var k = lsk(e);
+  
       switch(e.localName) {
         case "input":
            switch(e.type) {
               case "checkbox":
               case "radio":
-                window.localStorage.setItem(lsk(e.id), e.checked ? "1" : "0");
+                keyvaluemap(k, e.checked ? "1" : "0");
                 break;
               case "text":
               case "date":
               case "number":
-                window.localStorage.setItem(lsk(e.id), ((e.value === null) ? "" : e.value.trim()) );
+                keyvaluemap(k, (e.value === null) ? "" : e.value);
                 break;
               case "file":
-                // It does not make sense to save file, as it can not be restored back...
+                // It does not make sense to save files, as they are very very big sometimes.
                 break;
               default:
                 console.assert(false, "savin input type:" + e.type + " not supported");
@@ -1363,7 +1379,7 @@ var datin =  [
             }
             break;
         case "textarea":
-            window.localStorage.setItem(lsk(e.id), ((e.value === null) ? "" : e.value.trim()) );
+            keyvaluemap(k, (e.value === null) ? "" : e.value);
             break;
         default:
           console.assert(false, "saving elements with localname:" + e.localName + " not supported");
@@ -1427,12 +1443,12 @@ var datin =  [
       return true;
     }
 
-    function set_oninputforclasses(clss, fn) {
+    function set_oninputforclasses(clss, fn, evt) {
       for (var i = 0; i < clss.length; i++) {
         var es = document.getElementsByClassName(clss[i]);
 
         for (var j = 0; j < es.length; j++) {
-            es[j].addEventListener('input', fn);
+            es[j].addEventListener(evt, fn);
         }
       }
     }
@@ -1572,10 +1588,15 @@ var datin =  [
              + '     updateimgurls();                                                         \n' ;
 
             proc_script(nd.getElementsByTagName('body')[0], scriptstr);
-            //str = nd.documentElement.outerHTML;
-            var s = new XMLSerializer();
-            str = s.serializeToString(nd);
-            str = str.replace(/&lt;/g, "<"); // Kludgy hack... but works for our purposes...
+            
+            str = JSON.stringify(keyvaluesforJSONtoafile);
+            str = "$" + currentLocalStorageFormInstanceId + "$" + btoa(str);
+            nd.getElementById("summaryID").setAttribute("data-json", str);
+  
+            str = nd.documentElement.outerHTML;
+//            var s = new XMLSerializer();
+//            str = s.serializeToString(nd);
+//            str = str.replace(/&lt;/g, "<"); // Kludgy hack... but works for our purposes...
         }
         var htmlBlob = new Blob([str], {type : 'text/html'}); 
         anchor.setAttribute('href', URL.createObjectURL(htmlBlob));
@@ -1594,9 +1615,8 @@ var datin =  [
         var e = document.getElementById(id);
         //e.scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});
         e.scrollIntoView(true);
-        myElement.scrollIntoView(true);
         var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        window.scrollBy(0, (myElement.getBoundingClientRect().height-viewportH)/2);
+        window.scrollBy(0, (e.getBoundingClientRect().height-viewportH)/2);
         e.focus();
     }
  
@@ -1620,7 +1640,12 @@ var datin =  [
         }
         return bytes.buffer;
     }
-                                
+    
+    function addSummary(msg) {
+        var str = '<p class="summarypara"> ' + msg + ' </p>';
+        summary.appendChild($($.parseHTML(str)).show().get(0));
+    }
+       
     function validate_single(arr, reset) {
         switch(arr[0]) {
           case "Comment":
@@ -1637,8 +1662,7 @@ var datin =  [
                 updateformdatainsts(e, reset);
                 if ((!reset) && e.checked) {
                   idx = j;
-                  var str = "<p> " + arr[1] + " " + arr[3][j][0] + " </p>";
-                  summary.appendChild($($.parseHTML(str)).show().get(0));
+                  addSummary(arr[1] + " " + arr[3][j][0]);
                 }
               }
               for (var k=0; k < arr[4].length/2; k++){
@@ -1653,8 +1677,7 @@ var datin =  [
               updateformdatainsts(e, reset);
               var idx = reset? arr[3] : (e.checked ? 1 : 0);
               if ((!reset)) {
-                  var str = "<p> " + arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected") + " </p>";
-                  summary.appendChild($($.parseHTML(str)).show().get(0));
+                  addSummary(arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected"));
               }
               for (var k=0; k < arr[4].length/2; k++ ) {
                   validate_sect(arr[4][k*2+1], idx === arr[4][2*k] ? reset : true);
@@ -1714,8 +1737,7 @@ var datin =  [
                     var str = '<p><input type="button" onclick="scrollto(' +"'" + id + "'" + ');  return true;" value="Go Here"></input> ' + arr[1] + " is invalid </p>";
                     formissues.appendChild($($.parseHTML(str)).show().get(0));
                   } else {
-                    var str = "<p> " + arr[1] + " " + e.value + " </p>";
-                    summary.appendChild($($.parseHTML(str)).show().get(0));
+                    addSummary(arr[1] + " " + e.value);
                   }
                 }
                if (arr[0] === "Page") {
@@ -1781,14 +1803,12 @@ var datin =  [
       namemap = new Map();
       finalformdata = document.getElementById("finalformdataID");
       additionalinstructions = document.getElementById("additionalinstructionsID");
+      keyvaluesforJSONtoafile = {};
 
       var div = document.createElement("div");
                                  
       while (dynform.lastChild) {
         dynform.removeChild(dynform.lastChild);
-      }
-      while (summary.lastChild) {
-        summary.removeChild(summary.lastChild);
       }
       while (formissues.lastChild) {
         formissues.removeChild(formissues.lastChild);
@@ -1809,10 +1829,10 @@ var datin =  [
   
       dynform.appendChild(div);
 
-      set_oninputforclasses(['mycheck'], oninputcheck);
-      set_oninputforclasses(['myradio'], oninputradio);
-      set_oninputforclasses(['mytext', 'mytextarea'], oninputtext);                                       
-      set_oninputforclasses(['myfile', 'myfile'], oninputfile);
+      set_oninputforclasses(['mycheck'], oninputcheck, 'input');
+      set_oninputforclasses(['myradio'], oninputradio, 'input');
+      set_oninputforclasses(['mytext', 'mytextarea'], oninputtext, 'input');                                       
+      set_oninputforclasses(['myfile'], oninputfile, 'change');
                                        
       //Check current state of validity
       checkValidity();
