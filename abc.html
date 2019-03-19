@@ -21,7 +21,8 @@
     .imgcls {
       position:relative;
       display:block;
-      width: 99.98%;
+      width: 99%;
+      height:auto;
     }
 
     li {
@@ -303,10 +304,51 @@
 .a {
   background: url('path/to/image.jpg') center/cover;
 }
+    .shortcutshover {
+      position: fixed;
+      top:3%;
+      left:90%;
+      width:4%;
+      height: same-as-width;
+      display:none;
+      border: 2pt solid #002200;
+      background-color: #aaaaff;
+      z-index: 3;
+    }
+
+    .shortcuts {
+      position: fixed;
+      top:5%;
+      left:58%;
+      width:40%;
+      height:60%;
+      overflow-x: hidden; 
+      border: 2pt solid #002200;
+      opacity:1.0;
+      filter: alpha(opacity=100);
+      display:none;
+      background-color: #ffffff;
+   }
+    
+   .shortcuts p input, .formissues p input {
+      margin-left:3pt
+      margin-right:15pt;
+   }
+
+   .shortcuts p, .formissues p {
+      margin-top:1pt
+      margin-bottom:1pt;
+      margin-left:5pt
+   }
+
     </style>  
 </head>
 
  <body>
+ 
+ <div class="shortcutshover" id="shortcutsHoverID" style="display:hidden"> > </div>
+ <div class="shortcuts" id="shortcutsID" style="display:hidden"></div></p>
+    
  <div>
        <h1> Boy Scout Medical Forms A, B, C </h1>
         <ul>
@@ -347,7 +389,7 @@
   </div>
      
   <div class="mysectiondiv" id="epilogueId">
-      <div class="mysectiondiv" id="formIssuesID" style="display:none"></div>
+      <div class="mysectiondiv formissues" id="formIssuesID" style="display:none"></div>
       <div class="mysectiondiv onnewpage" id="formCompleteID" style="display:none">
             <h4 class="mysection"> Congratulations!! You have successfully completed filling out this form instance, look below to doublecheck your entries and then export to a file to print or e-mail to pertinent persons.</h4>
             <h2> Do not forget to sign all the yellow marked areas </h2>
@@ -485,11 +527,11 @@ var datin =  [
       ["Secti", "Health/Accident insurance details", [
 
         ["Names", "Health/Insurance Company Name:", "insc", 1, [["formB", 700, 825, 1425, 915]]],
-        ["Names", "Policy Number:", "policynum", 1, [["formB", 1575, 825, 2325, 915]]],
-        ["Names", "Group Number:", "groupnum", 1, []],
+        ["WordListShort", "Policy Number:", "policynum", 1, [["formB", 1575, 825, 2325, 915]]],
+        ["WordListShort", "Group Number:", "groupnum", 1, []],
         ["Names", "Policy holder name:", "phln", 1, []],
-        ["Names", "Plan Name:", "plnn", 0, []],
-        ["Names", "Plan type:", "plnt", 0, []],
+        ["Identifier", "Plan Name:", "plnn", 0, []],
+        ["Identifier", "Plan type:", "plnt", 0, []],
         ["Names", "Employer name (if applicable):", "empn", 0, []],
         ["Phone", "Insurance company contact phone number:", "insph", 1, []],
         ["Phone", "Preauthorization phone number (if needed):", "inspaph", 0, []],
@@ -667,7 +709,7 @@ var datin =  [
 
       ["Secti", "FORM C- Do you want to add Form C?", [
         ["Comment", "Form C is required for Boy Scouts activities that exceed 72 hours. For example (but not limited to) Camp Chawanakee and Camp Philmonte require mandatory submission or Form C signed by a Dr/Physician..."],
-        ["Cheky", "Check here to add form C: ", "upldfrmc", 0, [1,
+        ["Cheky", "Remove check mark from here to proceed without adding form C: ", "upldfrmc", 1, [1,
             [
               ["Photo", "Form C", "formc", 1],
               ["Formy", "Particulars from Form C", [
@@ -689,6 +731,7 @@ var datin =  [
                                 ["AdditionalFds", "Todays", "today", 1, [["formA", 1840, 1900, 2100, 1950], ["formA", 1840, 2040, 2100, 2090], ["formA", 1840, 2210, 2100, 2260]], "today()", [], []]
                               ];
   
+    var shortcuts = null;
     var dynform = null;
     var formissues = null;
     var formcomplete = null;
@@ -1129,7 +1172,7 @@ var datin =  [
             break;
           case 'file':
             str = '<div class="mytextdiv"><fieldset class="myfilefieldset"><label class="mytextlabel" for="' + lid + '">' + arr[1] + '</label>';
-            str +='<input class="myfile saveditem" type="file" value="" name="' +arr[2]+ '" id="' + lid + '"></input></fieldset></div>';
+            str +='<input class="myfile saveditem" type="file" accept="image/png, image/jpeg" value="" name="' +arr[2]+ '" id="' + lid + '"></input></fieldset></div>';
             break;
           default:
             str = '<div class="mytextdiv"><label class="mytextlabel" for="' + lid + '">' + arr[1] + '</label>'; 
@@ -1214,7 +1257,7 @@ var datin =  [
       div.appendChild(document.createElement("br"));      
       
       str = '<div class="myloadformdiv"><label for="id_importpriorfile">Load form instance from an exported file:</label>'
-          + '<input type="file" class="mypriorfile" onclick="load_file_instance(this.value);  return true;" id="id_importpriorfile"></file><file></div>';
+          + '<input type="file" class="mypriorfile" oninput="load_file_instance(this);  return true;" id="id_importpriorfile" accept="text/html"></file><file></div>';
 
       div.appendChild($($.parseHTML(str)).show().get(0));
       
@@ -1239,7 +1282,10 @@ var datin =  [
       load(priorid);
     }
   
-    function remove_prior(priorid) {  
+    function remove_prior(priorid) {
+      if (!confirm("All data will be discarded for instance: " + priorid + ". Are you sure you want to proceed?"))
+          return;
+                                        
       var priors = get_prior_instances();
       priors = filterout(priors, priorid);
       if (priors.length == 0) {
@@ -1293,16 +1339,23 @@ var datin =  [
         return true;
     }
   
-    function rename_prior(old) {
+    function obtain_a_rename(exists, old) {
       var response = "FormABC.SomeNewTitle";
                                     
       while(true) {
-        var response = prompt("Please provide a new name, to rename this old instance (" + old + ") to:", response);
-        if (response === null) { return;} // user cancelled.
+        response = prompt(exists? ("An instance already exists with the default name (" + old + ") of instance being imported. " + " Please provide a unique new name to name the instance being imported as:")
+                                      : "Please provide a unique new name, to rename this old instance (" + old + ") to:", response);
+  
+        if (response === null) { return ""; } // user cancelled.
         response = response.trim();
         if (response === old) {alert("Please enter a name different from the old (" + old + ")"); continue; }
-        if (validate_instance_name(response)) {break;} // we have it
+        if (validate_instance_name(response)) {return response;} // we have it
       }
+    }
+  
+    function rename_prior(old) {
+      var response = obtain_a_rename(false, old);
+      if (response == "") return; // User cancelled.
   
       //We have a valid new response.
       // First we copy over the key values in localStorage from old form to new form instance.
@@ -1342,7 +1395,47 @@ var datin =  [
     }
 
     function load_file_instance(fromfile) {
-          alert("Still to implement");
+      if (fromfile.files !== null && fromfile.files.length === 1) {
+        var fr = new FileReader();
+        fr.onload = function(evt) {
+            var parser = new DOMParser();
+            var res = new TextDecoder().decode(fr.result);
+            var e = parser.parseFromString(res, 'text/html');  
+            var str = e.getElementById("summaryID").getAttribute("data-json");
+            var parts = str.substring(1).split("$");
+            var inst = parts[0];
+            var json = atob(parts[1]);
+            var map = JSON.parse(json);
+
+            var priors = get_prior_instances();
+            if (priors.includes(inst)) {
+              var response = obtain_a_rename(true, inst);
+              if (response == "") 
+                return; // User cancelled.
+              inst = response;
+            }
+
+            for (var prop in map){
+                localStorage.setItem("$" + inst + "$" + prop, map[prop].toString());
+            }
+
+            priors.unshift(inst);
+            set_prior_instances(priors);
+            load(inst);
+
+            var imgs = e.getElementById("addedImagesID").getElementsByTagName('img');
+            for (var i = 0; i < imgs.length; i++) {
+              var img = document.getElementById(imgs[i].id);
+              var val = imgs[i].getAttribute('data-imgdata');
+              img.setAttribute('data-imgdata', val);
+              var blob = new Blob([base64ToArrayBuffer(img.getAttribute("data-imgdata"))], {type : "image/jpeg"});
+              img.attributes.src.value = URL.createObjectURL(blob);
+            }
+
+            checkValidity();
+        };
+        fr.readAsArrayBuffer(fromfile.files[0]);
+      }
     }
 
     function lsk(id) {
@@ -1645,7 +1738,18 @@ var datin =  [
         var str = '<p class="summarypara"> ' + msg + ' </p>';
         summary.appendChild($($.parseHTML(str)).show().get(0));
     }
-       
+    
+    function issuefound(id, issue) {
+        if (formissues.childNodes.length === 0) {
+            formissues.innerHTML = "<h2> Unresolved set of issues to complete this form instance: </h2>";
+        }
+  
+        var str = '<p>  <input type="button" onclick="scrollto(' +"'" + id + "'" + ');  return true;" value="Go Here"></input>    ' + issue + '</p>';
+        var e = $($.parseHTML(str)).show().get(0);
+        formissues.appendChild(e);
+        shortcuts.appendChild(e.cloneNode(true));
+    }
+          
     function validate_single(arr, reset) {
         switch(arr[0]) {
           case "Comment":
@@ -1693,26 +1797,21 @@ var datin =  [
             if (arr[0] === "Photo") {
                 var imgid = id+"_img";
                 var img = document.getElementById(imgid);
+                if (img === null) {
+                    var str = '<img class="myfileimg onnewpage" src="" name="' + arr[2] + '" id="' + imgid + '" style="display:block" data-file="" data-imgdata=""></img>';
+                    img = $($.parseHTML(str)).show().get(0);
+                    addedimages.appendChild(img);
+                }
                 if (reset) {
-                  if (img != null) {
                       img.style.display="none";
-                  }
                 } else {
-                   if ((arr[3] === 1) && (e.files === null || e.files.length != 1)) {
+                   if ((arr[3] === 1) && (e.files === null || e.files.length != 1) && (img.getAttribute("data-imgdata") === "")) {
                       // Missing mandatory photo.
-                      var str = '<p><input type="button" onclick="scrollto(' +"'" + id + "'" + ');  return true;" value="Go Here"></input> Missing Photo: ' + arr[1] + ' (must be added to complete this form) </p>';
-                      formissues.appendChild($($.parseHTML(str)).show().get(0));
-                      if (img) {
-                          img.style.display="none";
-                      }
+                      issuefound(id, 'Add Missing Photo: ' + arr[1]);
+                      img.style.display="none";
                     } else {
                         var imgidlabel = imgid + "_filelabelwithin";
                         if ((e.files) && e.files.length === 1) {
-                           if (img === null) {
-                              var str = '<img class="myfileimg onnewpage" src="" name="' + arr[2] + '" id="' + imgid + '" style="display:block" data-file="" data-imgdata=""></img>';
-                              img = $($.parseHTML(str)).show().get(0);
-                              addedimages.appendChild(img);
-                           }
                            var file = e.files[0];
                            var oldfile = img.getAttributeNode('data-file');
                            var filetag = (file.name + "#" + file.lastModifiedDate);
@@ -1727,6 +1826,8 @@ var datin =  [
                               };
                               fr.readAsArrayBuffer(file);
                            }
+                        } else if (img.getAttribute("data-imgdata") !== "") {
+                              img.style.display="block";
                         }
                      }
                  }
@@ -1734,8 +1835,7 @@ var datin =  [
               updateformdatainsts(e, reset);
               if (!reset) {
                   if (!e.validity.valid) {
-                    var str = '<p><input type="button" onclick="scrollto(' +"'" + id + "'" + ');  return true;" value="Go Here"></input> ' + arr[1] + " is invalid </p>";
-                    formissues.appendChild($($.parseHTML(str)).show().get(0));
+                    issuefound(id, arr[1] + " is invalid");
                   } else {
                     addSummary(arr[1] + " " + e.value);
                   }
@@ -1763,18 +1863,12 @@ var datin =  [
     }
 
     function checkValidity() {
+      blank([summary, shortcuts, formissues]);
+
       formissues.style.display="none";
-       while(formissues.lastChild) {
-        formissues.removeChild(formissues.lastChild);
-      }
-      
-      formissues.innerHTML = "<h2> Unresolved set of issues to complete this form instance: </h2>";
-      
       summary.style.display="none";
-      while (summary.lastChild) {
-        summary.removeChild(summary.lastChild);
-      }
       summary.innerHTML ="<h2> Summary of all the input values in text form </h2>";
+
       for (var iy=0; iy < datin.length; iy++){
             validate_sect(datin[iy][2], false);
       }
@@ -1786,15 +1880,34 @@ var datin =  [
           //No issues detected, time to wrapup
           formcomplete.style.display="block";
           formissues.style.display="none";
+  
+          var str = '<div> <p>No unresolved issues for this form.</p>'
+                   + ' <p> You can go here to review form: <input type="button" onclick="scrollto(' +"'" + formcomplete.id + "'" + ');  return true;" value="Review"></input></p>'
+                   + '<p>Once the review is complete, go to the end of this page, to obtain a printable copy of this form.</p>';
+                                       
+          var e = $($.parseHTML(str)).show().get(0);
+          shortcuts.appendChild(e);
       } else  {
-          //No issues detected, time to wrapup
           formcomplete.style.display="none";
           formissues.style.display="block";
       }
     }
+  
+    function blank(es) {
+      for (var i = 0; i < es.length; i++) {
+        while (es[i].lastChild) {
+          var priordisplay = es[i].style.display;
+          es[i].style.display = 'none';
+          es[i].removeChild(es[i].lastChild);
+          es[i].style.display = priordisplay;
+        }
+      }
+    }
 
     function load(id) {
-                                       
+      shortcutshover = document.getElementById("shortcutsHoverID");
+      shortcutshover.style.display="block";
+      shortcuts = document.getElementById("shortcutsID");
       dynform = document.getElementById("mydyndivID");
       formissues = document.getElementById("formIssuesID");
       formcomplete = document.getElementById("formCompleteID");
@@ -1806,16 +1919,8 @@ var datin =  [
       keyvaluesforJSONtoafile = {};
 
       var div = document.createElement("div");
-                                 
-      while (dynform.lastChild) {
-        dynform.removeChild(dynform.lastChild);
-      }
-      while (formissues.lastChild) {
-        formissues.removeChild(formissues.lastChild);
-      }
-      while (addedimages.lastChild) {
-        addedimages.removeChild(addedimages.lastChild);
-      }
+      
+      blank([dynform, formissues, addedimages, shortcuts]);
                                       
       currentLocalStorageFormInstanceId = id;
                                       
@@ -1836,6 +1941,11 @@ var datin =  [
                                        
       //Check current state of validity
       checkValidity();
+                                       
+      shortcutshover.addEventListener('mouseenter', function(evt) { shortcuts.style.display = "block"; return true; }, false );
+      shortcutshover.addEventListener('click', function(evt) { if (shortcuts.style.display === "block") {shortcuts.style.display = "none";} else {shortcuts.style.display = "block"; } return true; }, false );
+      shortcuts.addEventListener('keydown', function(evt) { if (evt.keyCode == 27) { shortcuts.style.display = "none"; } }, false );
+      shortcuts.parentElement.addEventListener('keydown', function(evt) { if (evt.keyCode == 27) { shortcuts.style.display = "none"; } }, false );
     }
   
 </script>
