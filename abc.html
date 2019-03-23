@@ -21,7 +21,7 @@
     .imgcls {
       position:relative;
       display:block;
-      width: 99%;
+      width: 100%;
       height:auto;
     }
 
@@ -232,10 +232,8 @@
     
     .myfileimg {
       display:block;
-      width: 100%;
-      margin-top:20pt;
-      height: auto;
-      margin-bottom:20pt;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 1.0);
     }
     
     .myfilefieldset {
@@ -270,7 +268,7 @@
     
     .formwithbackgroundimage {
         position: relative;
-        width: 100%;
+        width: 99%;
         margin: 0;
         padding: 0;
         display:block;
@@ -535,8 +533,8 @@ var datin =  [
         ["Names", "Employer name (if applicable):", "empn", 0, []],
         ["Phone", "Insurance company contact phone number:", "insph", 1, []],
         ["Phone", "Preauthorization phone number (if needed):", "inspaph", 0, []],
-        ["Photo", "Add Front image/photo of insurance card, please keep the image size below 1MB", "insfront", 1, []],
-        ["Photo", "Add Backside image/photo of insurance card, please keep the image size below 1MB", "insback", 1, []]
+        ["Photo", "Add Front image/photo of insurance card, please keep the image size below 1MB", "insfront", 1, ["insPage", 550, 425, 2050, 1425]],
+        ["Photo", "Add Backside image/photo of insurance card, please keep the image size below 1MB", "insback", 1, ["insPage", 550, 1850, 2050, 2850]]
       ]],
 
       ["Secti", "Health History:", [
@@ -698,11 +696,11 @@ var datin =  [
                       [0, ["Date", "Other/HIB Vaccine or Disease Date:", "otherDate", 1, [["formBB", 1155, 2775, 2320, 2815]]]]]
                 ]],
               1, ["Formy", "Add immunization form photos (keep image sizes below 1MB):", [
-                 ["Photo", "Immunization Form Page-1 Photo", "immunization1", 1], 
-                 ["Photo", "Immunization Form Page-2 Photo", "immunization2", 0], 
-                 ["Photo", "Immunization Form Page-3 Photo", "immunization3", 0], 
-                 ["Photo", "Immunization Form Page-4 Photo", "immunization4", 0], 
-                 ["Photo", "Immunization Form Page-5 Photo", "immunization5", 0]]],
+                 ["Photo", "Immunization Form Page-1 Photo", "immunization1", 1, ["immunPage1", 100, 100, 2450, 3200]], 
+                 ["Photo", "Immunization Form Page-2 Photo", "immunization2", 0, ["immunPage1", 100, 100, 2450, 3200]], 
+                 ["Photo", "Immunization Form Page-3 Photo", "immunization3", 0, ["immunPage1", 100, 100, 2450, 3200]], 
+                 ["Photo", "Immunization Form Page-4 Photo", "immunization4", 0, ["immunPage1", 100, 100, 2450, 3200]], 
+                 ["Photo", "Immunization Form Page-5 Photo", "immunization5", 0, ["immunPage1", 100, 100, 2450, 3200]]]],
             ]],
           ]],
         ]],
@@ -711,7 +709,7 @@ var datin =  [
         ["Comment", "Form C is required for Boy Scouts activities that exceed 72 hours. For example (but not limited to) Camp Chawanakee and Camp Philmonte require mandatory submission or Form C signed by a Dr/Physician..."],
         ["Cheky", "Remove check mark from here to proceed without adding form C: ", "upldfrmc", 1, [1,
             [
-              ["Photo", "Form C", "formc", 1],
+              ["Photo", "Form C", "formc", 1, ["formCPage", 100, 100, 2450, 3200]],
               ["Formy", "Particulars from Form C", [
                 ["Date", "Dr's Date on Form C:", "drdtonc", 1], 
                 ["Names", "Dr's Name on Form C:", "drnameonc", 1],
@@ -871,20 +869,20 @@ var datin =  [
         return "uid_"+arr[2]+alnumonly(arr[1]);
     }
 
-    function forminstid(id, form, i, superradio) {
-        var retval = id + "_" + form + "_fdsinst_" + i + (superradio ? "_superradio" : "_nonsr" );
+    function forminstid(id, form, i, superradio, img) {
+        var retval = id + "_" + form + img ? "_img"  : (("_fdsinst_" + i + (superradio ? "_superradio" : "_nonsr" ));
         return retval;
     }
                                        
-    function makeformdatainsts(rid, fds, superradio) {
+    function makeformdatainsts(rid, fds, superradio, img) {
       var retval = [];
       for (var i=0; i < fds.length; i++) {
         var form = fds[i][0];
         var f = document.getElementById(form);
         if (f === null) {
-            alert("Form specified: " + form + " not found.");
-            power = debuasd;
-            continue;
+          var str =  '<div class="formwithbackgroundimage onnewpage" id="' + arr[4][0] + '"><img src="https://t466medforms.netlify.com/assets/blank.jpg" class="imgcls"/></div>';
+          imgdiv = $($.parseHTML(str)).show().get(0);
+          addedimages.appendChild(imgdiv);
         }
 
         /* we can not rely on img elements background rendering to throw off our mathematics, so we are taking things in our own hands 
@@ -898,14 +896,15 @@ var datin =  [
         var aw = 2550.0
         var ah = 3300.0
   
-        var id = forminstid(rid, form, i, superradio);
+        var id = forminstid(rid, form, i, superradio, img);
         var eid = document.getElementById(id);
         if (eid) {
             eid.parentNode.removeChild(eid);
         }
         var e = document.getElementById(f);
         if (e == null) {
-            var str = '<label class="formdata" style="left:' + (100.0*fds[i][1]/aw) + '%; top:' + (100.0*fds[i][2]/ah) + '%; width:' + (100.0*(fds[i][3]-fds[i][1])/aw) + '%; height:' + (100.0*(fds[i][4]-fds[i][2])/ah) + '%; ';
+            var str = ( img ? 'img class="myfileimg" data-file="" data-imgdata="" ' : '<label class="formdata" ') + 
+                      'style="left:' + (100.0*fds[i][1]/aw) + '%; top:' + (100.0*fds[i][2]/ah) + '%; width:' + (100.0*(fds[i][3]-fds[i][1])/aw) + '%; height:' + (100.0*(fds[i][4]-fds[i][2])/ah) + '%; ';
                 str+= ' font-size:100%' + '" id="' + id + '"></label>';
             e = $($.parseHTML(str)).show().get(0);
             f.appendChild(e);
@@ -919,7 +918,7 @@ var datin =  [
       for (var i=0; i < additionalComputedFds.length; i++) {
         var arr = additionalComputedFds[[i]];
         var fid = uid(arr);
-        var insts = makeformdatainsts(fid, arr[4], false);
+        var insts = makeformdatainsts(fid, arr[4], false, false);
         
         var val = eval(arr[5]);
         for (var j = 0; j < insts.length; j++) {
@@ -953,7 +952,7 @@ var datin =  [
           // we have a radio button
           var fds = arr[2][3][arr[1]][1];
           for (var i=0; i < fds.length; i++) {
-            var eid = forminstid(e.id, fds[i][0], i, true);
+            var eid = forminstid(e.id, fds[i][0], i, true, false);
             eid = document.getElementById(eid);
             if (reset) {
               eid.innerHTML = (arr[2][3][arr[2][3].length-1] == arr[1]) ? "X" : "";
@@ -965,7 +964,7 @@ var datin =  [
           if (arr[2].length > 5) {
             fds = arr[2][5];
             for (var i=0; i < fds.length; i++) {
-              var eid = forminstid(uid(arr[2]), fds[i][0], i, false);
+              var eid = forminstid(uid(arr[2]), fds[i][0], i, false, false);
               eid = document.getElementById(eid);
               if (reset) {
                 eid.innerHTML = arr[2][3][arr[1]];
@@ -982,7 +981,7 @@ var datin =  [
         } else if (arr[0] === "Cheky") {
             fds = arr[2][5];
             for (var i=0; i < fds.length; i++) {
-              var eid = forminstid(e.id, fds[i][0], i, false);
+              var eid = forminstid(e.id, fds[i][0], i, false, false);
               eid = document.getElementById(eid);
               if (reset) {
                 eid.innerHTML = (arr[2][3] ? "X" : "");
@@ -994,15 +993,46 @@ var datin =  [
             if (arr[2].length > 5) {
                fds = arr[2][5];
                for (var i=0; i < fds.length; i++) {
-                 var eid = forminstid(e.id, fds[i][0], i, false);
+                 var eid = forminstid(e.id, fds[i][0], i, false, false);
                  eid = document.getElementById(eid);
                  eid.innerHTML = reset? "" : e.value.trim();
                }
             }
+        } else if (arr[0] === "Photo") {
+           var imgid = forminstid(e.id, fds[0], 0, false, true);
+           var img = document.getElementById(imgid);
+           if ((!reset) && (arr[3] === 1) && (e.files === null || e.files.length != 1) && 
+               (img.attributes.src.value === null || img.attributes.src.value === '') && 
+               (img.getAttribute("data-imgdata") === "")) {
+              // Missing mandatory photo.'Add Missing Photo: ' + arr[1];
+              var str = 'Add Missing Photo: ' + arr[1];
+              issuefound(id, str);
+              img.innerHTML = str;
+              img.style.display="block";
+            } else {
+                img.innerHTML = '';
+                if ((e.files) && e.files.length === 1) {
+                   var file = e.files[0];
+                   var oldfile = img.getAttributeNode('data-file');
+                   var filetag = (file.name + "#" + file.lastModifiedDate);
+                   if (oldfile.value !== filetag) {
+                      img.style.display="none";
+                      var fr = new FileReader();
+                      fr.onload = function(evt) {
+                          //set new data url for this img...
+                          oldfile.value = filetag;
+                          img.getAttributeNode('data-imgdata').value = arrayBufferToBase64(fr.result);
+                          img.attributes.src.value = URL.createObjectURL(file);
+                          img.style.display="block";
+                      };
+                      fr.readAsArrayBuffer(file);
+                   }
+                }
+             }
         } else if (arr[2].length > 4) {
             fds = arr[2][4];
             for (var i=0; i < fds.length; i++) {
-              var eid = forminstid(e.id, fds[i][0], i, false);
+              var eid = forminstid(e.id, fds[i][0], i, false, false);
               eid = document.getElementById(eid);
               if (arr[2][0] === "Date") {
                  eid.innerHTML = reset? "" : mmmddyyyy(e.value.trim());
@@ -1037,11 +1067,11 @@ var datin =  [
 
             radioset.appendChild(radio);
             var fds = arr[3][j][1];
-            makeformdatainsts(rid, fds, true);
+            makeformdatainsts(rid, fds, true, false);
         }
 
         if (arr.length > 5) {
-            makeformdatainsts(uid(arr), arr[5], false);
+            makeformdatainsts(uid(arr), arr[5], false, false);
         }
         newE.appendChild(radioset);
 
@@ -1097,7 +1127,7 @@ var datin =  [
         var check = $($.parseHTML(str)).show().get(0);
 
         newDiv.appendChild(check);
-        makeformdatainsts(cid, arr[5], false);
+        makeformdatainsts(cid, arr[5], false, false);
         newE.append(newDiv);
 
         //https://stackoverflow.com/questions/22552443/hide-display-of-3-textboxes-on-selection-of-radio-button
@@ -1193,10 +1223,12 @@ var datin =  [
       ctl.style.display = "block";
       if (arr[0] === "Number") {
         if (arr.length > 5) {
-          makeformdatainsts(lid, arr[5], false);
+          makeformdatainsts(lid, arr[5], false, false);
         }
+      } if (arr[0] === "Photo") {
+          makeformdatainsts(lid, [arr[4]], false, true);
       } else if (arr.length > 4) {
-          makeformdatainsts(lid, arr[4], false);
+          makeformdatainsts(lid, arr[4], false, false);
       }
   
       newE.appendChild(ctl);
@@ -1734,6 +1766,16 @@ var datin =  [
         return bytes.buffer;
     }
     
+    function addSummaryForm(msg) {
+        var str = '<h5> ' + msg + ' </h5>';
+        summary.appendChild($($.parseHTML(str)).show().get(0));
+    }
+
+    function addSummarySect(msg) {
+        var str = '<h4> ' + msg + ' </h4>';
+        summary.appendChild($($.parseHTML(str)).show().get(0));
+    }
+                                
     function addSummary(msg) {
         var str = '<p class="summarypara"> ' + msg + ' </p>';
         summary.appendChild($($.parseHTML(str)).show().get(0));
@@ -1755,6 +1797,7 @@ var datin =  [
           case "Comment":
              break;
           case "Formy":
+            if (!rest) { addSummaryForm(arr[1]); }
             validate_sect(arr[2], reset);
             break;
           case "Radii":
@@ -1789,67 +1832,31 @@ var datin =  [
             }
             break;
           case "Secti":
+            if (!reset) { addSummarySect(arr[1]); }
             validate_sect(arr, reset);
             break;
           default:
             var id = uid(arr);
             var e = document.getElementById(id);
+            updateformdatainsts(e, reset);
             if (arr[0] === "Photo") {
-                var imgid = id+"_img";
-                var img = document.getElementById(imgid);
-                if (img === null) {
-                    var str = '<img class="myfileimg onnewpage" src="" name="' + arr[2] + '" id="' + imgid + '" style="display:block" data-file="" data-imgdata=""></img>';
-                    img = $($.parseHTML(str)).show().get(0);
-                    addedimages.appendChild(img);
-                }
-                if (reset) {
-                      img.style.display="none";
-                } else {
-                   if ((arr[3] === 1) && (e.files === null || e.files.length != 1) && (img.getAttribute("data-imgdata") === "")) {
-                      // Missing mandatory photo.
-                      issuefound(id, 'Add Missing Photo: ' + arr[1]);
-                      img.style.display="none";
-                    } else {
-                        var imgidlabel = imgid + "_filelabelwithin";
-                        if ((e.files) && e.files.length === 1) {
-                           var file = e.files[0];
-                           var oldfile = img.getAttributeNode('data-file');
-                           var filetag = (file.name + "#" + file.lastModifiedDate);
-                           if (oldfile.value !== filetag) {
-                              var fr = new FileReader();
-                              fr.onload = function(evt) {
-                                  //set new data url for this img...
-                                  oldfile.value = filetag;
-                                  img.getAttributeNode('data-imgdata').value = arrayBufferToBase64(fr.result);
-                                  img.attributes.src.value = URL.createObjectURL(file);
-                                  img.style.display="block";
-                              };
-                              fr.readAsArrayBuffer(file);
-                           }
-                        } else if (img.getAttribute("data-imgdata") !== "") {
-                              img.style.display="block";
-                        } else {
-                              img.style.display="none";
-                        }
-                     }
-                 }
+               var imgdiv = document.getElementById(arr[4][0]);
+               imgdiv.style.display = reset? "none" : "block";
             } else {
-              updateformdatainsts(e, reset);
               if (!reset) {
                   if (!e.validity.valid) {
                     issuefound(id, arr[1] + " is invalid");
                   } else {
                     addSummary(arr[1] + " " + e.value);
                   }
-                }
-               if (arr[0] === "Page") {
-                 while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
-                 additionalinstructions.innerHTML = "<h2> Additional Instructions Specified: </h2>";
-                 additionalinstructions.appendChild(document.createTextNode(e.value));
-                 additionalinstructions.style.display= reset? "none" : "block";
-               }
-
               }
+             if (arr[0] === "Page") {
+               while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
+               additionalinstructions.innerHTML = "<h2> Additional Instructions Specified: </h2>";
+               additionalinstructions.appendChild(document.createTextNode(e.value));
+               additionalinstructions.style.display= reset? "none" : "block";
+             }
+            }
             break;
         }
     }
