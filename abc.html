@@ -23,6 +23,7 @@
       display:block;
       width: 100%;
       height:auto;
+      z-index:0;
     }
 
     li {
@@ -231,9 +232,13 @@
     }
     
     .myfileimg {
+      position:absolute;
       display:block;
       object-fit: contain;
       background: rgba(255, 255, 255, 1.0);
+      color: black;
+      font-size: 20pt;
+      z-index:1;
     }
     
     .myfilefieldset {
@@ -273,6 +278,7 @@
         padding: 0;
         display:block;
         font-size:1.5vw;
+        z-index:0;
     }
 
     .formdata {
@@ -299,19 +305,18 @@
         padding: 0vh;
      }
 
-.a {
-  background: url('path/to/image.jpg') center/cover;
-}
     .shortcutshover {
       position: fixed;
-      top:3%;
-      left:90%;
-      width:4%;
-      height: same-as-width;
+      top:3vw;
+      left:92vw;
+      width:3vw;
+      height:3vw;
       display:none;
-      border: 2pt solid #002200;
-      background-color: #aaaaff;
+      border: 4pt solid #002200;
+      background-color: #88ff88;
       z-index: 3;
+      text-align:center;
+      verticle-align:middle;
     }
 
     .shortcuts {
@@ -323,7 +328,7 @@
       overflow-x: hidden; 
       border: 2pt solid #002200;
       opacity:1.0;
-      filter: alpha(opacity=100);
+      /* filter: alpha(opacity=100); */
       display:none;
       background-color: #ffffff;
    }
@@ -399,12 +404,17 @@
       <div class="formwithbackgroundimage onnewpage" id="formA"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-001.jpg" class="imgcls"/></div>
       <div class="formwithbackgroundimage onnewpage" id="formB"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-002.jpg" class="imgcls"/></div>
       <div class="formwithbackgroundimage onnewpage" id="formBB"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-003.jpg" class="imgcls"/></div>
+      <div class="formwithbackgroundimage onnewpage" id="formC"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-004.jpg" class="imgcls"/></div>
       <div id="addedImagesID"></div>
       <div id="additionalinstructionsID"></div>
       <div class="onnewpage" id="summaryID"></div>
-        <h2> You can obtain a file with the current state of forms below: </h2>
-        <p> This file includes the added images (if any added)." </p>
-      <p><button onclick="get_form_instance();">Obtain Form Instance</button></p>
+        <h2>You can obtain an exported file with the current state of forms below: </h2>
+        <p>This file would include the added images (if any added)." </p>
+        <p><button onclick="get_form_instance();">Obtain Exported Form Instance</button></p>
+        <p>In future you can load back this exported file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
+        <p>Also if this file is complete (The box on the top right corner should be Green), you can print it, sign it, and snail mail it to the Troop Medical Forms Corrdinator.</p>
+        <p>Use the button below to e-mail the this form's summary to the Troop Medical Forms Coordinator</p>
+        <p><button onclick="window.open('mailto:t466MedForms@gmail.com?subject=MedicalFormsSummary&body'+encodeURIComponent('<html><body>' + summary.outerHTML + '</body></html>'));">e-Mail Summary to the Troop Medical Forms Coordinator</button></p>
   </div>
 </div>
      
@@ -438,8 +448,8 @@ const allPriorFormsKey = "$$_All^^priorABCforms^^$$";
 
 var datin =  [
       ["Secti", "Participant Details:", [
-        [ "Names", "Full Name:",   "mns", 1, [["formA", 400, 275, 1300, 375], ["formB", 500, 275, 1400, 375], ["formBB", 400, 275, 1300, 375]]],
-        [ "Date", "Date Of Birth:", "dob", 1, [["formA", 400, 400, 1300, 460], ["formB", 500, 400, 1400, 460], ["formBB", 400, 400, 1300, 460]]],
+        [ "Names", "Full Name:",   "mns", 1, [["formA", 400, 275, 1300, 375], ["formB", 500, 275, 1400, 375], ["formBB", 400, 275, 1300, 375], ["formC", 500, 375, 1300, 475]]],
+        [ "Date", "Date Of Birth:", "dob", 1, [["formA", 400, 400, 1300, 460], ["formB", 500, 400, 1400, 460], ["formBB", 400, 400, 1300, 460], ["formC", 500, 475, 1300, 540]]],
       ]],
       ["Secti", "Any participation restriction(s):", [
         ["Comment", "Due to the nature of programs and  activities, the Boy Scouts of America and local  councils cannot continually monitor compliance  of program participants or any limitations  imposed upon them by parents or medical  providers. However, so that leaders can be as familiar as possible with any limitations, list any restrictions imposed on a child participant in connection with programs or activities below:"],
@@ -485,7 +495,7 @@ var datin =  [
       ["Secti", "General Information Of Participant:", [
 
         [ "Number", "Age (yrs):", "age", 1, [9, 99], [["formB", 325,500, 550, 540]]],
-        [ "Radii", "Gender", "gndr", [["Male", []], ["Female", []], ["Prefer Not to Say", []], 0], [], [["formB", 825, 500, 1100, 540]]],
+        [ "Radii", "Gender:", "gndr", [["Male", []], ["Female", []], ["Prefer Not to Say", []], 0], [], [["formB", 825, 500, 1100, 540]]],
         [ "Number", "Height (inches):", "ht", 1, [24, 90], [["formB", 1375, 500, 1650, 540]]],
         [ "Number", "Weight (lbs):", "wt", 1, [24,350], [["formB", 1925, 500, 2150, 540]]],
         [ "Street", "Address (number, street, apt/ste):", "street", 1, [["formB", 375, 560, 2325, 600]]],
@@ -697,10 +707,10 @@ var datin =  [
                 ]],
               1, ["Formy", "Add immunization form photos (keep image sizes below 1MB):", [
                  ["Photo", "Immunization Form Page-1 Photo", "immunization1", 1, ["immunPage1", 100, 100, 2450, 3200]], 
-                 ["Photo", "Immunization Form Page-2 Photo", "immunization2", 0, ["immunPage1", 100, 100, 2450, 3200]], 
-                 ["Photo", "Immunization Form Page-3 Photo", "immunization3", 0, ["immunPage1", 100, 100, 2450, 3200]], 
-                 ["Photo", "Immunization Form Page-4 Photo", "immunization4", 0, ["immunPage1", 100, 100, 2450, 3200]], 
-                 ["Photo", "Immunization Form Page-5 Photo", "immunization5", 0, ["immunPage1", 100, 100, 2450, 3200]]]],
+                 ["Photo", "Immunization Form Page-2 Photo", "immunization2", 0, ["immunPage2", 100, 100, 2450, 3200]], 
+                 ["Photo", "Immunization Form Page-3 Photo", "immunization3", 0, ["immunPage3", 100, 100, 2450, 3200]], 
+                 ["Photo", "Immunization Form Page-4 Photo", "immunization4", 0, ["immunPage4", 100, 100, 2450, 3200]], 
+                 ["Photo", "Immunization Form Page-5 Photo", "immunization5", 0, ["immunPage5", 100, 100, 2450, 3200]]]],
             ]],
           ]],
         ]],
@@ -709,7 +719,8 @@ var datin =  [
         ["Comment", "Form C is required for Boy Scouts activities that exceed 72 hours. For example (but not limited to) Camp Chawanakee and Camp Philmonte require mandatory submission or Form C signed by a Dr/Physician..."],
         ["Cheky", "Remove check mark from here to proceed without adding form C: ", "upldfrmc", 1, [1,
             [
-              ["Photo", "Form C", "formc", 1, ["formCPage", 100, 100, 2450, 3200]],
+              ["Comment", "To print forms for Dr to sign, click on the button <input type='button' onclick='printformfordr()' value='Print Forms For Dr to Sign'></input> <p>Once you get back the signed form C from Dr, upload it below.</p>"],
+              ["Photo", "Form C: ", "formc", 1, ["formCPage", 100, 100, 2450, 3200]],
               ["Formy", "Particulars from Form C", [
                 ["Date", "Dr's Date on Form C:", "drdtonc", 1], 
                 ["Names", "Dr's Name on Form C:", "drnameonc", 1],
@@ -870,7 +881,7 @@ var datin =  [
     }
 
     function forminstid(id, form, i, superradio, img) {
-        var retval = id + "_" + form + img ? "_img"  : (("_fdsinst_" + i + (superradio ? "_superradio" : "_nonsr" ));
+        var retval = id + "_" + form + (img ? "_img"  : ("_fdsinst_" + i + (superradio ? "_superradio" : "_nonsr" )));
         return retval;
     }
                                        
@@ -880,9 +891,13 @@ var datin =  [
         var form = fds[i][0];
         var f = document.getElementById(form);
         if (f === null) {
-          var str =  '<div class="formwithbackgroundimage onnewpage" id="' + arr[4][0] + '"><img src="https://t466medforms.netlify.com/assets/blank.jpg" class="imgcls"/></div>';
-          imgdiv = $($.parseHTML(str)).show().get(0);
-          addedimages.appendChild(imgdiv);
+          var str =  '<div class="formwithbackgroundimage onnewpage" id="' + fds[i][0] + '"><img src="https://t466medforms.netlify.com/assets/blank.jpg" class="imgcls"/></img></div>';
+          f = $($.parseHTML(str)).show().get(0);
+          f.style.fontSize = "16pt";
+          f.style.borderWidth="2px";
+          f.style.borderStyle="dashed";
+          f.style.boderColor="black";
+          addedimages.appendChild(f);
         }
 
         /* we can not rely on img elements background rendering to throw off our mathematics, so we are taking things in our own hands 
@@ -903,9 +918,9 @@ var datin =  [
         }
         var e = document.getElementById(f);
         if (e == null) {
-            var str = ( img ? 'img class="myfileimg" data-file="" data-imgdata="" ' : '<label class="formdata" ') + 
+            var str = ( img ? '<img class="myfileimg" data-file="" data-imgdata="" src="" alt="" title="" ' : '<label class="formdata" ') + 
                       'style="left:' + (100.0*fds[i][1]/aw) + '%; top:' + (100.0*fds[i][2]/ah) + '%; width:' + (100.0*(fds[i][3]-fds[i][1])/aw) + '%; height:' + (100.0*(fds[i][4]-fds[i][2])/ah) + '%; ';
-                str+= ' font-size:100%' + '" id="' + id + '"></label>';
+                str+= ' font-size:100%' + '" id="' + id + '">' + (img ? '</img>' : '</label>');
             e = $($.parseHTML(str)).show().get(0);
             f.appendChild(e);
         }
@@ -999,24 +1014,26 @@ var datin =  [
                }
             }
         } else if (arr[0] === "Photo") {
+           fds = arr[2][4];
            var imgid = forminstid(e.id, fds[0], 0, false, true);
            var img = document.getElementById(imgid);
-           if ((!reset) && (arr[3] === 1) && (e.files === null || e.files.length != 1) && 
+           if ((!reset) && (arr[2][3] === 1) && (e.files === null || e.files.length != 1) && 
                (img.attributes.src.value === null || img.attributes.src.value === '') && 
                (img.getAttribute("data-imgdata") === "")) {
-              // Missing mandatory photo.'Add Missing Photo: ' + arr[1];
-              var str = 'Add Missing Photo: ' + arr[1];
-              issuefound(id, str);
-              img.innerHTML = str;
+              var str = 'Add Missing Photo: ' + arr[2][1];
+              issuefound(e.id, str);
+              img.attributes.alt.value = str;
+              img.attributes.title.value = str;
               img.style.display="block";
             } else {
-                img.innerHTML = '';
+                img.parentElement.style.display = (reset || arr[2][3] === 0) ? "none" : "block";
                 if ((e.files) && e.files.length === 1) {
                    var file = e.files[0];
                    var oldfile = img.getAttributeNode('data-file');
                    var filetag = (file.name + "#" + file.lastModifiedDate);
                    if (oldfile.value !== filetag) {
                       img.style.display="none";
+                      img.parentElement.style.display = "none";
                       var fr = new FileReader();
                       fr.onload = function(evt) {
                           //set new data url for this img...
@@ -1024,6 +1041,7 @@ var datin =  [
                           img.getAttributeNode('data-imgdata').value = arrayBufferToBase64(fr.result);
                           img.attributes.src.value = URL.createObjectURL(file);
                           img.style.display="block";
+                          img.parentElement.style.display = reset ? "none" : "block";
                       };
                       fr.readAsArrayBuffer(file);
                    }
@@ -1225,7 +1243,7 @@ var datin =  [
         if (arr.length > 5) {
           makeformdatainsts(lid, arr[5], false, false);
         }
-      } if (arr[0] === "Photo") {
+      } else if (arr[0] === "Photo") {
           makeformdatainsts(lid, [arr[4]], false, true);
       } else if (arr.length > 4) {
           makeformdatainsts(lid, arr[4], false, false);
@@ -1628,6 +1646,59 @@ var datin =  [
         }
     }
 
+    function newdoc() {
+      var nd = document.implementation.createHTMLDocument("T466MedForm-" + currentLocalStorageFormInstanceId);
+
+      var meta=document.createElement('meta');
+      meta.setAttribute('charset', 'utf-8');
+      nd.getElementsByTagName('head')[0].appendChild(meta);
+      document.createElement('meta');
+      meta.name='viewport';
+      meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+      nd.getElementsByTagName('head')[0].appendChild(meta);
+
+      //copy over the sytles
+      var parentStyleSheets = document.styleSheets;
+      var cssString = "";
+      for (var i = 0, count = parentStyleSheets.length; i < count; ++i) {
+        if (parentStyleSheets[i].cssRules) {
+            var cssRules = parentStyleSheets[i].cssRules;
+            for (var j = 0, countJ = cssRules.length; j < countJ; ++j) {
+              cssString += cssRules[j].cssText;
+            }
+        } else {
+            cssString += parentStyleSheets[i].cssText;  // IE8 and earlier
+        }
+      }
+      var style = document.createElement("style");
+      style.type = "text/css";
+      try {
+          style.innerHTML = cssString;
+      }
+      catch (ex) {
+          style.styleSheet.cssText = cssString;  // IE8 and earlier
+      }
+      nd.getElementsByTagName("head")[0].appendChild(style);
+      return nd;
+    }
+  
+    function printformfordr() {
+        var nd = newdoc();
+        var ids = ["formA", "formB", "formBB", "formC"];
+        for (var i = 0; i < ids.length; i++) {
+          var e = document.getElementById(ids[i]);
+          var cln = e.cloneNode(true);
+          cln.style.display="block";
+          nd.body.appendChild(cln);
+        }
+        var pw = window.open(new URL('blank.html', window.location.href), 'PRINT');
+        pw.document.write(nd.documentElement.outerHTML);
+        pw.document.documentElement.hide().show(0);
+        pw.focus();
+        pw.print();
+        pw.close();
+    }
+
     function updatedocanchor(wholeapp) {
        var anchor = document.getElementById('localizerId');
        anchor.visibility="hidden";
@@ -1644,39 +1715,8 @@ var datin =  [
            localize(document.documentElement);
            str = document.documentElement.outerHTML;
         } else {
-            var nd = document.implementation.createHTMLDocument("T466MedForm-" + currentLocalStorageFormInstanceId);
-
-            var meta=document.createElement('meta');
-            meta.setAttribute('charset', 'utf-8');
-            nd.getElementsByTagName('head')[0].appendChild(meta);
-            document.createElement('meta');
-            meta.name='viewport';
-            meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-            nd.getElementsByTagName('head')[0].appendChild(meta);
-  
-            //copy over the sytles
-            var parentStyleSheets = document.styleSheets;
-            var cssString = "";
-            for (var i = 0, count = parentStyleSheets.length; i < count; ++i) {
-              if (parentStyleSheets[i].cssRules) {
-                  var cssRules = parentStyleSheets[i].cssRules;
-                  for (var j = 0, countJ = cssRules.length; j < countJ; ++j) {
-                    cssString += cssRules[j].cssText;
-                  }
-              } else {
-                  cssString += parentStyleSheets[i].cssText;  // IE8 and earlier
-              }
-            }
-            var style = document.createElement("style");
-            style.type = "text/css";
-            try {
-                style.innerHTML = cssString;
-            }
-            catch (ex) {
-                style.styleSheet.cssText = cssString;  // IE8 and earlier
-            }
-            nd.getElementsByTagName("head")[0].appendChild(style);
-
+            var nd = newdoc();
+                                                          
             var ids = ["formA", "formB", "formBB", "addedImagesID", "additionalinstructionsID", "summaryID"];
             for (var i = 0; i < ids.length; i++) {
               var e = document.getElementById(ids[i]);
@@ -1797,7 +1837,7 @@ var datin =  [
           case "Comment":
              break;
           case "Formy":
-            if (!rest) { addSummaryForm(arr[1]); }
+            if (!reset) { addSummaryForm(arr[1]); }
             validate_sect(arr[2], reset);
             break;
           case "Radii":
@@ -1833,7 +1873,7 @@ var datin =  [
             break;
           case "Secti":
             if (!reset) { addSummarySect(arr[1]); }
-            validate_sect(arr, reset);
+            validate_sect(arr[2], reset);
             break;
           default:
             var id = uid(arr);
@@ -1841,14 +1881,13 @@ var datin =  [
             updateformdatainsts(e, reset);
             if (arr[0] === "Photo") {
                var imgdiv = document.getElementById(arr[4][0]);
-               imgdiv.style.display = reset? "none" : "block";
+               imgdiv.style.display = (reset || arr[3] === 0) ? "none" : "block";
             } else {
               if (!reset) {
                   if (!e.validity.valid) {
                     issuefound(id, arr[1] + " is invalid");
-                  } else {
-                    addSummary(arr[1] + " " + e.value);
                   }
+                  addSummary(arr[1] + " " + e.value);
               }
              if (arr[0] === "Page") {
                while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
@@ -1879,7 +1918,7 @@ var datin =  [
       summary.innerHTML ="<h2> Summary of all the input values in text form </h2>";
 
       for (var iy=0; iy < datin.length; iy++){
-            validate_sect(datin[iy][2], false);
+            validate_sect(datin[iy], false);
       }
       
       makeadditionalcomputedfds();
@@ -1896,7 +1935,9 @@ var datin =  [
                                        
           var e = $($.parseHTML(str)).show().get(0);
           shortcuts.appendChild(e);
+          shortcutshover.style.backgroundColor="#88ff88";
       } else  {
+          shortcutshover.style.backgroundColor="#ff8888";
           formcomplete.style.display="none";
           formissues.style.display="block";
       }
