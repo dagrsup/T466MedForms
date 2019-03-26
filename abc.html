@@ -1618,7 +1618,8 @@ var datin =  [
             }
 
             for (var prop in map){
-                localStorage.setItem("$" + inst + "$" + prop, map[prop].toString());
+                var k = prop.substring(1).split("$");
+                localStorage.setItem("$" + inst + "$" + k[1], map[prop].toString());
             }
 
             priors.unshift(inst);
