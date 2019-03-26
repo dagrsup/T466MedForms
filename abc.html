@@ -520,27 +520,27 @@
   }
   
   function emailsummary() {
-      checkAuth();
-      window.setTimeout( function() {
-      document.getElementById("sendemailID").disabled = true;
-      var summr = summary.innerHTML;
-      var sub = 'Medical Form Summary: ' 
-                + document.getElementById('uid_mnsFullName') 
-                + ' ' + today() + ' ' 
-                + checksum(summr);
-      var body = '<html><body>' + summr + '</html></body>';
-      sendMessage(
-              {
-                'To': "t466MedForms@gmail.com",
-                'Subject': sub,
-                'Content-Type' : 'text/html; charset="UTF-8"',
-                'Mime-Version' : '1.0',
-                'Content-Transfer-Encoding': 'base64'
-              },
-             body,
-             enableback
-     ); }, 2);
-
+      handleAuthClick();
+      if (typeof gapi.client.gmail !== 'undefined') {
+          document.getElementById("sendemailID").disabled = true;
+          var summr = summary.innerHTML;
+          var sub = 'Medical Form Summary: ' 
+                    + document.getElementById('uid_mnsFullName') 
+                    + ' ' + today() + ' ' 
+                    + checksum(summr);
+          var body = '<html><body>' + summr + '</html></body>';
+          sendMessage(
+                  {
+                    'To': "t466MedForms@gmail.com",
+                    'Subject': sub,
+                    'Content-Type' : 'text/html; charset="UTF-8"',
+                    'Mime-Version' : '1.0',
+                    'Content-Transfer-Encoding': 'base64'
+                  },
+                 body,
+                 enableback
+         );
+      }
       return false;
     }
                             
