@@ -459,11 +459,13 @@
 
   function emailsummary() {
     document.getElementById("sendemailID").disabled = true;
+  /*
     gapi.auth.authorize({
       client_id: clientId,
       scope: scopes,
       immediate: true,
-    }, handleAuthResultImmediate);
+    }, handleAuthResultImmediate); */
+    handleAuthResultImmediate(null);
     return false;
   }
 
@@ -493,7 +495,7 @@
       var summr = summary.innerHTML;
       var sub = 'Medical Form Summary: ' 
                 + document.getElementById('uid_mnsFullName').value 
-                + ' ' + today() + ' ' 
+                + ' ' + today() + ' Checksum:' 
                 + checksum(summr);
       var body = '<html><body>' + summr + '</html></body>';
       sendMessage(
@@ -1166,10 +1168,12 @@ var datin =  [
            var imgid = forminstid(e.id, fds[0], 0, false, true);
            var img = document.getElementById(imgid);
            if ((!reset) && (arr[2][3] === 1) && (e.files === null || e.files.length != 1) && 
-               (img.attributes.src.value === null || img.attributes.src.value === '') && 
+               (img.attributes.src === null || img.attributes.src.value === null || img.attributes.src.value === '') && 
                (img.getAttribute("data-imgdata") === "")) {
               var str = 'Add Missing Photo: ' + arr[2][1];
               issuefound(e.id, str);
+              addSummary("Photo: " + arr[2][1], false);
+
               img.attributes.alt.value = str;
               img.attributes.title.value = str;
               img.style.display="block";
@@ -1832,7 +1836,7 @@ var datin =  [
   
     function printformfordr() {
         var nd = newdoc();
-        var ids = ["formA", "formB", "formBB", "formC"];
+        var ids = ["formB", "formBB", "formC"];
         for (var i = 0; i < ids.length; i++) {
           var e = document.getElementById(ids[i]);
           var cln = e.cloneNode(true);
@@ -1872,6 +1876,9 @@ var datin =  [
               cln.style.display="block";
               nd.body.appendChild(cln);
             }
+            str = "<h3> Summary Checksum for this file is: " + checksum(summary.innerHTML) + "</h3>";
+            nd.body.appendChild($($.parseHTML(str)).show().get(0));
+                                           
                                            
             var imgs = nd.getElementById("addedImagesID").getElementsByTagName("img");
             for (var i = 0; i < imgs.length; i++) {
@@ -1891,7 +1898,7 @@ var datin =  [
              + '     function updateimgurls() {                           \n'
              + '         var imgs = document.getElementsByTagName("img"); \n'
              + '         for (var i = 0; i < imgs.length; i++) {          \n'
-             + '             if (imgs[i].attributes.src.value == "") {    \n'
+             + '             if (imgs[i].attributes.src.value === "") {    \n'
              + '                 var blob = new Blob([base64ToArrayBuffer(imgs[i].getAttribute("data-imgdata"))], {type : "image/jpeg"}); \n'
              + '                 imgs[i].attributes.src.value = URL.createObjectURL(blob);    \n'
              + '                 imgs[i].setAttribute("data-imgdata", "");                    \n'
@@ -1970,9 +1977,15 @@ var datin =  [
         summary.appendChild($($.parseHTML(str)).show().get(0));
     }
                                 
-    function addSummary(msg) {
-        var str = '<p class="summarypara"> ' + msg + ' </p>';
-        summary.appendChild($($.parseHTML(str)).show().get(0));
+    function addSummary(msg, valid) {
+        var str = '<p class="summarypara"> ' + (valid ? "" : "Missing/Invalid: ") + msg + ' </p>';
+        var e = $($.parseHTML(str)).show().get(0);
+        if (!valid) {
+            e.style.color="red";
+            e.style.fontWeight="bold";
+        }
+  
+        summary.appendChild(e);
     }
     
     function issuefound(id, issue) {
@@ -2003,7 +2016,7 @@ var datin =  [
                 updateformdatainsts(e, reset);
                 if ((!reset) && e.checked) {
                   idx = j;
-                  addSummary(arr[1] + " " + arr[3][j][0]);
+                  addSummary(arr[1] + " " + arr[3][j][0], true);
                 }
               }
               for (var k=0; k < arr[4].length/2; k++){
@@ -2018,7 +2031,7 @@ var datin =  [
               updateformdatainsts(e, reset);
               var idx = reset? arr[3] : (e.checked ? 1 : 0);
               if ((!reset)) {
-                  addSummary(arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected"));
+                  addSummary(arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected"), true);
               }
               for (var k=0; k < arr[4].length/2; k++ ) {
                   validate_sect(arr[4][k*2+1], idx === arr[4][2*k] ? reset : true);
@@ -2041,7 +2054,7 @@ var datin =  [
                   if (!e.validity.valid) {
                     issuefound(id, arr[1] + " is invalid");
                   }
-                  addSummary(arr[1] + " " + e.value);
+                  addSummary(arr[1] + " " + e.value, e.validity.valid);
               }
              if (arr[0] === "Page") {
                while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
@@ -2082,7 +2095,9 @@ var datin =  [
           //No issues detected, time to wrapup
           formcomplete.style.display="block";
           formissues.style.display="none";
-  
+
+          summary.innerHTML = summary.innerHTML + "<p><h3> No unresolved issues in this form </h3></p>" ;
+
           var str = '<div> <p>No unresolved issues for this form.</p>'
                    + ' <p> You can go here to review form: <input type="button" onclick="scrollto(' +"'" + formcomplete.id + "'" + ');  return true;" value="Review"></input></p>'
                    + '<p>Once the review is complete, go to the end of this page, to obtain a printable copy of this form.</p>';
