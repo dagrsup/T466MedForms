@@ -458,6 +458,7 @@
   }
 
   function emailsummary() {
+    document.getElementById("sendemailID").disabled = true;
     gapi.auth.authorize({
       client_id: clientId,
       scope: scopes,
@@ -483,7 +484,6 @@
   }
   
   function finallysend() {
-      document.getElementById("sendemailID").disabled = true;
       var summr = summary.innerHTML;
       var sub = 'Medical Form Summary: ' 
                 + document.getElementById('uid_mnsFullName') 
@@ -508,6 +508,7 @@
       loadGmailApi();
     } else {
         alert("Gmail is not available. Try again.");
+        enableback(authResult);
     }
   }
 </script>
@@ -526,7 +527,7 @@
     }
     var code = "3ZA1CDE2FG5HIJK6L4MON7PQR89SUVWXYTB";
     var checksum = '';
-    hash = (new Uint32Array([hash]))[0]
+    hash = (new Uint32Array([hash]))[0];
     for (var i = 0; i < 3; i++) {
       checksum += code[hash % code.length];
       hash = hash/code.length;
@@ -534,7 +535,7 @@
     checksum += '-';
     for (var i = 0; i < 4; i++) {
       checksum += code[hash % code.length];
-      hash = hash/code.length;
+      hash = (new Uint32Array([Math.floor(hash/code.length)]))[0];
     }
     return checksum;
   }
