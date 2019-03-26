@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=0.95, maximum-scale=5.0, minimum-scale=0.95, user-scalable=yes">
 
   <title>T466 Med Forms ABC</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -442,12 +442,127 @@
         <p><button onclick="get_form_instance();">Obtain Exported Form Instance</button></p>
         <p>In future you can load back this exported file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
         <p>Also if this file is complete (The box on the top right corner should be Green), you can print it, sign it, and snail mail it to the Troop Medical Forms Corrdinator.</p>
-        <p>Use the button below to e-mail the this form's summary to the Troop Medical Forms Coordinator</p>
-        <p><button onclick="window.open('mailto:t466MedForms@gmail.com?subject=MedicalFormsSummary&body'+encodeURIComponent('<html><body>' + summary.outerHTML + '</body></html>'));">e-Mail Summary to the Troop Medical Forms Coordinator</button></p>
+        <p>Use the button below to e-mail this form's summary to the Troop Medical Forms Coordinator</p>
+        <p>
+        <p><button id="sendemailID" onclick="emailsummary()">e-Mail Summary to the Troop Medical Forms Coordinator</button></p>
   </div>
 </div>
-     
+
 <script>
+  var clientId = '738175904237-6lnju7vjiefiinav83rsqa1in1vv54an.apps.googleusercontent.com';
+  var apiKey = 'AIzaSyAb0X7NUzYYgY2xDKSbiSaVRs21ROVFYCo';
+  var scopes = 'https://www.googleapis.com/auth/gmail.send';
+  
+  function handleClientLoad() {
+    gapi.client.setApiKey(apiKey);
+    window.setTimeout(checkAuth, 1);
+  }
+
+  function checkAuth() {
+    gapi.auth.authorize({
+      client_id: clientId,
+      scope: scopes,
+      immediate: true
+    }, handleAuthResult);
+  }
+
+  function handleAuthClick() {
+    gapi.auth.authorize({
+      client_id: clientId,
+      scope: scopes,
+      immediate: false
+    }, handleAuthResult);
+    return false;
+  }
+
+  function handleAuthResult(authResult) {
+    if(authResult && !authResult.error) {
+      loadGmailApi();
+    } else {
+        //handleAuthClick();
+    }
+  }
+
+  function loadGmailApi() {
+    gapi.client.load('gmail', 'v1', displayInbox);
+  }
+  
+  function displayInbox() {
+      document.getElementById("sendemailID").disabled = false;
+  }
+  
+</script>
+
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    
+<script>
+  
+  function checksum(s) {
+    var hash = 2863311530;
+    var strlen = s.length;
+    for (var i = 0; i < strlen; i++ ) {
+      var c = s.charCodeAt(i);
+      hash = ((hash << 5) - hash) + c;
+      hash = hash & hash;
+    }
+    var code = "3ZA1CDE2FG5HIJK6L4MON7PQR89SUVWXYTB";
+    var checksum = '';
+    for (var i = 0; i < 3; i++) {
+      checksum += code[hash % code.length];
+      hash = hash/code.length;
+    }
+    checksum += '-';
+    for (var i = 0; i < 4; i++) {
+      checksum += code[hash % code.length];
+      hash = hash/code.length;
+    }
+    return checksum;
+  }
+  
+  function emailsummary() {
+      document.getElementById("sendemailID").disabled = true;
+      var summr = summary.innerHTML;
+      var sub = 'Medical Form Summary: ' 
+                + document.getElementById('uid_mnsFullName') 
+                + ' ' + today() + ' ' 
+                + checksum(summr);
+      var body = '<html><body>' + summr + '</html></body>';
+      sendMessage(
+              {
+                'To': "t466MedForms@gmail.com",
+                'Subject': sub,
+                'Content-Type' : 'text/html; charset="UTF-8"',
+                'Mime-Version' : '1.0',
+                'Content-Transfer-Encoding': 'base64'
+              },
+             att,
+             enableback
+     );
+
+      return false;
+    }
+                            
+    function sendMessage(headers_obj, message, callback) {
+      var email = '';
+
+      for(var header in headers_obj)
+        email += header += ": "+headers_obj[header]+"\r\n";
+
+      email += "\r\n" + message;
+
+      var sendRequest = gapi.client.gmail.users.messages.send({
+        'userId': 'me',
+        'resource': {
+          'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+        }
+      });
+
+      return sendRequest.execute(callback);
+    }                            
+                            
+  function enableback() {
+     document.getElementById("sendemailID").disabled = false;
+  }
   
  //Split(['#topPart', '#bottomPart']);
   
@@ -984,7 +1099,7 @@ var datin =  [
       var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       if ((d !== "Invalid Date") && !isNaN(d))
       {
-        return months[d.getMonth()] + " " + d.getDay() + ", " + d.getFullYear();
+        return months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
       } else {
         return val;
       }
@@ -1016,7 +1131,7 @@ var datin =  [
                 var radios = e.closest("fieldset").getElementsByTagName("input");
                 for (var j = 0; j < radios.length; j++) {
                   if (radios[j].checked) {
-                    eid.innerHTML = arr[2][3][i][0];
+                    eid.innerHTML = arr[2][3][j][0];
                   }
                 }
               }
@@ -1788,9 +1903,6 @@ var datin =  [
             nd.getElementById("summaryID").setAttribute("data-json", str);
   
             str = nd.documentElement.outerHTML;
-//            var s = new XMLSerializer();
-//            str = s.serializeToString(nd);
-//            str = str.replace(/&lt;/g, "<"); // Kludgy hack... but works for our purposes...
         }
         var htmlBlob = new Blob([str], {type : 'text/html'}); 
         anchor.setAttribute('href', URL.createObjectURL(htmlBlob));
@@ -1825,14 +1937,23 @@ var datin =  [
         return window.btoa( binary );
     }
 
-    function base64ToArrayBuffer(base64) {
-        var binary_string =  window.atob(base64);
-        var len = binary_string.length;
+    function strToArrayBuffer(str) {
+        var len = str.length;
         var bytes = new Uint8Array( len );
         for (var i = 0; i < len; i++)        {
-            bytes[i] = binary_string.charCodeAt(i);
+            bytes[i] = str.charCodeAt(i);
         }
         return bytes.buffer;
+    }
+      
+    function strToBlob(str, typ) {
+       var blob = new Blob([strToArrayBuffer(str)], {type : typ});
+       return blob;
+    }
+
+    function base64ToArrayBuffer(base64) {
+        var binary_string =  window.atob(base64);
+        return strToArrayBuffer(binary_string);
     }
     
     function addSummaryForm(msg) {
