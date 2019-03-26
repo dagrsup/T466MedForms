@@ -1625,7 +1625,7 @@ var datin =  [
             set_prior_instances(priors);
             load(inst);
 
-            var imgs = e.getElementById("addedImagesID").getElementsByTagName('img');
+            var imgs = e.getElementById("addedImagesID").getElementsByClassName('myfileimg');
             for (var i = 0; i < imgs.length; i++) {
               var img = document.getElementById(imgs[i].id);
               var val = imgs[i].getAttribute('data-imgdata');
