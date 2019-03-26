@@ -492,7 +492,7 @@
   
       var summr = summary.innerHTML;
       var sub = 'Medical Form Summary: ' 
-                + document.getElementById('uid_mnsFullName') 
+                + document.getElementById('uid_mnsFullName').value 
                 + ' ' + today() + ' ' 
                 + checksum(summr);
       var body = '<html><body>' + summr + '</html></body>';
