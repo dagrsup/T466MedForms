@@ -455,14 +455,14 @@
   
   function handleClientLoad() {
     gapi.client.setApiKey(apiKey);
-    window.setTimeout(checkAuth, 1);
+    //window.setTimeout(checkAuth, 1);
   }
 
   function checkAuth() {
     gapi.auth.authorize({
       client_id: clientId,
       scope: scopes,
-      immediate: true
+      immediate: true,
     }, handleAuthResult);
   }
 
@@ -520,6 +520,7 @@
   }
   
   function emailsummary() {
+      window.setTimeout(checkAuth, 1);
       document.getElementById("sendemailID").disabled = true;
       var summr = summary.innerHTML;
       var sub = 'Medical Form Summary: ' 
@@ -535,7 +536,7 @@
                 'Mime-Version' : '1.0',
                 'Content-Transfer-Encoding': 'base64'
               },
-             att,
+             body,
              enableback
      );
 
