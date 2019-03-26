@@ -520,7 +520,8 @@
   }
   
   function emailsummary() {
-      window.setTimeout(checkAuth, 1);
+      checkAuth();
+      window.setTimeout( function() {
       document.getElementById("sendemailID").disabled = true;
       var summr = summary.innerHTML;
       var sub = 'Medical Form Summary: ' 
@@ -538,7 +539,7 @@
               },
              body,
              enableback
-     );
+     ); }, 2);
 
       return false;
     }
