@@ -455,42 +455,61 @@
   
   function handleClientLoad() {
     gapi.client.setApiKey(apiKey);
-    //window.setTimeout(checkAuth, 1);
   }
 
-  function checkAuth() {
+  function emailsummary() {
     gapi.auth.authorize({
       client_id: clientId,
       scope: scopes,
       immediate: true,
-    }, handleAuthResult);
-  }
-
-  function handleAuthClick() {
-    gapi.auth.authorize({
-      client_id: clientId,
-      scope: scopes,
-      immediate: false
-    }, handleAuthResult);
+    }, handleAuthResultImmediate);
     return false;
   }
 
-  function handleAuthResult(authResult) {
+  function handleAuthResultImmediate(authResult) {
     if(authResult && !authResult.error) {
       loadGmailApi();
     } else {
-        //handleAuthClick();
+      gapi.auth.authorize({
+        client_id: clientId,
+        scope: scopes,
+        immediate: false
+      }, handleAuthResult);
     }
   }
 
   function loadGmailApi() {
-    gapi.client.load('gmail', 'v1', displayInbox);
+    gapi.client.load('gmail', 'v1', finallysend);
   }
   
-  function displayInbox() {
-      document.getElementById("sendemailID").disabled = false;
+  function finallysend() {
+      document.getElementById("sendemailID").disabled = true;
+      var summr = summary.innerHTML;
+      var sub = 'Medical Form Summary: ' 
+                + document.getElementById('uid_mnsFullName') 
+                + ' ' + today() + ' ' 
+                + checksum(summr);
+      var body = '<html><body>' + summr + '</html></body>';
+      sendMessage(
+              {
+                'To': "t466MedForms@gmail.com",
+                'Subject': sub,
+                'Content-Type' : 'text/html; charset="UTF-8"',
+                'Mime-Version' : '1.0',
+                'Content-Transfer-Encoding': 'base64'
+              },
+             body,
+             enableback
+     );
   }
   
+  function handleAuthResult(authResult) {
+    if(authResult && !authResult.error) {
+      loadGmailApi();
+    } else {
+        alert("Gmail is not available. Try again.");
+    }
+  }
 </script>
 
 <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
@@ -507,6 +526,7 @@
     }
     var code = "3ZA1CDE2FG5HIJK6L4MON7PQR89SUVWXYTB";
     var checksum = '';
+    hash = (new Uint32Array([hash]))[0]
     for (var i = 0; i < 3; i++) {
       checksum += code[hash % code.length];
       hash = hash/code.length;
@@ -519,51 +539,23 @@
     return checksum;
   }
   
-  function emailsummary() {
-      checkAuth();
-      if (typeof gapi.client.gmail === 'undefined') {
-         handleAuthClick();
+  function sendMessage(headers_obj, message, callback) {
+    var email = '';
+
+    for(var header in headers_obj)
+      email += header += ": "+headers_obj[header]+"\r\n";
+
+    email += "\r\n" + message;
+
+    var sendRequest = gapi.client.gmail.users.messages.send({
+      'userId': 'me',
+      'resource': {
+        'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
       }
-      if (typeof gapi.client.gmail !== 'undefined') {
-          document.getElementById("sendemailID").disabled = true;
-          var summr = summary.innerHTML;
-          var sub = 'Medical Form Summary: ' 
-                    + document.getElementById('uid_mnsFullName') 
-                    + ' ' + today() + ' ' 
-                    + checksum(summr);
-          var body = '<html><body>' + summr + '</html></body>';
-          sendMessage(
-                  {
-                    'To': "t466MedForms@gmail.com",
-                    'Subject': sub,
-                    'Content-Type' : 'text/html; charset="UTF-8"',
-                    'Mime-Version' : '1.0',
-                    'Content-Transfer-Encoding': 'base64'
-                  },
-                 body,
-                 enableback
-         );
-      }
-      return false;
-    }
-                            
-    function sendMessage(headers_obj, message, callback) {
-      var email = '';
+    });
 
-      for(var header in headers_obj)
-        email += header += ": "+headers_obj[header]+"\r\n";
-
-      email += "\r\n" + message;
-
-      var sendRequest = gapi.client.gmail.users.messages.send({
-        'userId': 'me',
-        'resource': {
-          'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
-        }
-      });
-
-      return sendRequest.execute(callback);
-    }                            
+    return sendRequest.execute(callback);
+  }                            
                             
   function enableback(err) {
      document.getElementById("sendemailID").disabled = false;
