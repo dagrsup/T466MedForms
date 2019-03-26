@@ -1230,7 +1230,7 @@ var datin =  [
                 str += arr[3][j][0] + '</label></div>';
             var radio = $($.parseHTML(str)).show().get(0);
         
-            var v = window.localStorage.getItem(lsk(rid));
+            var v = lsg(lsk(rid));
             if (v === "1") {
                 presetidx = j;
             }
@@ -1286,7 +1286,7 @@ var datin =  [
         checknameuniqueness(cid, ["Cheky", 0, arr]);
 
         var presetidx = arr[3];
-        var v = window.localStorage.getItem(lsk(cid));
+        var v = lsg(lsk(cid));
         if (v !== null) {
           presetidx = ((v === "1") ? 1 : 0);
         }
@@ -1383,7 +1383,7 @@ var datin =  [
       var ctl = $($.parseHTML(str)).show().get(0);
   
       if (info[0] !== 'file') { // it does not make sense to save file.value due to sandbox issues.
-        var v = window.localStorage.getItem(lsk(lid));
+        var v = lsg(lsk(lid));
         if (v !== null) {
           var e = ctl.getElementsByClassName('saveditem');
           e[0].value = v;
@@ -1596,6 +1596,7 @@ var datin =  [
       load(newid);
     }
 
+  
     function load_file_instance(fromfile) {
       if (fromfile.files !== null && fromfile.files.length === 1) {
         var fr = new FileReader();
@@ -1619,7 +1620,7 @@ var datin =  [
 
             for (var prop in map){
                 var k = prop.substring(1).split("$");
-                localStorage.setItem("$" + inst + "$" + k[1], map[prop].toString());
+                window.localStorage.setItem("$" + inst + "$" + k[1], map[prop].toString());
             }
 
             priors.unshift(inst);
@@ -1646,11 +1647,19 @@ var datin =  [
     }
   
     function keyvaluemap(k, v) {
-        var vt = v.trim();
-        window.localStorage.setItem(k, vt);
-        keyvaluesforJSONtoafile[k] = vt;
+        if (v !== null) {
+          var vt = v.trim();
+          window.localStorage.setItem(k, vt);
+          keyvaluesforJSONtoafile[k] = vt;
+        }
     }
-  
+
+    function lsg(k) {
+       var v = window.localStorage.getItem(k);
+       keyvaluemap(k,v);
+       return v;
+    }
+
     function lse(e) {
       var k = lsk(e.id);
   
