@@ -520,7 +520,10 @@
   }
   
   function emailsummary() {
-      handleAuthClick();
+      checkAuth();
+      if (typeof gapi.client.gmail === 'undefined') {
+         handleAuthClick();
+      }
       if (typeof gapi.client.gmail !== 'undefined') {
           document.getElementById("sendemailID").disabled = true;
           var summr = summary.innerHTML;
@@ -562,7 +565,7 @@
       return sendRequest.execute(callback);
     }                            
                             
-  function enableback() {
+  function enableback(err) {
      document.getElementById("sendemailID").disabled = false;
   }
   
