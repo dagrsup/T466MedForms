@@ -483,7 +483,13 @@
     gapi.client.load('gmail', 'v1', finallysend);
   }
   
-  function finallysend() {
+  function finallysend(err) {
+      if (typeof gapi.client.gmail === 'undefined') {
+        alert("Gmail is not available. Try again.");
+        enableback(err);
+        return;
+      }
+  
       var summr = summary.innerHTML;
       var sub = 'Medical Form Summary: ' 
                 + document.getElementById('uid_mnsFullName') 
@@ -530,7 +536,7 @@
     hash = (new Uint32Array([hash]))[0];
     for (var i = 0; i < 3; i++) {
       checksum += code[hash % code.length];
-      hash = hash/code.length;
+      hash = (new Uint32Array([Math.floor(hash/code.length)]))[0];
     }
     checksum += '-';
     for (var i = 0; i < 4; i++) {
