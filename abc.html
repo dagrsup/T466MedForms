@@ -438,6 +438,7 @@
       <div id="addedImagesID"></div>
       <div id="additionalinstructionsID"></div>
       <div class="onnewpage summarycls" id="summaryID"></div>
+        <h3 id="summaryCheckSumID"></h3>
         <h2>You can obtain an exported file with the current state of forms below: </h2>
         <p>This file would include the added images (if any added)." </p>
         <p><button onclick="get_form_instance();">Obtain Exported Form Instance</button></p>
@@ -459,6 +460,11 @@
   }
 
   function emailsummary() {
+    if (formissues.childNodes.length !== 0) {
+        alert("There are unresolved issues in this form. Please resolve them first, before you can e-mail a summary of it to the coordinator.");
+        return false;
+    }
+  
     document.getElementById("sendemailID").disabled = true;
   /*
     gapi.auth.authorize({
@@ -2122,6 +2128,10 @@ var datin =  [
           formcomplete.style.display="none";
           formissues.style.display="block";
       }
+                                       
+      document.getElementByID("summaryCheckSumID").innerHTML = "Current Summary Checksum is: " + checksum(summary.innerHTML);
+      nd.body.appendChild($($.parseHTML(str)).show().get(0));
+
     }
   
     function blank(es) {
