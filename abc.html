@@ -360,7 +360,6 @@
       /* filter: alpha(opacity=100); */
       display:none;
       background-color: #ffffff;
-      z-index: 2;
    }
     
    .shortcuts p input, .formissues p input {
@@ -2123,15 +2122,14 @@ var datin =  [
           var e = $($.parseHTML(str)).show().get(0);
           shortcuts.appendChild(e);
           shortcutshover.style.backgroundColor="#88ff88";
+          document.getElementById("summaryCheckSumID").innerHTML = "Current Summary Checksum is: " + checksum(summary.innerHTML);
+                                       
       } else  {
           shortcutshover.style.backgroundColor="#ff8888";
           formcomplete.style.display="none";
           formissues.style.display="block";
       }
                                        
-      document.getElementByID("summaryCheckSumID").innerHTML = "Current Summary Checksum is: " + checksum(summary.innerHTML);
-      nd.body.appendChild($($.parseHTML(str)).show().get(0));
-
     }
   
     function blank(es) {
