@@ -360,6 +360,7 @@
       /* filter: alpha(opacity=100); */
       display:none;
       background-color: #ffffff;
+      z-index: 2;
    }
     
    .shortcuts p input, .formissues p input {
@@ -850,10 +851,10 @@ var datin =  [
                       [0, ["Date", "Hepatitis B Vaccine or Disease Date:", "hepbDate", 1, [["formBB", 1155, 2635, 2320, 2675]]]]],
                   ["Radii", "Meningitis:", "meningitis", [["Yes", [["formBB", 175, 2705, 215, 2745]]],	["No", [["formBB", 265, 2705, 305, 2745]]],  ["Had Disease", [["formBB", 410, 2705, 450, 2745]]], 1], 
                       [0, ["Date", "Meningitis Vaccine or Disease Date:", "menDate", 1, [["formBB", 1155, 2705, 2320, 2745]]]]],
-                  ["Radii", "Influenza:", "flu", [["Yes", [["formBB", 3, 175, 2775, 215, 2815]]],	["No", [["formBB", 265, 2775, 305, 2815]]],  ["Had Disease", [["formBB", 410, 2775, 450, 2815]]], 1], 
+                  ["Radii", "Influenza:", "flu", [["Yes", [["formBB", 175, 2775, 215, 2815]]],	["No", [["formBB", 265, 2775, 305, 2815]]],  ["Had Disease", [["formBB", 410, 2775, 450, 2815]]], 1], 
                       [0, ["Date", "Influenza Vaccine or Disease Date", "inflDate", 1, [["formBB", 1155, 2775, 2320, 2815]]]]],
                   ["Radii", "Other e.g. HIB:", "other-hib", [["Yes", [["formBB", 175, 2840, 215, 2885]]],	["No", [["formBB", 265, 2840, 305, 2885]]],  ["Had Disease", [["formBB", 410, 2840, 450, 2885]]], 1], 
-                      [0, ["Date", "Other/HIB Vaccine or Disease Date:", "otherDate", 1, [["formBB", 1155, 2775, 2320, 2815]]]]]
+                      [0, ["Date", "Other/HIB Vaccine or Disease Date:", "otherDate", 1, [["formBB", 1155, 2840, 2320, 2885]]]]]
                 ]],
               1, ["Formy", "Add immunization form photos (keep image sizes below 1MB):", [
                  ["Photo", "Immunization Form Page-1 Photo", "immunization1", 1, ["immunPage1", 100, 100, 2450, 3200]], 
@@ -1120,7 +1121,7 @@ var datin =  [
             var eid = forminstid(e.id, fds[i][0], i, true, false);
             eid = document.getElementById(eid);
             if (reset) {
-              eid.innerHTML = (arr[2][3][arr[2][3].length-1] == arr[1]) ? "X" : "";
+              eid.innerHTML = ""; /* (arr[2][3][arr[2][3].length-1] == arr[1]) ? "X" : ""; */
             } else {
                eid.innerHTML = e.checked? "X" : "";
             }
@@ -1132,7 +1133,7 @@ var datin =  [
               var eid = forminstid(uid(arr[2]), fds[i][0], i, false, false);
               eid = document.getElementById(eid);
               if (reset) {
-                eid.innerHTML = arr[2][3][arr[1]];
+                eid.innerHTML = ""; /* arr[2][3][arr[1]]; */
               } else {
                 var radios = e.closest("fieldset").getElementsByTagName("input");
                 for (var j = 0; j < radios.length; j++) {
@@ -1149,7 +1150,7 @@ var datin =  [
               var eid = forminstid(e.id, fds[i][0], i, false, false);
               eid = document.getElementById(eid);
               if (reset) {
-                eid.innerHTML = (arr[2][3] ? "X" : "");
+                eid.innerHTML = ""; /* (arr[2][3] ? "X" : ""); */
               } else {                             
                 eid.innerHTML = (e.checked? "X" : "");
               }
