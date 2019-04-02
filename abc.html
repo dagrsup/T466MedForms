@@ -568,6 +568,7 @@
   }                            
                             
   function enableback(err) {
+     alert("Your e-mail with summary for this form has been successfully sent to t466medforms@gmail.com. Please make sure to print, sign (legally biniding original signatures are a must) and snail-mail or personally deliver this form (with checksum: " + checksum(summary.innerHTML) + ")");
      document.getElementById("sendemailID").disabled = false;
   }
   
