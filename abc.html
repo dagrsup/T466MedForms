@@ -12,7 +12,6 @@
 
     html, body {
       width: 100vw;
-      max-width: 100vw;
       overflow-x:hidden;
       visibility:visible;
     }
@@ -438,10 +437,10 @@
       <div id="additionalinstructionsID"></div>
       <div class="onnewpage summarycls" id="summaryID"></div>
         <h3 id="summaryCheckSumID"></h3>
-        <h2>You can obtain an exported file with the current state of forms below: </h2>
+        <h2>You can save the current state of this form instance to a file below: </h2>
         <p>This file would include the added images (if any added)." </p>
-        <p><button onclick="get_form_instance();">Obtain Exported Form Instance</button></p>
-        <p>In future you can load back this exported file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
+        <p><button onclick="get_form_instance();">Save</button></p>
+        <p>In future you can load back this file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
         <p>Also if this file is complete (The box on the top right corner should be Green), you can print it, sign it, and snail mail it to the Troop Medical Forms Corrdinator.</p>
         <p>Use the button below to e-mail this form's summary to the Troop Medical Forms Coordinator</p>
         <p>
@@ -1465,12 +1464,12 @@ var datin =  [
       div.appendChild($($.parseHTML(str)).show().get(0));
       div.appendChild(document.createElement("br"));      
       
-      str = '<div class="myloadformdiv"><label for="id_importpriorfile">Load form instance from an exported file:</label>'
+      str = '<div class="myloadformdiv"><label for="id_importpriorfile">Load form instance from a saved file:</label>'
           + '<input type="file" class="mypriorfile" oninput="load_file_instance(this);  return true;" id="id_importpriorfile" accept="text/html"></file><file></div>';
 
       div.appendChild($($.parseHTML(str)).show().get(0));
       
-      str = "<div><h2>Currently selected form instance: <span style='color:#CC0000'>" + currentLocalStorageFormInstanceId + "</span><h2></div>";
+      str = "<div><h2>Current form instance: <span style='color:#CC0000'>" + currentLocalStorageFormInstanceId + "</span><h2></div>";
       div.appendChild($($.parseHTML(str)).show().get(0));
   
       return div;
