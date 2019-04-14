@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>T466 Med Forms ABC</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -11,7 +11,7 @@
   <style type="text/css">
     
     html, body {
-      width: auto;
+      width: 100%;
       overflow-x:hidden;
       visibility:visible;
     }
@@ -332,12 +332,6 @@
 	cursor: ew-resize;
 	} */
     
-    .fullscreen {
-        width: 100vw;
-        height: 100%;
-        padding: 0vh;
-     }
-
     .shortcutshover {
       position: fixed;
       top:3vw;
@@ -443,8 +437,8 @@
       <div class="onnewpage summarycls" id="summaryID"></div>
         <h3 id="summaryCheckSumID"></h3>
         <h2>You can save the current state of this form instance to a file below: </h2>
-        <p>This file would include the added images (if any added)." </p>
         <p><button onclick="get_form_instance();">Save</button></p>
+        <p>This saved file would include the added images (if any added)." </p>
         <p>In future you can load back this file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
         <p>Also if this file is complete (The box on the top right corner should be Green), you can print it, sign it, and snail mail it to the Troop Medical Forms Corrdinator.</p>
         <p>Use the button below to e-mail this form's summary to the Troop Medical Forms Coordinator</p>
