@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -8,7 +8,7 @@
   <title>T466 Med Forms ABC</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="assets/qrcode.min.js"></script>
-    
+ 
   <style type="text/css">
     
     .imgcls {
@@ -27,7 +27,7 @@
       margin:3%;
       display: inline-block;
     }
-
+"
     li {
       margin-right: 20pt;
       margin-bottom: 5pt;
@@ -335,6 +335,7 @@
         position: absolute;
         background: rgba(255, 255, 255, 0.0);
         color:  rgba(0, 0, 0, 1.0);
+        overflow-y: hidden;
       }
 
     .summarypara {
@@ -714,7 +715,7 @@ var datin =  [
         [ "Formy", "Check None if no restrictions", [
           ["Cheky", "None Restrictions", "pr", 0, 
             [0, [ "WordListShort", "Restrict participation as listed here:", "pre", 1, [["formA", 1250, 1575, 2300, 1635]], "If no restrictions specified here, check the None checkbox box above."]
-            ], [["formA", 1895, 1515, 1935, 1545]]]
+            ], [["formA", 1895, 1515, 1955, 1565]]]
         ]]
       ]],
 
@@ -1985,11 +1986,9 @@ var datin =  [
         }
         var pw = window.open(new URL('blank.html', window.location.href), 'PRINT');
         pw.document.write(nd.documentElement.outerHTML);
-        pw.document.documentElement.hide();
-        pw.document.documentElement.show(0);
+        //pw.document.documentElement.style.display="none";
+        //pw.document.documentElement.style.display="block";
         pw.focus();
-        pw.print();
-        pw.close();
     }
 
     function updatedocanchor(wholeapp) {
@@ -2175,6 +2174,22 @@ var datin =  [
        }
     }
 
+    function textBestFit() {
+        var texts = document.getElementsByClassName("formdata");
+        var textsLength = texts.length;
+
+        // Loop through all of the dynamic divs on the page
+        for(var i=0; i<textsLength; i++) {
+            var text = texts[i];
+                      
+            if (text.innerHTML && text.innerHTML != "") {
+              while(text.scrollHeight > text.offsetHeight && parseInt(text.style.fontSize.slice(0, -1)) > 35) {
+                  text.style.fontSize = (parseInt(text.style.fontSize.slice(0, -1)) - 7).toString() + "%";
+              }
+            }
+        }
+    }
+  
     function checkValidity() {
       blank([summary, shortcuts, formissues, summaryqrcodes]);
 
@@ -2188,6 +2203,8 @@ var datin =  [
       }
       
       makeadditionalcomputedfds();
+      
+      textBestFit(document.getElementsByClassName('formdata'), {multiline: true, minFontSize: 2, maxFontSize: 10 });
       
       summary.style.display="block"
       if (formissues.childNodes.length === 0) {
