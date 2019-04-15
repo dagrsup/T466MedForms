@@ -7,6 +7,7 @@
 
   <title>T466 Med Forms ABC</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="assets/qrcode.min.js"></script>
     
   <style type="text/css">
     
@@ -16,6 +17,15 @@
       width: 100%;
       height:auto;
       z-index:0;
+    }
+    
+    .qrcodecls {
+      position:relative;
+      display:block;
+      width: 42%;
+      height:auto;
+      margin:3%;
+      display: inline-block;
     }
 
     li {
@@ -297,6 +307,11 @@
         display:block;
         font-size:1.5vw;
         z-index:0;
+        page-break-inside: avoid;
+    }
+  
+    .qrcodescls {
+      page-break-inside: avoid;
     }
 
     .summarycls {
@@ -374,6 +389,10 @@
    }
 
     </style>  
+  <script>
+        var digest = "";
+        var qridindex = 1;
+  </script>
 </head>
 
  <body>
@@ -384,15 +403,16 @@
  <div>
        <h1> Boy Scout Medical Forms A, B, C </h1>
         <ul>
-          <li style="text-align: justify;">This static online form is to help make Boy Scouts Medical Forms ABCs easier.</li>
+          <li style="text-align: justify;">This static online web form is to help make Boy Scouts Medical Forms ABCs easier for Troop 466 in SVMBC.</li>
           <li style="text-align: justify;">All information is stored locally on your browser client, with "no" information submitted to server.</li>
           <li style="text-align: justify;">Activities exceeding 72 hrs, require Form C along with A & B. Form C requires a Dr's signature and you may need to schedule an annual exam with Dr.</li>
-          <li style="text-align: justify;">There are absolutely no express or implied promises or warranty of safety, security or privacy of this web form, and by using this form, you will be using it at own risk.</li>
-          <li style="text-align: justify;">The digital printable output created by this web page will contain sensitive medical information and you will assume all risks to make sure it does not get misused or fall into wrong hands.</li>
+          <li style="text-align: justify;">There are absolutely no express or implied promises or warranty of safety, security or privacy of this web form, and by using this form, you will be using it at your own risks.</li>
+          <li style="text-align: justify;">The digital printable output or files created by this web page, as well as the summary email sent to T466 Medical Form Coordinator, "will" contain sensitive, private or medical information and you will assume all the risks to make sure it does not get misused or fall into wrong hands.</li>
         </ul>
 
-       <p>If you dont agree with statements above, or do not understand the possible privacy risks of digitized medical data, please don't use this online form. You can print blank forms and fill and submit them 
-       manually (in writing) by following instructions at: https://www.scouting.org/health-and-safety/ahmr/ </p>
+       <p>In future, this web form can become unavailable for any reason, or its terms can conditions can change anytime. Troop 466 and/or this web forms' owners, creators, operators, coordinators or maintainers will have no express or implied liability, ever, including security, safety and privacy risks of the sensitive, private or medical information, that may arise from the use of this web form.</p>
+       <p>If you dont agree with statements above, or do not understand the possible privacy risks of digitized sensitive, private or medical data, please don't use this online form. You can print blank forms and fill and submit them 
+       manually (in writing) by following instructions at: <a href="https://www.scouting.org/health-and-safety/ahmr/">Medical Forms</a> </p>
 
        <p><input type="checkbox" id="id_iagreetothisform">By checking here I agree to statements above.</input></p>
        <p><input type="button" id="proceedButtonId", onclick="proceed(); return true;" value="PROCEED"></input></p>
@@ -437,19 +457,59 @@
       <div id="addedImagesID"></div>
       <div id="additionalinstructionsID"></div>
       <div class="onnewpage summarycls" id="summaryID"></div>
-        <h3 id="summaryCheckSumID"></h3>
-        <h2>You can save the current state of this form instance to a file below: </h2>
-        <p><button onclick="get_form_instance();">Save</button></p>
-        <p>This saved file would include the added images (if any added)." </p>
-        <p>In future you can load back this file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
-        <p>Also if this file is complete (The box on the top right corner should be Green), you can print it, sign it, and snail mail it to the Troop Medical Forms Corrdinator.</p>
-        <p>Use the button below to e-mail this form's summary to the Troop Medical Forms Coordinator</p>
-        <p>
-        <p><button id="sendemailID" onclick="emailsummary()">e-Mail Summary to the Troop Medical Forms Coordinator</button></p>
+      <div class="onnewpage" id="summaryChecksumHeaderID"><h3>Current Summary Checksum is: <span id="summaryCheckSumID">INCOMPLETE-FORM</span></h3>
+        <div id="summaryqrcodesID"></div>
+      </div>
+      <h2>You can save the current state of this form instance to a file below: </h2>
+      <p><button onclick="get_form_instance();">Save</button></p>
+      <p>This saved file would include the added images (if any added)." </p>
+      <p>In future you can load back this file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
+      <p>Also if this file is complete (The box on the top right corner should be Green), you can print it, sign it, and snail mail it to the Troop 466 Medical Forms Coordinator.</p>
+      <p>Use the button below to e-mail this form's summary to the Troop Medical Forms Coordinator</p>
+      <p>
+      <p><button id="sendemailID" onclick="emailsummary()">e-Mail Summary to the Troop Medical Forms Coordinator</button></p>
   </div>
 </div>
 
-<script>
+<script type="text/javascript">
+  function recomputeqrs() {
+    var parts = ("chksum:" + document.getElementById("summaryCheckSumID").innerHTML + digest).split("\t");
+    var str = "";
+    while (parts.length >= 0) {
+      if (parts.length && parts[0].length > 1024) {
+          assert(false, "Too long a value (greater than 1024 characters), not possible to continue");
+          break;
+      } else {
+        if ((parts.length !== 0 && ((str.length + parts[0].length) > 1150)) || (str.length !== 0 && parts.length === 0)) {
+          var qrid = "qrid" + qridindex;
+          qridindex = qridindex + 1;
+          var e = $($.parseHTML('<div class="qrcodecls" id="' + qrid + '"></div>')).show().get(0);
+          document.getElementById("summaryqrcodesID").appendChild(e);
+          var qrcode = new QRCode(qrid, {
+            text: str,
+            width: 2048,
+            height: 2048,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            typeNumber: 24,
+            correctLevel : QRCode.CorrectLevel.L,
+            useSVG: true
+          });
+          e.getElementsByTagName('img')[0].style.width="100%";
+          str = "";
+          if (parts.length === 0) {
+            break;
+          }
+        } else {
+          str = str + "\t" + parts[0];
+          parts.shift();
+        }
+      }
+    }
+  }
+</script>
+
+<script id="emailScriptID">
   var clientId = '738175904237-6lnju7vjiefiinav83rsqa1in1vv54an.apps.googleusercontent.com';
   var apiKey = 'AIzaSyAb0X7NUzYYgY2xDKSbiSaVRs21ROVFYCo';
   var scopes = 'https://www.googleapis.com/auth/gmail.send';
@@ -460,7 +520,7 @@
 
   function emailsummary() {
     if (formissues.childNodes.length !== 0) {
-        alert("There are unresolved issues in this form. Please resolve them first, before you can e-mail a summary of it to the coordinator.");
+        alert("There are unresolved issues in this form. Please resolve them first, before you can e-mail this form's summary to the coordinator.");
         return false;
     }
   
@@ -502,7 +562,7 @@
       var sub = 'Medical Form Summary: ' 
                 + document.getElementById('uid_mnsFullName').value 
                 + ' ' + today() + ' Checksum:' 
-                + checksum(summr);
+                + document.getElementById("SummaryCheckSumID").innerHTML;
       var body = '<html><body>' + summr + '</html></body>';
       sendMessage(
               {
@@ -525,11 +585,70 @@
         enableback(authResult);
     }
   }
-</script>
+  
+  function sendMessage(headers_obj, message, callback) {
+    var email = '';
 
-<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    for(var header in headers_obj)
+      email += header += ": "+headers_obj[header]+"\r\n";
+
+    email += "\r\n" + message;
+
+    var sendRequest = gapi.client.gmail.users.messages.send({
+      'userId': 'me',
+      'resource': {
+        'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+      }
+    });
+
+    return sendRequest.execute(callback);
+  }                            
+                            
+  function enableback(err) {
+     alert("Your e-mail with summary for this form has been successfully sent to t466medforms@gmail.com. Please make sure to print, sign (legally biniding original signatures are a must) and drop it at the troop meeting or snail-mail or personally deliver this form to the troop 466 medical forms coordinator.");
+     document.getElementById("sendemailID").disabled = false;
+  }
+  
+    //https://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
+    function arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
+    }
+
+    function strToArrayBuffer(str) {
+        var len = str.length;
+        var bytes = new Uint8Array( len );
+        for (var i = 0; i < len; i++)        {
+            bytes[i] = str.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
+      
+    function strToBlob(str, typ) {
+       var blob = new Blob([strToArrayBuffer(str)], {type : typ});
+       return blob;
+    }
+
+    function base64ToArrayBuffer(base64) {
+        var binary_string =  window.atob(base64);
+        return strToArrayBuffer(binary_string);
+    }
     
-<script>
+  function updateimgurls() {
+    var imgs = document.getElementsByTagName("img");
+    for (var i = 0; i < imgs.length; i++) {
+      if (imgs[i].attributes.src.value === "") {
+        var blob = new Blob([base64ToArrayBuffer(imgs[i].getAttribute("data-imgdata"))], {type : "image/jpeg"});
+        imgs[i].attributes.src.value = URL.createObjectURL(blob);
+        imgs[i].setAttribute("data-imgdata", "");
+      }
+    }
+  }
   
   function checksum(s) {
     var hash = 2863311530;
@@ -554,29 +673,11 @@
     return checksum;
   }
   
-  function sendMessage(headers_obj, message, callback) {
-    var email = '';
+</script>
 
-    for(var header in headers_obj)
-      email += header += ": "+headers_obj[header]+"\r\n";
-
-    email += "\r\n" + message;
-
-    var sendRequest = gapi.client.gmail.users.messages.send({
-      'userId': 'me',
-      'resource': {
-        'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
-      }
-    });
-
-    return sendRequest.execute(callback);
-  }                            
-                            
-  function enableback(err) {
-     alert("Your e-mail with summary for this form has been successfully sent to t466medforms@gmail.com. Please make sure to print, sign (legally biniding original signatures are a must) and snail-mail or personally deliver this form (with checksum: " + checksum(summary.innerHTML) + ")");
-     document.getElementById("sendemailID").disabled = false;
-  }
-  
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    
+<script>
  //Split(['#topPart', '#bottomPart']);
   
 var specials = new Map ([
@@ -592,7 +693,7 @@ var specials = new Map ([
       ["Description",    ["text", 32, ".*",                                                      "Invalid description"]],
       ["ShortDesc",      ["text", 20, ".*",                                                      "Invalid description"]],
       ["vShortDesc",     ["text", 10, ".*",                                                      "Invalid description"]],
-      ["Page",           ["textarea", 8192, "[^\s]+[\s[^s]+]*(\\s)*",                                                "Invalid page content"]],
+      ["Page",           ["textarea", 1024, "[^\s]+[\s[^s]+]*(\\s)*",                                                "Invalid page content"]],
       ["Date",           ["date"]],
       ["Photo",          ["file"]],
       ["Email",          ["email"]],
@@ -605,7 +706,7 @@ const allPriorFormsKey = "$$_All^^priorABCforms^^$$";
 
 var datin =  [
       ["Secti", "Participant Details:", [
-        [ "Names", "Full Name:",   "mns", 1, [["formA", 400, 275, 1300, 375], ["formB", 500, 275, 1400, 375], ["formBB", 400, 275, 1300, 375], ["formC", 500, 375, 1300, 475]]],
+        [ "Names", "Full Name:",   "fn", 1, [["formA", 400, 275, 1300, 375], ["formB", 500, 275, 1400, 375], ["formBB", 400, 275, 1300, 375], ["formC", 500, 375, 1300, 475]]],
         [ "Date", "Date Of Birth:", "dob", 1, [["formA", 400, 400, 1300, 460], ["formB", 500, 400, 1400, 460], ["formBB", 400, 400, 1300, 460], ["formC", 500, 475, 1300, 540]]],
       ]],
       ["Secti", "Any participation restriction(s):", [
@@ -902,8 +1003,10 @@ var datin =  [
     var formissues = null;
     var formcomplete = null;
     var summary = null;
+    var summaryqrcodes = null;
     var addedimages = null;
     var namemap = null;
+    var abridgednamemap = null;
     var finalformdata = null;
     var additionalinstructions = null;
     var keyvaluesforJSONtoafile = {};
@@ -980,6 +1083,11 @@ var datin =  [
           assert(false, "namemap already has the name: " + lid);
        } else {
           namemap.set(lid, arr);
+       }
+       if (abridgednamemap.has(arr[2][2])) {
+          assert(false, "abridged namemap already has the name: " + arr[2][2]);
+       } else {
+          abridgednamemap.set(lid, arr);
        }
     }
                                        
@@ -1117,7 +1225,22 @@ var datin =  [
         return val;
       }
     }
+  
+    function updatedigest(field, value) {
+      digest += "\t"+field+":\t"+value;
+    }
 
+    function getradioset(e) {
+      var radios = e.closest("fieldset").getElementsByTagName("input");
+      var tops = [];
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].closest("fieldset") === radios[0].closest("fieldset")) {
+          tops.push(radios[i]);
+        }
+      }
+      return tops;
+    }
+  
     function updateformdatainsts(e, reset) {
       var arr = namemap.get(e.id);
       if (arr[0] === "Radii") {
@@ -1141,7 +1264,7 @@ var datin =  [
               if (reset) {
                 eid.innerHTML = ""; /* arr[2][3][arr[1]]; */
               } else {
-                var radios = e.closest("fieldset").getElementsByTagName("input");
+                var radios = getradioset(e);
                 for (var j = 0; j < radios.length; j++) {
                   if (radios[j].checked) {
                     eid.innerHTML = arr[2][3][j][0];
@@ -1280,7 +1403,7 @@ var datin =  [
        }
 
        //finally the desired radiobutton that gets checked..
-       var radios = radioset.getElementsByTagName("input");
+       var radios = getradioset(radioset);
        var preset = radios[presetidx];
        preset.checked = true;
 
@@ -1747,7 +1870,7 @@ var datin =  [
     }
 
     function oninputradio() {
-      radios = this.closest("fieldset").getElementsByTagName("input");
+      var radios = getradioset(this);
       for (var i = 0; i < radios.length; i++) {
         lse(radios[i]);
       }
@@ -1862,7 +1985,8 @@ var datin =  [
         }
         var pw = window.open(new URL('blank.html', window.location.href), 'PRINT');
         pw.document.write(nd.documentElement.outerHTML);
-        pw.document.documentElement.hide().show(0);
+        pw.document.documentElement.hide();
+        pw.document.documentElement.show(0);
         pw.focus();
         pw.print();
         pw.close();
@@ -1886,43 +2010,23 @@ var datin =  [
         } else {
             var nd = newdoc();
                                                           
-            var ids = ["formA", "formB", "formBB", "addedImagesID", "additionalinstructionsID", "summaryID"];
+            var ids = ["formA", "formB", "formBB", "addedImagesID", "additionalinstructionsID", "summaryID", "summaryChecksumHeaderID"];
             for (var i = 0; i < ids.length; i++) {
               var e = document.getElementById(ids[i]);
               var cln = e.cloneNode(true);
               cln.style.display="block";
               nd.body.appendChild(cln);
-            }
-            str = "<h3> Summary Checksum for this file is: " + checksum(summary.innerHTML) + "</h3>";
-            nd.body.appendChild($($.parseHTML(str)).show().get(0));
-                                           
+            }                                           
                                            
             var imgs = nd.getElementById("addedImagesID").getElementsByTagName("img");
             for (var i = 0; i < imgs.length; i++) {
                imgs[i].attributes.src.value = ""; // src attributes dont make sense anynmore.
                   // but we will indeed provide a script to create the object urls afresh when the new document is loaded..
             }
-            var scriptstr = '\n'
-             + '     function base64ToArrayBuffer(base64) {               \n'
-             + '         var binary_string =  window.atob(base64);        \n'
-             + '         var len = binary_string.length;                  \n'
-             + '         var bytes = new Uint8Array( len );               \n'
-             + '         for (var i = 0; i < len; i++)        {           \n'
-             + '             bytes[i] = binary_string.charCodeAt(i);      \n'
-             + '         }                                                \n'
-             + '         return bytes.buffer;                             \n'
-             + '     }                                                    \n'
-             + '     function updateimgurls() {                           \n'
-             + '         var imgs = document.getElementsByTagName("img"); \n'
-             + '         for (var i = 0; i < imgs.length; i++) {          \n'
-             + '             if (imgs[i].attributes.src.value === "") {    \n'
-             + '                 var blob = new Blob([base64ToArrayBuffer(imgs[i].getAttribute("data-imgdata"))], {type : "image/jpeg"}); \n'
-             + '                 imgs[i].attributes.src.value = URL.createObjectURL(blob);    \n'
-             + '                 imgs[i].setAttribute("data-imgdata", "");                    \n'
-             + '             }                                                                \n'
-             + '         }                                                                    \n'
-             + '     }                                                                        \n'
-             + '     updateimgurls();                                                         \n' ;
+
+            proc_script(nd.getElementsByTagName('body')[0], document.getElementById("emailScriptID").innerHTML);
+
+            var scriptstr = '     updateimgurls();                                                         \n' ;
 
             proc_script(nd.getElementsByTagName('body')[0], scriptstr);
             
@@ -1954,36 +2058,6 @@ var datin =  [
         e.focus();
     }
  
-    //https://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
-    function arrayBufferToBase64( buffer ) {
-        var binary = '';
-        var bytes = new Uint8Array( buffer );
-        var len = bytes.byteLength;
-        for (var i = 0; i < len; i++) {
-            binary += String.fromCharCode( bytes[ i ] );
-        }
-        return window.btoa( binary );
-    }
-
-    function strToArrayBuffer(str) {
-        var len = str.length;
-        var bytes = new Uint8Array( len );
-        for (var i = 0; i < len; i++)        {
-            bytes[i] = str.charCodeAt(i);
-        }
-        return bytes.buffer;
-    }
-      
-    function strToBlob(str, typ) {
-       var blob = new Blob([strToArrayBuffer(str)], {type : typ});
-       return blob;
-    }
-
-    function base64ToArrayBuffer(base64) {
-        var binary_string =  window.atob(base64);
-        return strToArrayBuffer(binary_string);
-    }
-    
     function addSummaryForm(msg) {
         var str = '<h5> ' + msg + ' </h5>';
         summary.appendChild($($.parseHTML(str)).show().get(0));
@@ -2025,31 +2099,33 @@ var datin =  [
             validate_sect(arr[2], reset);
             break;
           case "Radii":
-            if (arr[4]) {
-              var idx = arr[3][arr[3].length-1];
-              for (var j=0; j < arr[3].length-1; j++) {
-                var id = uidj(arr, j);
-                var e = document.getElementById(id);
-                updateformdatainsts(e, reset);
-                if ((!reset) && e.checked) {
-                  idx = j;
-                  addSummary(arr[1] + " " + arr[3][j][0], true);
-                }
+            var idx = arr[3][arr[3].length-1];
+            for (var j=0; j < arr[3].length-1; j++) {
+              var id = uidj(arr, j);
+              var e = document.getElementById(id);
+              updateformdatainsts(e, reset);
+              if ((!reset) && e.checked) {
+                idx = j;
+                addSummary(arr[1] + " " + arr[3][j][0], true);
+                updatedigest(arr[2], arr[3][j][0].substring(0,1));
               }
+            }
+            if (arr[4]) {
               for (var k=0; k < arr[4].length/2; k++){
                   validate_sect(arr[4][k*2+1], idx === arr[4][k*2] ? reset : true); 
                }
             } 
             break;
           case "Cheky":
+            var id = uid(arr);
+            var e = document.getElementById(id);
+            updateformdatainsts(e, reset);
+            var idx = reset? arr[3] : (e.checked ? 1 : 0);
+            if ((!reset)) {
+                addSummary(arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected"), true);
+                updatedigest(arr[2], e.checked? "Y" : "N"); 
+            }
             if (arr[4]) {
-              var id = uid(arr);
-              var e = document.getElementById(id);
-              updateformdatainsts(e, reset);
-              var idx = reset? arr[3] : (e.checked ? 1 : 0);
-              if ((!reset)) {
-                  addSummary(arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected"), true);
-              }
               for (var k=0; k < arr[4].length/2; k++ ) {
                   validate_sect(arr[4][k*2+1], idx === arr[4][2*k] ? reset : true);
               }
@@ -2072,7 +2148,12 @@ var datin =  [
                     issuefound(id, arr[1] + " is invalid");
                   }
                   addSummary(arr[1] + " " + e.value, e.validity.valid);
-              }
+                  if (arr[0] === "Date") {
+                    updatedigest(arr[2], mmmddyyyy(e.value.trim())); 
+                  } else {
+                    updatedigest(arr[2], e.value.trim());
+                  }
+             }
              if (arr[0] === "Page") {
                while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
                additionalinstructions.innerHTML = "<h2> Additional Instructions Specified: </h2>";
@@ -2095,11 +2176,12 @@ var datin =  [
     }
 
     function checkValidity() {
-      blank([summary, shortcuts, formissues]);
+      blank([summary, shortcuts, formissues, summaryqrcodes]);
 
       formissues.style.display="none";
       summary.style.display="none";
       summary.innerHTML ="<h2> Summary of all the input values in text form </h2>";
+      digest = "";
 
       for (var iy=0; iy < datin.length; iy++){
             validate_sect(datin[iy], false);
@@ -2122,12 +2204,13 @@ var datin =  [
           var e = $($.parseHTML(str)).show().get(0);
           shortcuts.appendChild(e);
           shortcutshover.style.backgroundColor="#88ff88";
-          document.getElementById("summaryCheckSumID").innerHTML = "Current Summary Checksum is: " + checksum(summary.innerHTML);
-                                       
+          document.getElementById("summaryCheckSumID").innerHTML = checksum(summary.innerHTML);
+          recomputeqrs();
       } else  {
           shortcutshover.style.backgroundColor="#ff8888";
           formcomplete.style.display="none";
           formissues.style.display="block";
+          document.getElementById("summaryCheckSumID").innerHTML = "INCOMPLETE-FORM"
       }
                                        
     }
@@ -2151,15 +2234,18 @@ var datin =  [
       formissues = document.getElementById("formIssuesID");
       formcomplete = document.getElementById("formCompleteID");
       summary = document.getElementById("summaryID");
+      summaryqrcodes = document.getElementById("summaryqrcodesID");
       addedimages = document.getElementById("addedImagesID");
       namemap = new Map();
+      abridgednamemap = new Map();
+      digest = "";
       finalformdata = document.getElementById("finalformdataID");
       additionalinstructions = document.getElementById("additionalinstructionsID");
       keyvaluesforJSONtoafile = {};
 
       var div = document.createElement("div");
       
-      blank([dynform, formissues, addedimages, shortcuts]);
+      blank([dynform, formissues, addedimages, shortcuts, summaryqrcodes]);
                                       
       currentLocalStorageFormInstanceId = id;
                                       
@@ -2175,7 +2261,7 @@ var datin =  [
 
       set_oninputforclasses(['mycheck'], oninputcheck, 'input');
       set_oninputforclasses(['myradio'], oninputradio, 'input');
-      set_oninputforclasses(['mytext', 'mytextarea'], oninputtext, 'input');                                       
+      set_oninputforclasses(['mytext', 'mytextarea'], oninputtext, 'focusout');                                       
       set_oninputforclasses(['myfile'], oninputfile, 'change');
                                        
       //Check current state of validity
