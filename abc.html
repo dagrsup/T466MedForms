@@ -462,13 +462,10 @@
         <div id="summaryqrcodesID"></div>
       </div>
       <h2>You can save the current state of this form instance to a file below: </h2>
-      <p><button onclick="get_form_instance();">Save</button></p>
+      <p><button id="getFormInstanceID" onclick="get_form_instance();">Save</button></p>
       <p>This saved file would include the added images (if any added)." </p>
       <p>In future you can load back this file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
-      <p>Also if this file is complete (The box on the top right corner should be Green), you can print it, sign it, and snail mail it to the Troop 466 Medical Forms Coordinator.</p>
-      <p>Use the button below to e-mail this form's summary to the Troop Medical Forms Coordinator</p>
-      <p>
-      <p><button id="sendemailID" onclick="emailsummary()">e-Mail Summary to the Troop Medical Forms Coordinator</button></p>
+      <p>Also if this file is complete, you can print it, sign it, and snail mail it to the Troop 466 Medical Forms Coordinator.</p>
   </div>
 </div>
 
@@ -520,11 +517,6 @@
   }
 
   function emailsummary() {
-    if (formissues.childNodes.length !== 0) {
-        alert("There are unresolved issues in this form. Please resolve them first, before you can e-mail this form's summary to the coordinator.");
-        return false;
-    }
-  
     document.getElementById("sendemailID").disabled = true;
   /*
     gapi.auth.authorize({
@@ -676,7 +668,7 @@
   
 </script>
 
-<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+<script id="gmailScriptID" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     
 <script>
  //Split(['#topPart', '#bottomPart']);
@@ -2008,8 +2000,25 @@ var datin =  [
            str = document.documentElement.outerHTML;
         } else {
             var nd = newdoc();
-                                                          
-            var ids = ["formA", "formB", "formBB", "addedImagesID", "additionalinstructionsID", "summaryID", "summaryChecksumHeaderID"];
+
+            if (isformcomplete()) {
+              str = 
+                "<h2 class='onnewpage' style='border:3px solid #73AD21; padding:10px; margin:10px;'><center><p>This form is complete. You can print (and then sign) this page and snail-mail or physically submit it to T466 medical forms coordinator.</p>"                    + "<p>Original signatures are a must (in all yellow boxes). Also the Form C must have a date that is within one year of date of event for this medical form.</h2>";
+  
+/*              + "     <p>Along with the physical SIGNED copy in original, use the button below to e-mail this form's summary to the Troop Medical Forms Coordinator.</p>"
+              + "     <p>To e-mail this form's summary, you must have a g-mail account and be able to login to the g-mail account, to do so."
+              + "     <p><button id='sendemailID' onclick='emailsummary()'>e-Mail Summary to the Troop Medical Forms Coordinator</button></p>"
+              + "     <p>Summary checksum for this form is: " + document.getElementById("summaryCheckSumID").innerHTML + "</p><center></h2>";*/
+            } else {
+               str = 
+                "<h2 class='onnewpage'style='border:3px solid #73AD21; padding:10px; margin:10px;'><center><p>This form is incomplete, with deficiencies listed in <font color='red'>RED</font> in the summary section.</p>"
+                + "<p>You can load back this form and correct these dificiencies in the troop's webform page.</p>"
+                + "<p>Please DO NOT mail or drop this form to the troop medical forms coordinator without fixing these deficiencies first.</p><center></h2>";
+            }
+            var e = $($.parseHTML(str)).show().get(0);
+            nd.body.appendChild(e);
+              
+            var ids = ["gmailScriptID", "formA", "formB", "formBB", "addedImagesID", "additionalinstructionsID", "summaryID", "summaryChecksumHeaderID"];
             for (var i = 0; i < ids.length; i++) {
               var e = document.getElementById(ids[i]);
               var cln = e.cloneNode(true);
@@ -2020,13 +2029,12 @@ var datin =  [
             var imgs = nd.getElementById("addedImagesID").getElementsByTagName("img");
             for (var i = 0; i < imgs.length; i++) {
                imgs[i].attributes.src.value = ""; // src attributes dont make sense anynmore.
-                  // but we will indeed provide a script to create the object urls afresh when the new document is loaded..
+                  // we will provide a script to re-create the object urls, afresh, when the new document is loaded again by the user..
             }
 
             proc_script(nd.getElementsByTagName('body')[0], document.getElementById("emailScriptID").innerHTML);
 
             var scriptstr = '     updateimgurls();                                                         \n' ;
-
             proc_script(nd.getElementsByTagName('body')[0], scriptstr);
             
             str = JSON.stringify(keyvaluesforJSONtoafile);
@@ -2189,6 +2197,10 @@ var datin =  [
             }
         }
     }
+              
+    function isformcomplete() {
+       return (formissues.childNodes.length === 0);
+    }
   
     function checkValidity() {
       blank([summary, shortcuts, formissues, summaryqrcodes]);
@@ -2207,7 +2219,7 @@ var datin =  [
       textBestFit(document.getElementsByClassName('formdata'), {multiline: true, minFontSize: 2, maxFontSize: 10 });
       
       summary.style.display="block"
-      if (formissues.childNodes.length === 0) {
+      if (isformcomplete()) {
           //No issues detected, time to wrapup
           formcomplete.style.display="block";
           formissues.style.display="none";
@@ -2216,7 +2228,7 @@ var datin =  [
 
           var str = '<div> <p>No unresolved issues for this form.</p>'
                    + ' <p> You can go here to review form: <input type="button" onclick="scrollto(' +"'" + formcomplete.id + "'" + ');  return true;" value="Review"></input></p>'
-                   + '<p>Once the review is complete, go to the end of this page, to obtain a printable copy of this form.</p>';
+                   + '<p>Once the review is complete, go to the end of this page, <input type="button" onclick="scrollto(' + "'getFormInstanceID'" + '); return true;" value="Go To End"></input> to obtain a printable copy of this form.</p>';
                                        
           var e = $($.parseHTML(str)).show().get(0);
           shortcuts.appendChild(e);
