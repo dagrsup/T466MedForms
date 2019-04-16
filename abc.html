@@ -1759,7 +1759,7 @@ var datin =  [
               img.attributes.src.value = URL.createObjectURL(blob);
             }
 
-            checkValidity();
+            checkValidity(true);
         };
         fr.readAsArrayBuffer(fromfile.files[0]);
       }
@@ -1829,16 +1829,22 @@ var datin =  [
         // Something to ponder upon,... https://thiscouldbebetter.wordpress.com/2012/12/18/loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
         // window.open, window.opener..... https://stackoverflow.com/questions/87359/can-i-pass-a-javascript-variable-to-another-browser-window
     }
+                                            
+    function onfocusouttext() {
+        lse(this);
+        checkValidity(true);
+        return true;
+    }
 
     function oninputtext() {
         lse(this);
-        checkValidity();
+        checkValidity(false);
         return true;
     }
 
     function oninputcheck() {
         lse(this);
-        checkValidity();
+        checkValidity(true);
         return true;
     }
   
@@ -1858,7 +1864,7 @@ var datin =  [
         if (e && e.src != '') {
           e.src = '';
         }
-        checkValidity();
+        checkValidity(true);
         return true;
     }
 
@@ -1867,7 +1873,7 @@ var datin =  [
       for (var i = 0; i < radios.length; i++) {
         lse(radios[i]);
       }
-      checkValidity();
+      checkValidity(true);
       return true;
     }
 
@@ -2202,7 +2208,7 @@ var datin =  [
        return (formissues.childNodes.length === 0);
     }
   
-    function checkValidity() {
+    function checkValidity(recompqr) {
       blank([summary, shortcuts, formissues, summaryqrcodes]);
 
       formissues.style.display="none";
@@ -2234,7 +2240,9 @@ var datin =  [
           shortcuts.appendChild(e);
           shortcutshover.style.backgroundColor="#88ff88";
           document.getElementById("summaryCheckSumID").innerHTML = checksum(summary.innerHTML);
-          recomputeqrs();
+          if (recompqr) {
+            recomputeqrs();
+          }
       } else  {
           shortcutshover.style.backgroundColor="#ff8888";
           formcomplete.style.display="none";
@@ -2290,7 +2298,8 @@ var datin =  [
 
       set_oninputforclasses(['mycheck'], oninputcheck, 'input');
       set_oninputforclasses(['myradio'], oninputradio, 'input');
-      set_oninputforclasses(['mytext', 'mytextarea'], oninputtext, 'focusout');                                       
+      set_oninputforclasses(['mytext', 'mytextarea'], oninputtext, 'input');                                       
+      set_oninputforclasses(['mytext', 'mytextarea'], onfocusouttext, 'focusout');                                       
       set_oninputforclasses(['myfile'], oninputfile, 'change');
                                        
       //Check current state of validity
