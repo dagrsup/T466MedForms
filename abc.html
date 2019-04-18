@@ -1222,7 +1222,7 @@ var datin =  [
     }
   
     function updatedigest(field, value, reset) {
-      digest += "\t"+field+":\t"+ (reset ? value : "");
+      digest += "\t"+field+":\t"+ ((!reset) ? value : "");
     }
 
     function getradioset(e) {
