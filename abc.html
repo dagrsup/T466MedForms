@@ -472,7 +472,7 @@
 
 <script>
   function recomputeqrs() {
-    var parts = ("chksum:" + document.getElementById("summaryCheckSumID").innerHTML + digest).split("\t");
+    var parts = ("chksum\t" + document.getElementById("summaryCheckSumID").innerHTML + digest).split("\t");
     var str = "";
     while (parts.length >= 0) {
       if (parts.length && parts[0].length > 1024) {
@@ -1221,8 +1221,8 @@ var datin =  [
       }
     }
   
-    function updatedigest(field, value) {
-      digest += "\t"+field+":\t"+value;
+    function updatedigest(field, value, reset) {
+      digest += "\t"+field+":\t"+ (reset ? value : "");
     }
 
     function getradioset(e) {
@@ -2122,8 +2122,8 @@ var datin =  [
               if ((!reset) && e.checked) {
                 idx = j;
                 addSummary(arr[1] + " " + arr[3][j][0], true);
-                updatedigest(arr[2], arr[3][j][0].substring(0,1));
               }
+              updatedigest(arr[2], arr[3][j][0].substring(0,1), reset);
             }
             if (arr[4]) {
               for (var k=0; k < arr[4].length/2; k++){
@@ -2138,8 +2138,8 @@ var datin =  [
             var idx = reset? arr[3] : (e.checked ? 1 : 0);
             if ((!reset)) {
                 addSummary(arr[1] + " " + (e.checked ? "[X] Selected" : "[ ] Unselected"), true);
-                updatedigest(arr[2], e.checked? "Y" : "N"); 
             }
+            updatedigest(arr[2], e.checked? "Y" : "N", reset); 
             if (arr[4]) {
               for (var k=0; k < arr[4].length/2; k++ ) {
                   validate_sect(arr[4][k*2+1], idx === arr[4][2*k] ? reset : true);
@@ -2163,18 +2163,18 @@ var datin =  [
                     issuefound(id, arr[1] + " is invalid");
                   }
                   addSummary(arr[1] + " " + e.value, e.validity.valid);
-                  if (arr[0] === "Date") {
-                    updatedigest(arr[2], mmmddyyyy(e.value.trim())); 
-                  } else {
-                    updatedigest(arr[2], e.value.trim());
-                  }
-             }
-             if (arr[0] === "Page") {
-               while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
-               additionalinstructions.innerHTML = "<h2> Additional Instructions Specified: </h2>";
-               additionalinstructions.appendChild(document.createTextNode(e.value));
-               additionalinstructions.style.display= reset? "none" : "block";
-             }
+              }
+              if (arr[0] === "Date") {
+                updatedigest(arr[2], mmmddyyyy(e.value.trim()), reset); 
+              } else {
+                updatedigest(arr[2], e.value.trim(), reset);
+              }
+              if (arr[0] === "Page") {
+                while(additionalinstructions.lastChild) {additionalinstructions.removeChild(additionalinstructions.lastChild);}
+                additionalinstructions.innerHTML = "<h2> Additional Instructions Specified: </h2>";
+                additionalinstructions.appendChild(document.createTextNode(e.value));
+                additionalinstructions.style.display= reset? "none" : "block";
+              }
             }
             break;
         }
