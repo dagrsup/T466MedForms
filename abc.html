@@ -1209,7 +1209,8 @@ var datin =  [
     }
 
     function mmmddyyyy(val) {
-      var d = new Date(val);
+      var parts = val.split('-');
+      var d = new Date(parts[0], parts[1]-1, parts[2]);
       var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       if ((d !== "Invalid Date") && !isNaN(d))
       {
