@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -9,7 +9,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="assets/qrcode.min.js"></script>
  
-  <style type="text/css">
+  <style>
     
     .imgcls {
       position:relative;
@@ -169,24 +169,24 @@
     }
     
     .myaprioritemdiv {
-       display:block:
+       display:block;
        width:100%;
        border-bottom:2pt dashed magenta;
         margin-top:6pt;
     }
     
     .myapriornamediv {
-       display:inline:
+       display:inline;
        width:33%;
     }
     
     .mypriorspan {
-       display:inline:
+       display:inline;
        width:100%;
     }
     
     .mypriorsbutton {
-       display:inline:
+       display:inline;
        width:100pt;
        margin: 6pt;
     }
@@ -379,12 +379,12 @@
    }
     
    .shortcuts p input, .formissues p input {
-      margin-left:3pt
+      margin-left:3pt;
       margin-right:15pt;
    }
 
    .shortcuts p, .formissues p {
-      margin-top:1pt
+      margin-top:1pt;
       margin-bottom:1pt;
       margin-left:5pt
    }
@@ -398,40 +398,40 @@
 
  <body>
  
- <div class="shortcutshover" id="shortcutsHoverID" style="display:hidden"> v </div>
- <div class="shortcuts" id="shortcutsID" style="display:hidden"></div>
+ <div class="shortcutshover" id="shortcutsHoverID" style="display:none"> v </div>
+ <div class="shortcuts" id="shortcutsID" style="display:none"></div>
     
- <div>
-       <h1> Boy Scout Medical Forms A, B, C </h1>
-        <ul>
-          <li style="text-align: justify;">This static online web form is to help make Boy Scouts Medical Forms ABCs easier for Troop 466 in SVMBC.</li>
-          <li style="text-align: justify;">All information is stored locally on your browser client, with "no" information submitted to server.</li>
-          <li style="text-align: justify;">Activities exceeding 72 hrs, require Form C along with A & B. Form C requires a Dr's signature and you may need to schedule an annual exam with Dr.</li>
-          <li style="text-align: justify;">There are absolutely no express or implied promises or warranty of safety, security or privacy of this web form, and by using this form, you will be using it at your own risks.</li>
-          <li style="text-align: justify;">The digital printable output or files created by this web page, as well as the summary email sent to T466 Medical Form Coordinator, "will" contain sensitive, private or medical information and you will assume all the risks to make sure it does not get misused or fall into wrong hands.</li>
-        </ul>
+<div>
+     <h1> Boy Scout Medical Forms A, B, C </h1>
+      <ul>
+        <li style="text-align: justify;">This static online web form is to help make Boy Scouts Medical Forms ABCs easier for Troop 466 in SVMBC.</li>
+        <li style="text-align: justify;">All information is stored locally on your browser client, with "no" information submitted to server.</li>
+        <li style="text-align: justify;">Activities exceeding 72 hrs, require Form C along with A & B. Form C requires a Dr's signature and you may need to schedule an annual exam with Dr.</li>
+        <li style="text-align: justify;">There are absolutely no express or implied promises or warranty of safety, security or privacy of this web form, and by using this form, you will be using it at your own risks.</li>
+        <li style="text-align: justify;">The digital printable output or files created by this web page, as well as the summary email sent to T466 Medical Form Coordinator, "will" contain sensitive, private or medical information and you will assume all the risks to make sure it does not get misused or fall into wrong hands.</li>
+      </ul>
 
-       <p>In future, this web form can become unavailable for any reason, or its terms can conditions can change anytime. Troop 466 and/or this web forms' owners, creators, operators, coordinators or maintainers will have no express or implied liability, ever, including security, safety and privacy risks of the sensitive, private or medical information, that may arise from the use of this web form.</p>
-       <p>If you dont agree with statements above, or do not understand the possible privacy risks of digitized sensitive, private or medical data, please don't use this online form. You can print blank forms and fill and submit them 
-       manually (in writing) by following instructions at: <a href="https://www.scouting.org/health-and-safety/ahmr/">Medical Forms</a> </p>
+     <p>In future, this web form can become unavailable for any reason, or its terms can conditions can change anytime. Troop 466 and/or this web forms' owners, creators, operators, coordinators or maintainers will have no express or implied liability, ever, including security, safety and privacy risks of the sensitive, private or medical information, that may arise from the use of this web form.</p>
+     <p>If you dont agree with statements above, or do not understand the possible privacy risks of digitized sensitive, private or medical data, please don't use this online form. You can print blank forms and fill and submit them 
+     manually (in writing) by following instructions at: <a href="https://www.scouting.org/health-and-safety/ahmr/">Medical Forms</a> </p>
 
-       <p><input type="checkbox" id="id_iagreetothisform">By checking here I agree to the statements above.</p>
-       <p><input type="button" id="proceedButtonId" onclick="proceed(); return true;" value="PROCEED"></p>
-    <script>
-           function proceed() {
-              var agree = document.getElementById("id_iagreetothisform");
-              if (agree.checked) {
-                document.getElementById("proceedDIV").style.display = "block";
-                document.getElementById("mydyndivID").style.display = "block";
-                agree.disabled = true; // cant disagree anymore :-)
-                load(get_prior_instances()[0]);
-              } else {
-                alert("Please read and agree to the statements above, before proceeding. If you are in doubt, specially about your ability to manage the digitized data generated by this page, please elect not to use this web form by not proceeding. -Thanks");
-              }
-           }
-    </script>
-         
- </div>
+     <p><input type="checkbox" id="id_iagreetothisform">By checking here I agree to the statements above.</p>
+     <p><input type="button" id="proceedButtonId" onclick="proceed(); return true;" value="PROCEED"></p>
+  <script>
+         function proceed() {
+            var agree = document.getElementById("id_iagreetothisform");
+            if (agree.checked) {
+              document.getElementById("proceedDIV").style.display = "block";
+              document.getElementById("mydyndivID").style.display = "block";
+              agree.disabled = true; // cant disagree anymore :-)
+              load(get_prior_instances()[0]);
+            } else {
+              alert("Please read and agree to the statements above, before proceeding. If you are in doubt, specially about your ability to manage the digitized data generated by this page, please elect not to use this web form by not proceeding. -Thanks");
+            }
+         }
+  </script>
+
+</div>
 <div id="proceedDIV" style="display:none;">
    <p><br></p>
    <a id="localizerId"></a>
@@ -451,25 +451,26 @@
       <h2>Right now your forms look as below:</h2>
 
       <div id="finalformdataID" style="display:block;" class="onnewpage">
-      <div class="formwithbackgroundimage onnewpage" id="formA"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-001.jpg" class="imgcls"/></div>
-      <div class="formwithbackgroundimage onnewpage" id="formB"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-002.jpg" class="imgcls"/></div>
-      <div class="formwithbackgroundimage onnewpage" id="formBB"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-003.jpg" class="imgcls"/></div>
-      <div class="formwithbackgroundimage onnewpage" id="formC"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-004.jpg" class="imgcls"/></div>
-      <div id="addedImagesID"></div>
-      <div id="additionalinstructionsID"></div>
-      <div class="onnewpage summarycls" id="summaryID"></div>
-      <div class="onnewpage" id="summaryChecksumHeaderID"><h3>Current Summary Checksum is: <span id="summaryCheckSumID">INCOMPLETE-FORM</span></h3>
-        <div id="summaryqrcodesID"></div>
+        <div class="formwithbackgroundimage onnewpage" id="formA"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-001.jpg" class="imgcls"/></div>
+        <div class="formwithbackgroundimage onnewpage" id="formB"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-002.jpg" class="imgcls"/></div>
+        <div class="formwithbackgroundimage onnewpage" id="formBB"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-003.jpg" class="imgcls"/></div>
+        <div class="formwithbackgroundimage onnewpage" id="formC"><img src="https://t466medforms.netlify.com/assets/680-001_ABC-page-004.jpg" class="imgcls"/></div>
+        <div id="addedImagesID"></div>
+        <div id="additionalinstructionsID"></div>
+        <div class="onnewpage summarycls" id="summaryID"></div>
+        <div class="onnewpage" id="summaryChecksumHeaderID"><h3>Current Summary Checksum is: <span id="summaryCheckSumID">INCOMPLETE-FORM</span></h3>
+          <div id="summaryqrcodesID"></div>
+        </div>
+        <h2>You can save the current state of this form instance to a file below: </h2>
+        <p><button id="getFormInstanceID" onclick="get_form_instance();">Save</button></p>
+        <p>This saved file would include the added images (if any added)." </p>
+        <p>In future you can load back this file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
+        <p>Also if this file is complete, you can print it, sign it, and snail mail it to the Troop 466 Medical Forms Coordinator.</p>
       </div>
-      <h2>You can save the current state of this form instance to a file below: </h2>
-      <p><button id="getFormInstanceID" onclick="get_form_instance();">Save</button></p>
-      <p>This saved file would include the added images (if any added)." </p>
-      <p>In future you can load back this file from here: <a href="javascript:void(0);" onclick="scrollto('id_importpriorfile')"> Here</a></p>
-      <p>Also if this file is complete, you can print it, sign it, and snail mail it to the Troop 466 Medical Forms Coordinator.</p>
   </div>
 </div>
 
-<script type="text/javascript">
+<script>
   function recomputeqrs() {
     var parts = ("chksum:" + document.getElementById("summaryCheckSumID").innerHTML + digest).split("\t");
     var str = "";
